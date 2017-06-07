@@ -16,5 +16,13 @@ def id() -> str:
     return _get_name_from_file("identificator")
 
 
+def training_values() -> str:
+    return _get_name_from_file("training_values")
+
+
+def database() -> str:
+    return _get_name_from_file("database")
+
+
 if __name__ == '__main__':
     pass
