@@ -31,7 +31,7 @@ def get_row(filepath: str, row_number: int) -> list:
             return row
 
 
-def select_all_rows_where(filepath: str, predicate: function) -> list:
+def select_all_rows_where(filepath: str, predicate: callable) -> list:
     """ Return all rows from the CSV file at `filepath` with which the `predicate` return True.
     The rows are casted as a dictionary.
 

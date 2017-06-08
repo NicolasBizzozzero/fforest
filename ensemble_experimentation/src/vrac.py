@@ -1,7 +1,7 @@
 import time
 
 
-def timeit(func: function) -> function:
+def timeit(func: callable) -> callable:
     """ Calculate and print execution time of a function into the standard output. """
     def wrapper(*args):
         start = time.time()

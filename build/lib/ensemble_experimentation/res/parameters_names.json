@@ -1,4 +1,10 @@
 {
     "identificator": "--id",
-    "%train": "--train"
+    "encoding": "--encoding",
+    "training_values": "--train",
+    "format": "--format",
+    "reference_values": "--reference",
+    "delimiter": "--delimiter",
+    "keep_headers": "--keep-headers",
+    "database": "database"
 }

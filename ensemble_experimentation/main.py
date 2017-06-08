@@ -41,7 +41,6 @@ def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
     return int(round(percentage * number_of_rows))
 
 
-
 def main_entry_point():
     print("Hello main_entry_point")
     args = parse_args_main_entry_point()

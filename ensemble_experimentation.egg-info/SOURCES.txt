@@ -14,6 +14,7 @@ ensemble_experimentation/res/global_variables.json
 ensemble_experimentation/res/parameters_names.json
 ensemble_experimentation/src/__init__.py
 ensemble_experimentation/src/csv_tools.py
+ensemble_experimentation/src/exceptions.py
 ensemble_experimentation/src/vrac.py
 ensemble_experimentation/src/getters/__init__.py
 ensemble_experimentation/src/getters/get_default_value.py

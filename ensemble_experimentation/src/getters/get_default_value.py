@@ -16,8 +16,28 @@ def id() -> str:
     return _get_value_from_file("identificator")
 
 
-def pourcentage_train() -> float:
-    return _get_value_from_file("%train")
+def encoding() -> str:
+    return _get_value_from_file("encoding")
+
+
+def training_values() -> float:
+    return _get_value_from_file("training_values")
+
+
+def format_bd() -> str:
+    return _get_value_from_file("format")
+
+
+def reference_values() -> float:
+    return _get_value_from_file("reference_values")
+
+
+def delimiter() -> str:
+    return _get_value_from_file("delimiter")
+
+
+def keep_headers() -> int:
+    return _get_value_from_file("keep_headers")
 
 
 if __name__ == '__main__':
