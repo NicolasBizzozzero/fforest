@@ -24,7 +24,7 @@ def training_values() -> float:
     return _get_value_from_file("training_values")
 
 
-def format_bd() -> str:
+def format_db() -> str:
     return _get_value_from_file("format")
 
 
@@ -36,8 +36,8 @@ def delimiter() -> str:
     return _get_value_from_file("delimiter")
 
 
-def keep_headers() -> int:
-    return _get_value_from_file("keep_headers")
+def keep_header() -> int:
+    return _get_value_from_file("keep_header")
 
 
 if __name__ == '__main__':

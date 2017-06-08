@@ -5,5 +5,5 @@
     "format": "CSV",
     "reference_values": 0.10,
     "delimiter": ",",
-    "keep_headers": 1
+    "keep_header": 1
 }
