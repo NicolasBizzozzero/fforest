@@ -1,3 +1,0 @@
-include README.md
-include ensemble_experimentation/res/default_values.json
-include ensemble_experimentation/res/parameters_names.json
