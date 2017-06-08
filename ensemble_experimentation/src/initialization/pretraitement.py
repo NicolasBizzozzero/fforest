@@ -5,7 +5,7 @@ def _ajout_id(database, id: str):
     pass
 
 
-def pretraitement(*, database, id: str):
+def preprocessing(*, database, id: str):
     if not id:
         # On doit ajouter une colonne d'identification
         _ajout_id(database, "_ID")

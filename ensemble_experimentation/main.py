@@ -2,7 +2,8 @@ import sys
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_default_value as gdv
 from ensemble_experimentation.src.initialization import pretraitement
-from ensemble_experimentation.src.csv_tools import halfing
+from ensemble_experimentation.src.splitting_methods import split2
+from ensemble_experimentation.src.splitting_methods import SplittingMethod
 from ensemble_experimentation.src.initialization.arg_parser import parse_args_main_entry_point
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.exceptions import InvalidValue
@@ -53,7 +54,8 @@ def main_entry_point():
     #pretraitement(database)
     row_limit = _convert_row_limit(args[gpn.training_value()], get_number_of_rows(args[gpn.database()]))
 
-    halfing(filepath=args[gpn.database()], row_limit=row_limit, keep_headers=args[gpn.keep_header()])
+    split2(method=SplittingMethod.HALFING, filepath=args[gpn.database()], row_limit=row_limit,
+           keep_headers=args[gpn.keep_header()])
 
 
 def forest_entry_point():
