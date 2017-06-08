@@ -1,5 +1,0 @@
-[console_scripts]
-ensemble_experimentation = ensemble_experimentation.main:main_entry_point
-ensemble_foret_classique = ensemble_experimentation.main:forest_entry_point
-ensemble_foret_reduction = ensemble_experimentation.main:forest_reduction_entry_point
-
