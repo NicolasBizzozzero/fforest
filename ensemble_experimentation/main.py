@@ -1,7 +1,8 @@
 import sys
+import os
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_default_value as gdv
-from ensemble_experimentation.src.initialization import pretraitement
+from ensemble_experimentation.src.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.splitting_methods import split2
 from ensemble_experimentation.src.splitting_methods import SplittingMethod
 from ensemble_experimentation.src.initialization.arg_parser import parse_args_main_entry_point
@@ -45,16 +46,22 @@ def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
 def main_entry_point():
     print("Hello main_entry_point")
     args = parse_args_main_entry_point()
-    print(args)
 
     if _check_add_id(args):
         # We must add a column as identificator
         args[gpn.identificator()] = None
+    print(args)
 
-    #pretraitement(database)
+    output_path, output_name = os.path.split(args[gpn.database()])
+    output_path += '/~' + output_name
+
+    # The preprocessing function return the new input file in case it has been backup-ed
+    input_path = preprocessing(input_path=args[gpn.database()], output_path=output_path,
+                               identificator=args[gpn.identificator()], keep_header=args[gpn.keep_header()],
+                               delimiter=args[gpn.delimiter()])
+
     row_limit = _convert_row_limit(args[gpn.training_value()], get_number_of_rows(args[gpn.database()]))
-
-    split2(method=SplittingMethod.HALFING, filepath=args[gpn.database()], row_limit=row_limit,
+    split2(method=SplittingMethod.HALFING, filepath=input_path, row_limit=row_limit,
            keep_headers=args[gpn.keep_header()])
 
 
