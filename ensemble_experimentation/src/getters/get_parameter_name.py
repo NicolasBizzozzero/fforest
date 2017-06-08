@@ -12,7 +12,7 @@ def _get_name_from_file(value):
         return json.load(file)[value]
 
 
-def id() -> str:
+def identificator() -> str:
     return _get_name_from_file("identificator")
 
 
@@ -20,16 +20,20 @@ def encoding() -> str:
     return _get_name_from_file("encoding")
 
 
-def training_values() -> str:
-    return _get_name_from_file("training_values")
+def training_value() -> str:
+    return _get_name_from_file("training_value")
+
+
+def trees_in_forest() -> str:
+    return _get_name_from_file("trees_in_forest")
 
 
 def format_db() -> str:
     return _get_name_from_file("format_db")
 
 
-def reference_values() -> str:
-    return _get_name_from_file("reference_values")
+def reference_value() -> str:
+    return _get_name_from_file("reference_value")
 
 
 def delimiter() -> str:

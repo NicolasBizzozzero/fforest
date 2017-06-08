@@ -12,7 +12,7 @@ def _get_value_from_file(value):
         return json.load(file)[value]
 
 
-def id() -> str:
+def identificator() -> str:
     return _get_value_from_file("identificator")
 
 
@@ -20,16 +20,16 @@ def encoding() -> str:
     return _get_value_from_file("encoding")
 
 
-def training_values() -> float:
-    return _get_value_from_file("training_values")
+def training_value() -> float:
+    return _get_value_from_file("training_value")
 
 
 def format_db() -> str:
     return _get_value_from_file("format")
 
 
-def reference_values() -> float:
-    return _get_value_from_file("reference_values")
+def reference_value() -> float:
+    return _get_value_from_file("reference_value")
 
 
 def delimiter() -> str:

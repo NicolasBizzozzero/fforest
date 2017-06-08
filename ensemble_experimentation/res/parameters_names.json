@@ -1,10 +1,10 @@
 {
     "identificator": "--id",
     "encoding": "--encoding",
-    "training_values": "--train",
+    "training_value": "--train",
     "trees_in_forest": "--trees-in-forest",
-    "format": "--format",
-    "reference_values": "--reference",
+    "format_db": "--format",
+    "reference_value": "--reference",
     "delimiter": "--delimiter",
     "keep_header": "--keep-header",
     "database": "database"

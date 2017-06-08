@@ -119,7 +119,7 @@ def halfing(*, filepath: str, delimiter: str = ',', row_limit: int, output_name1
 
         # Write the headers if asked to
         if keep_headers:
-            headers = content.next()
+            headers = next(content)
             out_writer1.writerow(headers)
             out_writer2.writerow(headers)
 

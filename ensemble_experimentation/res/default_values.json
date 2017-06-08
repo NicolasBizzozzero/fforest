@@ -1,9 +1,9 @@
 {
     "identificator": "_ID",
     "encoding": "UTF8",
-    "training_values": 0.75,
+    "training_value": 0.75,
     "format": "CSV",
-    "reference_values": 0.10,
+    "reference_value": 0.25,
     "delimiter": ",",
     "keep_header": 1
 }

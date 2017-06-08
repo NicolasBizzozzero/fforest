@@ -13,8 +13,8 @@ def _check_add_id(args: dict) -> bool:
     """Check if the user asked to use as an identificator the same string as the default identificator string.
     If this function is not called, the program will overwrite all the identificator values in this specific case.
     """
-    id_name = gpn.id()
-    if args[id_name] == gdv.id():
+    id_name = gpn.identificator()
+    if args[id_name] == gdv.identificator():
         # Check if the parameter for the identificator has been used
         for option in sys.argv:
             if len(option) > len(id_name) and option[:len(id_name)] == id_name:
@@ -44,15 +44,16 @@ def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
 def main_entry_point():
     print("Hello main_entry_point")
     args = parse_args_main_entry_point()
+    print(args)
 
     if _check_add_id(args):
         # We must add a column as identificator
-        args[gpn.id()] = None
+        args[gpn.identificator()] = None
 
     #pretraitement(database)
-    row_limit = _convert_row_limit(args[gpn.training_values()], get_number_of_rows(args[gpn.database()]))
+    row_limit = _convert_row_limit(args[gpn.training_value()], get_number_of_rows(args[gpn.database()]))
 
-    halfing(filepath=args[gpn.database()], row_limit=row_limit)
+    halfing(filepath=args[gpn.database()], row_limit=row_limit, keep_headers=args[gpn.keep_header()])
 
 
 def forest_entry_point():
