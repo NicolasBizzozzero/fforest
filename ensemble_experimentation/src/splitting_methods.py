@@ -5,6 +5,7 @@ test database).
 import csv
 import os
 import enum
+import ensemble_experimentation.src.getters.get_default_value as gdv
 
 
 class SplittingMethod(enum.IntEnum):
@@ -12,10 +13,11 @@ class SplittingMethod(enum.IntEnum):
     KEEP_DISTRIBUTION = 1
 
 
-def split2(*, filepath: str, delimiter: str = ",", row_limit: int, output_name_train: str = 'train_data.csv',
-           output_name_test: str = 'test_data.csv', output_path: str = '.', keep_headers: bool = True,
+def split2(*, filepath: str, delimiter: str = ",", row_limit: int, output_path: str = '.', keep_headers: bool = True,
            method: SplittingMethod):
     # Set the outputs' writer
+    output_name_train = gdv.initial_split_train_name()
+    output_name_test = gdv.initial_split_test_name()
     out_writer_train = csv.writer(open(os.path.join(output_path, output_name_train), 'w'), delimiter=delimiter)
     out_writer_test = csv.writer(open(os.path.join(output_path, output_name_test), 'w'), delimiter=delimiter)
 
@@ -103,9 +105,19 @@ def halfing2(content, row_limit, out_writer_train, out_writer_test):
 def keep_distribution():
     pass
 
+# TODO: Ouvrir en lecture avec un DictReader pour sa voir quel argument se trouve ou
+# TODO: Passer ensuite le nom de la colonne de classe OU son numero
+def keep_distribution2(content, row_limit, out_writer_train, out_writer_test):
+    # We store rows into the distribution dictionary
+    distribution_dictionary = dict()
+    for row in content:
+        if row[TRUC] in distribution_dictionary:
+            distribution_dictionary[row[TRUC]].append(row)
+        else:
+            distribution_dictionary[row[TRUC]] = [row]
 
-def keep_distribution2():
-    pass
+    # Then we distribute the rows proportionally
+
 
 
 def _enum_to_function(method: SplittingMethod, is2: bool) -> callable:

@@ -5,5 +5,8 @@
     "format": "CSV",
     "reference_value": 0.25,
     "delimiter": ",",
-    "keep_header": 1
+    "have_header": 0,
+    "initial_split_train_name": "initial_train.csv",
+    "initial_split_test_name": "initial_test.csv",
+    "initial_split_method": "keepdistribution"
 }

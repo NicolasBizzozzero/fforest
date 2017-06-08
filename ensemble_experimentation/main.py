@@ -57,12 +57,12 @@ def main_entry_point():
 
     # The preprocessing function return the new input file in case it has been backup-ed
     input_path = preprocessing(input_path=args[gpn.database()], output_path=output_path,
-                               identificator=args[gpn.identificator()], keep_header=args[gpn.keep_header()],
+                               identificator=args[gpn.identificator()], keep_header=args[gpn.have_header()],
                                delimiter=args[gpn.delimiter()])
 
     row_limit = _convert_row_limit(args[gpn.training_value()], get_number_of_rows(args[gpn.database()]))
     split2(method=SplittingMethod.HALFING, filepath=input_path, row_limit=row_limit,
-           keep_headers=args[gpn.keep_header()])
+           keep_headers=args[gpn.have_header()])
 
 
 def forest_entry_point():

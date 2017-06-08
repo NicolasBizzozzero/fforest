@@ -40,12 +40,24 @@ def delimiter() -> str:
     return _get_name_from_file("delimiter")
 
 
-def keep_header() -> str:
-    return _get_name_from_file("keep_header")
+def have_header() -> str:
+    return _get_name_from_file("have_header")
 
 
 def database() -> str:
     return _get_name_from_file("database")
+
+
+def initial_split_train_name() -> str:
+    return _get_name_from_file("initial_split_train_name")
+
+
+def initial_split_test_name() -> str:
+    return _get_name_from_file("initial_split_test_name")
+
+
+def initial_split_method() -> str:
+    return _get_name_from_file("initial_split_method")
 
 
 if __name__ == '__main__':
