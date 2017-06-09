@@ -2,7 +2,6 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
 from ensemble_experimentation.src.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.splitting_methods import split2
-from ensemble_experimentation.src.splitting_methods import SplittingMethod
 from ensemble_experimentation.src.initialization.arg_parser import parse_args_main_entry_point
 
 
@@ -11,12 +10,10 @@ def main_entry_point():
 
     # Parsing and cleaning command-line arguments
     args = parse_args_main_entry_point()
-    print(args)
 
     # Prepare the database to be splitted
     has_ben_backuped = preprocessing(args)
 
-    print(args)
     if has_ben_backuped:
         input_path = args[gpn.modified_database_name()]
     else:
