@@ -60,5 +60,13 @@ def initial_split_method() -> str:
     return _get_name_from_file("initial_split_method")
 
 
+def modified_database_name() -> str:
+    return _get_name_from_file("modified_database_name")
+
+
+def class_name() -> str:
+    return _get_name_from_file("class")
+
+
 if __name__ == '__main__':
     pass

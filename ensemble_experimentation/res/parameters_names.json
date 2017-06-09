@@ -1,7 +1,7 @@
 {
     "identificator": "--id",
     "encoding": "--encoding",
-    "training_value": "--train",
+    "training_value": "--training-value",
     "trees_in_forest": "--trees-in-forest",
     "format_db": "--format",
     "reference_value": "--reference",
@@ -9,6 +9,8 @@
     "have_header": "--have-header",
     "database": "database",
     "initial_split_train_name": "--init-split-train-name",
-    "initial_split_test_name": "--init-split-train-name",
-    "initial_split_method": "--initial-split-method"
+    "initial_split_test_name": "--init-split-test-name",
+    "initial_split_method": "--init-split-method",
+    "modified_database_name":"--modified-database",
+    "class": "--class"
 }

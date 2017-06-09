@@ -5,7 +5,7 @@ test database).
 import csv
 import os
 import enum
-import ensemble_experimentation.src.getters.get_default_value as gdv
+from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
 
 
 class SplittingMethod(enum.IntEnum):
@@ -13,26 +13,27 @@ class SplittingMethod(enum.IntEnum):
     KEEP_DISTRIBUTION = 1
 
 
-def split2(*, filepath: str, delimiter: str = ",", row_limit: int, output_path: str = '.', keep_headers: bool = True,
-           method: SplittingMethod):
-    # Set the outputs' writer
-    output_name_train = gdv.initial_split_train_name()
-    output_name_test = gdv.initial_split_test_name()
-    out_writer_train = csv.writer(open(os.path.join(output_path, output_name_train), 'w'), delimiter=delimiter)
-    out_writer_test = csv.writer(open(os.path.join(output_path, output_name_test), 'w'), delimiter=delimiter)
-
-    with open(filepath) as file:
-        content = csv.reader(file, delimiter=delimiter)
+def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
+           method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str):
+    """ Open the initial database as input, open the two output databases as output, then give the reader and writers
+    to the asked splitting method.
+    """
+    with open(filepath, encoding=encoding) as input_file,\
+         open(os.path.join(output_path, output_name_train), 'w', encoding=encoding) as output_train,\
+         open(os.path.join(output_path, output_name_test), 'w', encoding=encoding) as output_test:
+        input_reader = csv.reader(input_file, delimiter=delimiter)
+        out_writer_train = csv.writer(output_train, delimiter=delimiter)
+        out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
         # Write the headers if asked to
-        if keep_headers:
-            headers = next(content)
-            out_writer_train.writerow(headers)
-            out_writer_test.writerow(headers)
+        if have_header:
+            header = next(input_reader)
+            out_writer_train.writerow(header)
+            out_writer_test.writerow(header)
 
         # Then split the file
-        splitting_method = _enum_to_function(method=method, is2=True)
-        splitting_method(content, row_limit, out_writer_train, out_writer_test)
+        splitting_method = _smenum_to_function(method=method, is2=True)
+        splitting_method(input_reader, row_limit, out_writer_train, out_writer_test)
 
 
 def split():
@@ -105,7 +106,8 @@ def halfing2(content, row_limit, out_writer_train, out_writer_test):
 def keep_distribution():
     pass
 
-# TODO: Ouvrir en lecture avec un DictReader pour sa voir quel argument se trouve ou
+
+# TODO: Ouvrir en lecture avec un DictReader pour savoir quel argument se trouve ou
 # TODO: Passer ensuite le nom de la colonne de classe OU son numero
 def keep_distribution2(content, row_limit, out_writer_train, out_writer_test):
     # We store rows into the distribution dictionary
@@ -119,8 +121,7 @@ def keep_distribution2(content, row_limit, out_writer_train, out_writer_test):
     # Then we distribute the rows proportionally
 
 
-
-def _enum_to_function(method: SplittingMethod, is2: bool) -> callable:
+def _smenum_to_function(method: SplittingMethod, is2: bool) -> callable:
     """ Convert a SplittingMethod enum into its respective function. """
     if method == SplittingMethod.HALFING:
         if is2:
@@ -130,3 +131,13 @@ def _enum_to_function(method: SplittingMethod, is2: bool) -> callable:
         if is2:
             return keep_distribution2
         return keep_distribution
+
+
+def _str_to_smenum(string: str) -> SplittingMethod:
+    """ Convert a String into its respective SplittingMethod enum. """
+    if string == "halfing":
+        return SplittingMethod.HALFING
+    elif string == "keepdistribution":
+        return SplittingMethod.KEEP_DISTRIBUTION
+    else:
+        raise UnknownSplittingMethod("The splitting method : \"" + string + "\" doesn't exists")

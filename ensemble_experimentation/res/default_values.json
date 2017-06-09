@@ -1,12 +1,12 @@
 {
     "identificator": "_ID",
-    "encoding": "UTF8",
+    "encoding": "utf8",
     "training_value": 0.75,
-    "format": "CSV",
+    "format": "csv",
     "reference_value": 0.25,
     "delimiter": ",",
     "have_header": 0,
-    "initial_split_train_name": "initial_train.csv",
-    "initial_split_test_name": "initial_test.csv",
-    "initial_split_method": "keepdistribution"
+    "initial_split_train_name": "initial_train",
+    "initial_split_test_name": "initial_test",
+    "initial_split_method": "halfing"
 }

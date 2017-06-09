@@ -1,8 +1,8 @@
 import csv
-import ensemble_experimentation.src.getters.get_default_value as gdv
+import ensemble_experimentation.src.getters.get_parameter_name as gpn
 
 
-def _add_id(input_path: str, output_path: str, id_name: str, keep_header: bool, delimiter: str = ','):
+def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str = ','):
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
@@ -10,7 +10,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, keep_header: bool, 
         output_writer = csv.writer(output_file)
         input_reader = csv.reader(input_file, delimiter=delimiter)
 
-        if keep_header:
+        if have_header:
             header = next(input_reader)
             header.insert(0, id_name)
             output_writer.writerow(header)
@@ -21,13 +21,16 @@ def _add_id(input_path: str, output_path: str, id_name: str, keep_header: bool, 
                 output_writer.writerow(row)
 
 
-def preprocessing(*, input_path: str, output_path: str, identificator: str, keep_header: bool, delimiter: str = ','):
-    if identificator is None:
+def preprocessing(args: dict) -> bool:
+    """ Prepare the original database to be splitted.
+    Return `True` if the database has been modifier, thus the modified database needs to be use, `False` otherwise.
+    """
+    if args[gpn.identificator()] is None:
         # We must add an identificator column
-        _add_id(input_path=input_path, output_path=output_path, id_name=gdv.identificator(), keep_header=keep_header,
-                delimiter=delimiter)
-        return output_path
-    return input_path
+        _add_id(input_path=args[gpn.database()], output_path=args[gpn.modified_database_name()],
+                id_name=args[gpn.identificator()], have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
+        return True
+    return False
 
 
 if __name__ == '__main__':
