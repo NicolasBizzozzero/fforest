@@ -10,6 +10,7 @@ def main_entry_point():
 
     # Parsing and cleaning command-line arguments
     args = parse_args_main_entry_point()
+    print(args)
 
     # Prepare the database to be splitted
     has_ben_backuped = preprocessing(args)

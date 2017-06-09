@@ -1,4 +1,5 @@
 import csv
+import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 
 
@@ -28,7 +29,7 @@ def preprocessing(args: dict) -> bool:
     if args[gpn.identificator()] is None:
         # We must add an identificator column
         _add_id(input_path=args[gpn.database()], output_path=args[gpn.modified_database_name()],
-                id_name=args[gpn.identificator()], have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
+                id_name=gdv.identificator(), have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
         return True
     return False
 
