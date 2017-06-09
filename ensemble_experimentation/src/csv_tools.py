@@ -50,3 +50,10 @@ def get_identified_row(filepath: str, identifier_name: str, row_id: int):
     Select the row identified at the column `identifier_name` with the value `row_id`.
     """
     return select_all_rows_where(filepath, lambda r: r[identifier_name] == row_id)[0]
+
+
+def write_header(input_reader, *out_writers):
+    header = next(input_reader)
+
+    for writer in out_writers:
+        writer.writerow(header)

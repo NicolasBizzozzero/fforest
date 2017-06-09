@@ -4,3 +4,7 @@ class InvalidValue(Exception):
 
 class UnknownSplittingMethod(Exception):
     pass
+
+
+class MissingClassificationAttribute(Exception):
+    pass

@@ -9,10 +9,10 @@ import docopt
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
-from ensemble_experimentation.src.exceptions import InvalidValue
+from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
 from ensemble_experimentation.src.vrac import is_a_percentage
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
-from ensemble_experimentation.src.splitting_methods import _str_to_smenum
+from ensemble_experimentation.src.splitting_methods import _str_to_smenum, SplittingMethod
 import os
 
 
@@ -31,6 +31,7 @@ _FORMAT_DICTIONARY = dict(
     param_initial_split_test_name=gpn.initial_split_test_name(),
     param_initial_split_method=gpn.initial_split_method(),
     param_modified_database_name=gpn.modified_database_name(),
+    param_class_name=gpn.class_name(),
 
     # Default values
     default_identificator=gdv.identificator(),
@@ -88,6 +89,12 @@ def _get_modified_db_name(args: dict) -> str:
 
 def _clean_args(args: dict) -> None:
     """ Clean the arguments to make the `args` dictionary usable more easily. """
+    # Class name
+    try:
+        args[gpn.class_name()]
+    except KeyError:
+        args[gpn.class_name()] = None
+
     # Have header
     if args[gpn.have_header()] == "0":
         args[gpn.have_header()] = False
@@ -101,6 +108,8 @@ def _clean_args(args: dict) -> None:
 
     # Initial split Method
     args[gpn.initial_split_method()] = _str_to_smenum(args[gpn.initial_split_method()])
+    if args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and args[gpn.class_name()] is None:
+        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
 
     # Initial split test database name
     args[gpn.initial_split_test_name()] += "." + args[gpn.format_db()]
@@ -121,8 +130,9 @@ def _clean_args(args: dict) -> None:
         args[gpn.modified_database_name()] = _get_modified_db_name(args)
 
     # Training value
+    args[ggv.number_of_rows()] = get_number_of_rows(args[gpn.database()])
     args[gpn.training_value()] = _convert_row_limit(args[gpn.training_value()],
-                                                    get_number_of_rows(args[gpn.database()]))
+                                                    args[ggv.number_of_rows()])
 
 
 def parse_args_main_entry_point() -> dict:
@@ -131,7 +141,7 @@ def parse_args_main_entry_point() -> dict:
     documentation = """{global_name}
 
 Usage:
-  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>]
+  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>]
 
 Options:
   -h --help                           Print this help message.
@@ -147,6 +157,7 @@ Options:
   {param_initial_split_test_name}=<STR>   The name of the testing database after the initial split. [default: {default_initial_split_test_name}]
   {param_initial_split_method}=<METHOD>         The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]
   {param_modified_database_name}=<STR>                      The name of the modified original database. Its defaulting to the database name prefixed with '~'.
+  {param_class_name}=<STR>             The name or the index of the class attribute. The first index of the database is `0`.
 """.format(**_FORMAT_DICTIONARY)
 
     args = docopt.docopt(documentation, version=ggv.version(), help=True)

@@ -12,6 +12,10 @@ def _get_value_from_file(value):
         return json.load(file)[value]
 
 
+def number_of_rows() -> str:
+    return "number_of_rows"
+
+
 def name() -> str:
     return _get_value_from_file("name")
 

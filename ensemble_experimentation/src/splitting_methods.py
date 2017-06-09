@@ -5,7 +5,10 @@ test database).
 import csv
 import os
 import enum
+import itertools
 from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
+from ensemble_experimentation.src.csv_tools import write_header
+from ensemble_experimentation.src.vrac import is_an_int
 
 
 class SplittingMethod(enum.IntEnum):
@@ -14,29 +17,42 @@ class SplittingMethod(enum.IntEnum):
 
 
 def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
-           method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str):
+           method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str, class_name=None,
+           number_of_rows: int = None):
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
-    to the asked splitting method.
+    to the asked splitting2 method.
     """
     with open(filepath, encoding=encoding) as input_file,\
          open(os.path.join(output_path, output_name_train), 'w', encoding=encoding) as output_train,\
          open(os.path.join(output_path, output_name_test), 'w', encoding=encoding) as output_test:
-        input_reader = csv.reader(input_file, delimiter=delimiter)
         out_writer_train = csv.writer(output_train, delimiter=delimiter)
         out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
-        # Write the headers if asked to
-        if have_header:
-            header = next(input_reader)
-            out_writer_train.writerow(header)
-            out_writer_test.writerow(header)
+        if method == SplittingMethod.HALFING:
+            input_reader = csv.reader(input_file, delimiter=delimiter)
 
-        # Then split the file
-        splitting_method = _smenum_to_function(method=method, is2=True)
-        splitting_method(input_reader, row_limit, out_writer_train, out_writer_test)
+            # Write the headers if asked to
+            if have_header:
+                write_header(input_reader, out_writer_train, out_writer_test)
+
+            halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
+        elif method == SplittingMethod.KEEP_DISTRIBUTION:
+            if is_an_int(class_name):
+                input_reader = csv.reader(input_file, delimiter=delimiter)
+            else:
+                input_reader = csv.DictReader(input_file, delimiter=delimiter)
+
+            # Write the headers if asked to
+            if have_header:
+                write_header(input_reader, out_writer_train, out_writer_test)
+
+            keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows)
 
 
 def split():
+    """ Open the initial database as input, open all the other databases as output, then give the reader and writers
+    to the asked splitting method.
+    """
     pass
 
 
@@ -107,18 +123,42 @@ def keep_distribution():
     pass
 
 
-# TODO: Ouvrir en lecture avec un DictReader pour savoir quel argument se trouve ou
-# TODO: Passer ensuite le nom de la colonne de classe OU son numero
-def keep_distribution2(content, row_limit, out_writer_train, out_writer_test):
+def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows: int):
     # We store rows into the distribution dictionary
     distribution_dictionary = dict()
+
+    if is_an_int(class_name):
+        class_name = int(class_name)
     for row in content:
-        if row[TRUC] in distribution_dictionary:
-            distribution_dictionary[row[TRUC]].append(row)
+        if row[class_name] in distribution_dictionary:
+            distribution_dictionary[row[class_name]].append(row)
         else:
-            distribution_dictionary[row[TRUC]] = [row]
+            distribution_dictionary[row[class_name]] = [row]
 
     # Then we distribute the rows proportionally
+    percentage_train = row_limit / number_of_rows
+    # If the class name is an index
+    if isinstance(class_name, int):
+        for class_name in distribution_dictionary.keys():
+            # Distribute to train
+            rows_to_give = int(round(len(distribution_dictionary[class_name]) * percentage_train))
+            for _ in range(rows_to_give):
+                out_writer_train.writerow(distribution_dictionary[class_name].pop(0))
+
+            # Then the rest to test
+            for row in distribution_dictionary[class_name]:
+                out_writer_test.writerow(row)
+    # If it's a name
+    else:
+        for class_name in distribution_dictionary.keys():
+            # Distribute to train
+            rows_to_give = int(round(len(distribution_dictionary[class_name]) * percentage_train))
+            for _ in range(rows_to_give):
+                out_writer_train.writerow(distribution_dictionary[class_name].pop(0).values())
+
+            # Then the rest to test
+            for row in distribution_dictionary[class_name]:
+                out_writer_test.writerow(row.values())
 
 
 def _smenum_to_function(method: SplittingMethod, is2: bool) -> callable:

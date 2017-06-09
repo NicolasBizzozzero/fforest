@@ -8,5 +8,5 @@
     "have_header": 0,
     "initial_split_train_name": "initial_train",
     "initial_split_test_name": "initial_test",
-    "initial_split_method": "halfing"
+    "initial_split_method": "keepdistribution"
 }

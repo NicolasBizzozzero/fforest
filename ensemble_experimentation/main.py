@@ -1,4 +1,5 @@
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
+import ensemble_experimentation.src.getters.get_global_variable as ggv
 from ensemble_experimentation.src.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.splitting_methods import split2
 from ensemble_experimentation.src.splitting_methods import SplittingMethod
@@ -24,7 +25,9 @@ def main_entry_point():
            have_header=args[gpn.have_header()], method=args[gpn.initial_split_method()],
            output_name_train=args[gpn.initial_split_train_name()],
            output_name_test=args[gpn.initial_split_test_name()],
-           encoding=args[gpn.encoding()])
+           encoding=args[gpn.encoding()],
+           class_name=args[gpn.class_name()],
+           number_of_rows=args[ggv.number_of_rows()])
 
 
 def forest_entry_point():
