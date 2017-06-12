@@ -12,5 +12,6 @@
     "initial_split_test_name": "--init-split-test-name",
     "initial_split_method": "--init-split-method",
     "modified_database_name":"--modified-database",
-    "class": "--class"
+    "class": "--class",
+    "main_directory": "--main-directory"
 }

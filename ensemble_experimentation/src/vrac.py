@@ -95,20 +95,30 @@ def get_filename(path: str, with_extension: bool = False) -> str:
         >>> get_filename("dir/subdir/file")
         'file'
         >>> get_filename("dir/subdir/file.txt.txt")
-        'file.txt'
+        'file'
         >>> get_filename("dir/subdir/file.txt.txt", with_extension=True)
         'file.txt.txt'
         >>> get_filename("dir/subdir/file.txt.txt/")
-        'file.txt'
+        'file'
         >>> get_filename("dir/subdir/file.txt.txt/", with_extension=True)
         'file.txt.txt'
         >>> get_filename("/dir/subdir/file.txt.txt/")
-        'file.txt'
+        'file'
         >>> get_filename("/dir/subdir/file.txt.txt/", with_extension=True)
         'file.txt.txt'
+        >>> get_filename("/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt/")
+        'file'
     """
     head, tail = ntpath.split(path)
     if with_extension:
         return tail or ntpath.basename(head)
     else:
-        return os.path.splitext(tail or ntpath.basename(head))[0]
+        result = tail or ntpath.basename(head)
+        while "." in result:
+            result = os.path.splitext(result)[0]
+        return result
+
+
+def create_dir(directory: str) -> None:
+    """ Create a directory if it doesn't exists. Otherwise, do nothing"""
+    os.makedirs(directory, exist_ok=True)

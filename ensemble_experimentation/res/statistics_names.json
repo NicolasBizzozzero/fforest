@@ -1,9 +1,9 @@
 {
     "database_path": "Database path",
     "database_name": "Database name",
-    "modified_database": "Modified database name",
-    "train": "Train database name",
-    "test": "Test database name",
+    "modified_database_path": "Modified database path",
+    "train_path": "Train database path",
+    "test_path": "Test database path",
     "instances_in_database": "Number of instances in database",
     "instances_in_train": "Number of instances in train database",
     "instances_in_test": "Number of instances in test database",

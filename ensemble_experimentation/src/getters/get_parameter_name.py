@@ -68,5 +68,9 @@ def class_name() -> str:
     return _get_name_from_file("class")
 
 
+def main_directory() -> str:
+    return _get_name_from_file("main_directory")
+
+
 if __name__ == '__main__':
     pass

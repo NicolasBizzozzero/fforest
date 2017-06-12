@@ -36,6 +36,7 @@ _FORMAT_DICTIONARY = dict(
     param_initial_split_method=gpn.initial_split_method(),
     param_modified_database_name=gpn.modified_database_name(),
     param_class_name=gpn.class_name(),
+    param_main_directory=gpn.main_directory(),
 
     # Default values
     default_identificator=gdv.identificator(),
@@ -92,9 +93,9 @@ def _get_modified_db_name(args: dict) -> str:
 
 
 def _clean_args(args: dict) -> dict:
+    """ Clean the arguments to make the `args` dictionary usable more easily. """
     global statistics
 
-    """ Clean the arguments to make the `args` dictionary usable more easily. """
     cleaned_args = copy.copy(args)
 
     # Class name
@@ -143,7 +144,9 @@ def _clean_args(args: dict) -> dict:
                                                             cleaned_args[ggv.number_of_rows()])
 
     # Add statistics
-    statistics[gsn.database_path()] = get_filename()
+    statistics[gsn.database_path()] = cleaned_args[gpn.database()]
+    statistics[gsn.database_name] = get_filename(cleaned_args[gpn.database()])
+    statistics[gsn.modified_database_path()] = cleaned_args[gpn.modified_database_name()()]
 
     return cleaned_args
 
@@ -154,7 +157,7 @@ def parse_args_main_entry_point() -> Tuple[dict, dict]:
     documentation = """{global_name}
 
 Usage:
-  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>]
+  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>] [{param_main_directory} <main_directory>]
 
 Options:
   -h --help                           Print this help message.
@@ -171,6 +174,7 @@ Options:
   {param_initial_split_method}=<METHOD>         The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]
   {param_modified_database_name}=<STR>                      The name of the modified original database. Its defaulting to the database name prefixed with '~'.
   {param_class_name}=<STR>             The name or the index of the class attribute. The first index of the database is `0`.
+  {param_main_directory}=<name>        The name of the main directory, where all the project will be outputed. It defaults to the name of the database.
 """.format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

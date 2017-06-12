@@ -20,16 +20,16 @@ def database_name() -> str:
     return _get_stat_from_file()["database_name"]
 
 
-def modified_database() -> str:
-    return _get_stat_from_file()["modified_database"]
+def modified_database_path() -> str:
+    return _get_stat_from_file()["modified_database_path"]
 
 
-def train() -> str:
-    return _get_stat_from_file()["train"]
+def train_path() -> str:
+    return _get_stat_from_file()["train_path"]
 
 
-def test() -> str:
-    return _get_stat_from_file()["test"]
+def test_path() -> str:
+    return _get_stat_from_file()["test_path"]
 
 
 def instances_in_database() -> str:
