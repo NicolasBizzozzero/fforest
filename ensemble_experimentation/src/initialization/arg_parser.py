@@ -5,6 +5,8 @@ and parsing arguments.
 #TODO: make it consistent between all entry points.
 """
 import sys
+from typing import Tuple
+
 import docopt
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
@@ -14,6 +16,7 @@ from ensemble_experimentation.src.vrac import is_a_percentage
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.splitting_methods import _str_to_smenum, SplittingMethod
 import os
+import copy
 
 
 _FORMAT_DICTIONARY = dict(
@@ -87,55 +90,59 @@ def _get_modified_db_name(args: dict) -> str:
     return "~" + os.path.split(args[gpn.database()])[1]
 
 
-def _clean_args(args: dict) -> None:
+def _clean_args(args: dict) -> dict:
     """ Clean the arguments to make the `args` dictionary usable more easily. """
+    cleaned_args = copy.copy(args)
+
     # Class name
     try:
-        args[gpn.class_name()]
+        cleaned_args[gpn.class_name()]
     except KeyError:
-        args[gpn.class_name()] = None
+        cleaned_args[gpn.class_name()] = None
 
     # Have header
-    if args[gpn.have_header()] == "0":
-        args[gpn.have_header()] = False
+    if cleaned_args[gpn.have_header()] == "0":
+        cleaned_args[gpn.have_header()] = False
     else:
-        args[gpn.have_header()] = True
+        cleaned_args[gpn.have_header()] = True
 
     # ID
-    if _check_add_id(args):
+    if _check_add_id(cleaned_args):
         # We must add a column as identificator
-        args[gpn.identificator()] = None
+        cleaned_args[gpn.identificator()] = None
 
     # Initial split Method
-    args[gpn.initial_split_method()] = _str_to_smenum(args[gpn.initial_split_method()])
-    if args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and args[gpn.class_name()] is None:
+    cleaned_args[gpn.initial_split_method()] = _str_to_smenum(cleaned_args[gpn.initial_split_method()])
+    if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
         raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
 
     # Initial split test database name
-    args[gpn.initial_split_test_name()] += "." + args[gpn.format_db()]
+    cleaned_args[gpn.initial_split_test_name()] += "." + cleaned_args[gpn.format_db()]
 
     # Initial split train database name
     #TODO: I don't know why, but docopt can't parse the default value
-    if args[gpn.initial_split_train_name()] is None:
-        args[gpn.initial_split_train_name()] = gdv.initial_split_train_name() + "." + args[gpn.format_db()]
+    if cleaned_args[gpn.initial_split_train_name()] is None:
+        cleaned_args[gpn.initial_split_train_name()] = gdv.initial_split_train_name() + "." + cleaned_args[gpn.format_db()]
 
     # Rename parameter database
-    args["{param_database}".format(**_FORMAT_DICTIONARY)] = args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
-    del args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
+    cleaned_args["{param_database}".format(**_FORMAT_DICTIONARY)] = cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
+    del cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
 
     # Default modified database name
     try:
-        args[gpn.modified_database_name()]
+        cleaned_args[gpn.modified_database_name()]
     except KeyError:
-        args[gpn.modified_database_name()] = _get_modified_db_name(args)
+        cleaned_args[gpn.modified_database_name()] = _get_modified_db_name(cleaned_args)
 
     # Training value
-    args[ggv.number_of_rows()] = get_number_of_rows(args[gpn.database()])
-    args[gpn.training_value()] = _convert_row_limit(args[gpn.training_value()],
-                                                    args[ggv.number_of_rows()])
+    cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
+    cleaned_args[gpn.training_value()] = _convert_row_limit(cleaned_args[gpn.training_value()],
+                                                    cleaned_args[ggv.number_of_rows()])
+
+    return cleaned_args
 
 
-def parse_args_main_entry_point() -> dict:
+def parse_args_main_entry_point() -> Tuple[dict, dict]:
     global _FORMAT_DICTIONARY
 
     documentation = """{global_name}
@@ -160,9 +167,10 @@ Options:
   {param_class_name}=<STR>             The name or the index of the class attribute. The first index of the database is `0`.
 """.format(**_FORMAT_DICTIONARY)
 
-    args = docopt.docopt(documentation, version=ggv.version(), help=True)
-    _clean_args(args)
-    return args
+    arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
+    cleaned_arguments = _clean_args(arguments)
+
+    return arguments, cleaned_arguments
 
 
 def parse_args_forest_entry_point() -> dict:
