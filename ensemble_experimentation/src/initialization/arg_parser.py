@@ -1,17 +1,16 @@
 """ This module contains all functions related to parsing command-line arguments for all entry points of the package.
 It uses the `docopt` package (listed as a dependencie) to easily combine the tedious task of writing documentation
 and parsing arguments.
-#TODO: Instead of writing all documentation line for each parameter, we should store all lines in a separate file to
-#TODO: make it consistent between all entry points.
 """
 import sys
-from typing import Tuple
 
 import docopt
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
+import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
+import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
 from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
@@ -21,23 +20,27 @@ import copy
 
 
 _FORMAT_DICTIONARY = dict(
+    # Documentation
+    doc_usage=gpd.usage(),
+
     # Parameters
     param_database=gpn.database(),
     param_training_value=gpn.training_value(),
-    param_trees_in_forest=gpn.trees_in_forest(),
     param_reference_value=gpn.reference_value(),
+    param_trees_in_forest=gpn.trees_in_forest(),
+    param_initial_split_method=gpn.initial_split_method(),
+    param_reference_split_method=gpn.reference_split_method(),
+    param_train_name=gpn.train_name(),
+    param_test_name=gpn.test_name(),
+    param_preprocessed_db_name=gpn.preprocessed_database_name(),
+    #TODO: JEN SUIS ICI
     param_identificator=gpn.identifier(),
     param_encoding=gpn.encoding(),
     param_format_db=gpn.format_db(),
     param_delimiter=gpn.delimiter(),
     param_have_header=gpn.have_header(),
-    param_initial_split_train_name=gpn.train_name(),
-    param_initial_split_test_name=gpn.test_name(),
-    param_initial_split_method=gpn.initial_split_method(),
-    param_modified_database_name=gpn.preprocessed_database_name(),
     param_class_name=gpn.class_name(),
     param_main_directory=gpn.main_directory(),
-    param_reference_split_method=gpn.reference_split_method(),
 
     # Default values
     default_identificator=gdv.identifier(),
@@ -52,7 +55,7 @@ _FORMAT_DICTIONARY = dict(
     default_initial_split_method=gdv.initial_split_method(),
     default_reference_split_method=gdv.reference_split_method(),
 
-    # Global variables
+    # Miscellaneous
     global_name=ggv.name()
 )
 
@@ -165,39 +168,55 @@ def _clean_args(args: dict) -> dict:
     return cleaned_args
 
 
-def parse_args_main_entry_point() -> Tuple[dict, dict]:
+def parse_args_main_entry_point() -> None:
     global _FORMAT_DICTIONARY
 
     documentation = """{global_name}
 
 Usage:
-  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>] [{param_main_directory} <main_directory>] [{param_reference_split_method} <reference_split_method>]
+  {doc_usage}
 
 Options:
-  -h --help                           Print this help message.
-  {param_identificator}=<STR>                           The class name of the examples' identifier [default: {default_identificator}].
-  {param_encoding}=<SRE>               The encoding used to read the database and write the outputs. [default: {default_encoding}]
-  {param_training_value}=<NUMBER>   % of training values to extract from the database. You can also pass the number of values you want to use (by passing an integer greater than 1) [default: {default_training_value}].
-  {param_trees_in_forest}=<INT> Number of trees in to create in the base forest.
-  {param_format_db}=<STR>                   The format used to read the database and write the outputs. [default: {default_format_db}]
-  {param_reference_value}=<NUMBER>       % of the values you want to extract from the training set and put in the reference set. You can also pass the number of values you want to use (by passing an integer greater than 1) [default: {default_reference_value}].
-  {param_delimiter}=<CHAR>             The symbol used to delimiting data in CSV database. [default: {default_delimiter}]
-  {param_have_header}=<BOOL>         Set this boolean to 1 if your database have a header, or 0 otherwise. [default: {default_have_header}]
-  {param_initial_split_train_name}=<STR> The name of the training database after the initial split. [default: {default_initial_split_train_name}]
-  {param_initial_split_test_name}=<STR>   The name of the testing database after the initial split. [default: {default_initial_split_test_name}]
-  {param_modified_database_name}=<STR>                      The name of the modified original database. Its defaulting to the database name prefixed with '~'.
-  {param_class_name}=<STR>             The name or the index of the class attribute. The first index of the database is `0`.
-  {param_main_directory}=<name>        The name of the main directory, where all the project will be outputed. It defaults to the name of the database.
-  
-  # Splitting Methods
-  {param_initial_split_method}=<METHOD>         The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]
-  {param_reference_split_method}=<METHOD>         The method to use with the split of the train database to the reference and subtrain databases. Values can be `halfing` or `keepdistribution` [default: {default_reference_split_method}]
+  # Splitting values
+  {param_training_value}=<value>            {doc_training_value}
+  {param_reference_value}=<value>           {doc_reference_value}
+  {param_trees_in_forest}=<value>           {doc_trees_in_forest}
+
+  # Splitting methods
+  {param_initial_split_method}=<method>     {doc_initial_split_method}
+  {param_reference_split_method}=<method>   {doc_reference_split_method}
+
+  # File names
+  {param_train_name}=<name>                 {doc_train_name}
+  {param_test_name}=<name>                  {doc_test_name}
+  {param_preprocessed_db_name}=<name>       {doc_preprocessed_db}
+  {param_subtrain_name}=<name>              {doc_subtrain_name}
+  {param_reference_name}=<name>             {doc_reference_name}
+  {param_subsubtrain_name_pattern}=<name>   {doc_subsubtrain_name_pattern}
+  {param_statistics_name}=<name>            {doc_statistics_name}
+  {param_tree_file_extension}=<name>        {doc_tree_file_extension}
+  {param_vector_file_extension}=<name>      {doc_vector_file_extension}
+
+  # Directories names
+  {param_main_directory}=<name>             {doc_main_directory}
+  {param_subtrain_directory}=<name>         {doc_subtrain_directory}
+  {param_subsubtrain_directory_pattern}=<name> {doc_subsubtrain_directory_pattern}
+
+  # Miscellaneous
+  {param_help}                              {doc_help}
+  {param_identifier}=<ID>                   {doc_identifier}
+  {param_encoding}=<encoding>               {doc_encoding}
+  {param_format_db}=<format>                {doc_format_db}
+  {param_delimiter}=<char>                  {doc_delimiter}
+  {param_have_header}                       {doc_have_header}
+  {param_class_name}=<name>                 {doc_class_name}
 """.format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     cleaned_arguments = _clean_args(arguments)
 
-    return arguments, cleaned_arguments
+    env.arguments = arguments
+    env.cleaned_arguments = cleaned_arguments
 
 
 def parse_args_forest_entry_point() -> dict:

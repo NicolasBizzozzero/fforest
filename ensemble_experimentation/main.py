@@ -11,8 +11,12 @@ from ensemble_experimentation.src.initialization.arg_parser import parse_args_ma
 def main_entry_point():
     print("Hello main_entry_point")
 
-    # Parsing and cleaning command-line arguments + preprocessing
-    ggv.arguments, ggv.cleaned_arguments = parse_args_main_entry_point()
+    # Parsing and cleaning command-line arguments.
+    # After calling this method, the parsed arguments and the cleaned arguments will be stored as dictionaries into the
+    # `environment` module.
+    parse_args_main_entry_point()
+
+    # Preprocessing the database
     has_ben_backuped = preprocessing(ggv.cleaned_arguments)
 
     # Split the initial database into the train and test database

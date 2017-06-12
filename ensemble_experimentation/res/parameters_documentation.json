@@ -1,0 +1,33 @@
+{
+    "usage": "ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>] [{param_main_directory} <main_directory>] [{param_reference_split_method} <reference_split_method>]",
+
+    "training_value": "% of training values to extract from the database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
+    "reference_value": "% of the values you want to extract from the training set and put in the reference set. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_reference_value}]",
+    "trees_in_forest": "Number of trees in to create in the base forest. [default: {default_trees_in_forest}]",
+
+    "initial_split_method": "The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]",
+    "reference_split_method": "The method to use with the split of the train database to the reference and subtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_reference_split_method}]",
+    "subsubtrain_split_method": "",
+
+    "train_name": "The name of the training database after the initial split. [default: {default_train_name}]",
+    "test_name": "The name of the testing database after the initial split. [default: {default_test_name}]",
+    "preprocessed_db_name":"The name of the modified original database. Its defaulting to the database name prefixed with '~'.",
+    "subtrain_name": "",
+    "reference_name": "",
+    "subsubtrain_name_pattern": "",
+    "statistics_file_name": "",
+    "tree_file_extension": "",
+    "vector_file_extension": "",
+
+    "main_directory": "The name of the main directory, where all the project will be outputed. It defaults to the name of the database.",
+    "subtrain_directory": "",
+    "subsubtrain_directory_pattern": "",
+
+    "help": "Print this help message.",
+    "identifier": "The class name of the examples' identifier. [default: {default_identifier}]",
+    "encoding": "The encoding used to read the database and write the outputs. [default: {default_encoding}]",
+    "format_db": "The format used to read the database and write the outputs. [default: {default_format_db}]",
+    "delimiter": "The symbol used to delimiting data in CSV database. [default: {default_delimiter}]",
+    "have_header": "Set this boolean to 1 if your database have a header, or 0 otherwise. [default: {default_have_header}]",
+    "class": "The name or the index of the class attribute. The first index of the database is `0`."
+}

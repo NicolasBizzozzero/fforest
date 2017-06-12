@@ -100,6 +100,10 @@ def subsubtrain_directory_pattern() -> str:
     return _get_name_from_file("subsubtrain_directory_pattern")
 
 
+def help_param() -> str:
+    return _get_name_from_file("help")
+
+
 def identifier() -> str:
     return _get_name_from_file("identifier")
 
