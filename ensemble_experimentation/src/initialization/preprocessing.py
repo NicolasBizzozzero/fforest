@@ -29,10 +29,10 @@ def preprocessing(args: dict) -> bool:
     """
     create_dir(args[gpn.main_directory()])
 
-    if args[gpn.identificator()] is None:
+    if args[gpn.identifier()] is None:
         # We must add an identificator column
-        _add_id(input_path=args[gpn.database()], output_path=args[gpn.modified_database_name()],
-                id_name=gdv.identificator(), have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
+        _add_id(input_path=args[gpn.database()], output_path=args[gpn.preprocessed_database_name()],
+                id_name=gdv.identifier(), have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
         return True
     return False
 

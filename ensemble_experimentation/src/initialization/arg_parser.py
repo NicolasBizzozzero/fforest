@@ -26,29 +26,29 @@ _FORMAT_DICTIONARY = dict(
     param_training_value=gpn.training_value(),
     param_trees_in_forest=gpn.trees_in_forest(),
     param_reference_value=gpn.reference_value(),
-    param_identificator=gpn.identificator(),
+    param_identificator=gpn.identifier(),
     param_encoding=gpn.encoding(),
     param_format_db=gpn.format_db(),
     param_delimiter=gpn.delimiter(),
     param_have_header=gpn.have_header(),
-    param_initial_split_train_name=gpn.initial_split_train_name(),
-    param_initial_split_test_name=gpn.initial_split_test_name(),
+    param_initial_split_train_name=gpn.train_name(),
+    param_initial_split_test_name=gpn.test_name(),
     param_initial_split_method=gpn.initial_split_method(),
-    param_modified_database_name=gpn.modified_database_name(),
+    param_modified_database_name=gpn.preprocessed_database_name(),
     param_class_name=gpn.class_name(),
     param_main_directory=gpn.main_directory(),
     param_reference_split_method=gpn.reference_split_method(),
 
     # Default values
-    default_identificator=gdv.identificator(),
+    default_identificator=gdv.identifier(),
     default_encoding=gdv.encoding(),
     default_training_value=gdv.training_value(),
     default_format_db=gdv.format_db(),
     default_reference_value=gdv.reference_value(),
     default_delimiter=gdv.delimiter(),
     default_have_header=gdv.have_header(),
-    default_initial_split_train_name=gdv.initial_split_train_name(),
-    default_initial_split_test_name=gdv.initial_split_test_name(),
+    default_initial_split_train_name=gdv.train_name(),
+    default_initial_split_test_name=gdv.test_name(),
     default_initial_split_method=gdv.initial_split_method(),
     default_reference_split_method=gdv.reference_split_method(),
 
@@ -61,8 +61,8 @@ def _check_add_id(args: dict) -> bool:
     """Check if the user asked to use as an identificator the same string as the default identificator string.
     If this function is not called, the program will overwrite all the identificator values in this specific case.
     """
-    id_name = gpn.identificator()
-    if args[id_name] == gdv.identificator():
+    id_name = gpn.identifier()
+    if args[id_name] == gdv.identifier():
         # Check if the parameter for the identificator has been used
         for option in sys.argv:
             if len(option) > len(id_name) and option[:len(id_name)] == id_name:
@@ -113,7 +113,7 @@ def _clean_args(args: dict) -> dict:
     # ID
     if _check_add_id(cleaned_args):
         # We must add a column as identificator
-        cleaned_args[gpn.identificator()] = None
+        cleaned_args[gpn.identifier()] = None
 
     # Initial split Method
     cleaned_args[gpn.initial_split_method()] = _str_to_smenum(cleaned_args[gpn.initial_split_method()])
@@ -134,20 +134,20 @@ def _clean_args(args: dict) -> dict:
         cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
 
     # Initial split test database name
-    cleaned_args[gpn.initial_split_test_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.initial_split_test_name()] + "." + cleaned_args[gpn.format_db()]
+    cleaned_args[gpn.test_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.test_name()] + "." + cleaned_args[gpn.format_db()]
 
     # Initial split train database name
     #TODO: I don't know why, but docopt can't parse the default value
-    if cleaned_args[gpn.initial_split_train_name()] is None:
-        cleaned_args[gpn.initial_split_train_name()] = cleaned_args[gpn.main_directory()] + "/" + gdv.initial_split_train_name() + "." + cleaned_args[gpn.format_db()]
+    if cleaned_args[gpn.train_name()] is None:
+        cleaned_args[gpn.train_name()] = cleaned_args[gpn.main_directory()] + "/" + gdv.train_name() + "." + cleaned_args[gpn.format_db()]
     else:
-        cleaned_args[gpn.initial_split_train_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.initial_split_train_name()]  + "." + cleaned_args[gpn.format_db()]
+        cleaned_args[gpn.train_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.train_name()] + "." + cleaned_args[gpn.format_db()]
 
     # Default modified database name
     try:
-        cleaned_args[gpn.modified_database_name()]
+        cleaned_args[gpn.preprocessed_database_name()]
     except KeyError:
-        cleaned_args[gpn.modified_database_name()] = cleaned_args[gpn.main_directory()] + "/" + _get_modified_db_name(cleaned_args)
+        cleaned_args[gpn.preprocessed_database_name()] = cleaned_args[gpn.main_directory()] + "/" + _get_modified_db_name(cleaned_args)
 
     # Training value
     cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
@@ -157,9 +157,9 @@ def _clean_args(args: dict) -> dict:
     # Add statistics
     ggv.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
     ggv.statistics[gsn.database_name()] = get_filename(cleaned_args[gpn.database()])
-    ggv.statistics[gsn.modified_database_path()] = cleaned_args[gpn.modified_database_name()]
-    ggv.statistics[gsn.train_path()] = cleaned_args[gpn.initial_split_train_name()]
-    ggv.statistics[gsn.test_path()] = cleaned_args[gpn.initial_split_test_name()]
+    ggv.statistics[gsn.preprocessed_database_path()] = cleaned_args[gpn.preprocessed_database_name()]
+    ggv.statistics[gsn.train_path()] = cleaned_args[gpn.train_name()]
+    ggv.statistics[gsn.test_path()] = cleaned_args[gpn.test_name()]
     ggv.statistics[gsn.instances_in_database()] = cleaned_args[ggv.number_of_rows()]
 
     return cleaned_args

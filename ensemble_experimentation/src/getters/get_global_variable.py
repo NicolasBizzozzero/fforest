@@ -1,28 +1,27 @@
+""" This module defines functions to easily access values stored in the file `global_variables.json`, located in the
+`res` folder at the root of the program's package.
+This file contains metadata and information for the program. They are mainly used by the `setup.py` module.
+
+It follows the following strict guidelines:
+- All values stored in the files must have its own access function.
+- All access functions must have the same name as its respective key in the file. The only exception is a key is named
+after a built-in function or variable. In this case, the programmer is free to prepend a word to its access function
+name.
+- Except for the access functions, this module mustn't have any side effect to the program's namespace nor the files it
+tries to access.
+"""
 import json
 import os
 
 
-# Contains every parsed arguments without any modification
-arguments = dict()
-
-# Contains argument cleaned for better an faster uses by the program
-cleaned_arguments = dict()
-
-# Contains useful statistics for the user
-statistics = dict()
-
-_FILEPATH_GLOBAL_VARIABLES = "../../res/global_variables.json"
+_PATH_GLOBAL_VARIABLES = "../../res/global_variables.json"
 
 
 def _get_value_from_file(value):
-    filepath = os.path.join(os.path.dirname(__file__),
-                            _FILEPATH_GLOBAL_VARIABLES)
-    with open(filepath) as file:
+    path = os.path.join(os.path.dirname(__file__),
+                        _PATH_GLOBAL_VARIABLES)
+    with open(path) as file:
         return json.load(file)[value]
-
-
-def number_of_rows() -> str:
-    return "number_of_rows"
 
 
 def name() -> str:
@@ -65,15 +64,15 @@ def status() -> str:
     return _get_value_from_file("status")
 
 
-def copyright() -> str:
+def copyright_text() -> str:
     return _get_value_from_file("copyright")
 
 
-def credits() -> list:
+def credits_authors() -> list:
     return _get_value_from_file("credits")
 
 
-def license() -> str:
+def license_used() -> str:
     return _get_value_from_file("license")
 
 

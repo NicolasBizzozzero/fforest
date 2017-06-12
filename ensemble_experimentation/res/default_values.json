@@ -1,14 +1,26 @@
 {
-    "identificator": "_ID",
-    "encoding": "utf8",
     "training_value": 0.75,
-    "format": "csv",
     "reference_value": 0.25,
-    "delimiter": ",",
-    "have_header": 0,
-    "initial_split_train_name": "train",
-    "initial_split_test_name": "test",
+    "trees_in_forest": 10,
+
     "initial_split_method": "keepdistribution",
     "reference_split_method": "keepdistribution",
-    "statistics_file_name": "statistics.json"
+    "subsubtrain_split_method": "keepdistribution",
+
+    "train_name": "train",
+    "test_name": "test",
+    "subtrain_name": "subtrain",
+    "reference_name": "reference",
+    "subsubtrain_name_pattern": "%s_sstrain",
+    "statistics_file_name": "statistics.json",
+    "tree_file_extension": "tree",
+    "vector_file_extension": "vector",
+
+    "subtrain_directory": "subtrain",
+    "subsubtrain_directory_pattern": "%s_sstrain",
+
+    "identifier": "_ID",
+    "encoding": "utf8",
+    "format_db": "csv",
+    "delimiter": ","
 }

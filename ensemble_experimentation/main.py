@@ -2,6 +2,7 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 import ensemble_experimentation.src.getters.get_default_value as gdv
+import ensemble_experimentation.src.vrac
 from ensemble_experimentation.src.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.splitting_methods import split2
 from ensemble_experimentation.src.initialization.arg_parser import parse_args_main_entry_point
@@ -16,7 +17,7 @@ def main_entry_point():
 
     # Split the initial database into the train and test database
     if has_ben_backuped:
-        input_path = ggv.cleaned_arguments[gpn.modified_database_name()]
+        input_path = ggv.cleaned_arguments[gpn.preprocessed_database_name()]
     else:
         input_path = ggv.cleaned_arguments[gpn.database()]
     ggv.statistics[gsn.instances_in_train()], \
@@ -26,8 +27,8 @@ def main_entry_point():
                row_limit=ggv.cleaned_arguments[gpn.training_value()],
                have_header=ggv.cleaned_arguments[gpn.have_header()],
                method=ggv.cleaned_arguments[gpn.initial_split_method()],
-               output_name_train=ggv.cleaned_arguments[gpn.initial_split_train_name()],
-               output_name_test=ggv.cleaned_arguments[gpn.initial_split_test_name()],
+               output_name_train=ggv.cleaned_arguments[gpn.train_name()],
+               output_name_test=ggv.cleaned_arguments[gpn.test_name()],
                encoding=ggv.cleaned_arguments[gpn.encoding()],
                class_name=ggv.cleaned_arguments[gpn.class_name()],
                number_of_rows=ggv.cleaned_arguments[ggv.number_of_rows()])
@@ -47,7 +48,7 @@ def main_entry_point():
                number_of_rows=ggv.statistics[gsn.instances_in_train()])
 
     # Dump the statistics dictionary
-    gsn.output_dict(ggv.statistics, ggv.cleaned_arguments[gpn.main_directory()] + "/" + gdv.statistics_file_name())
+    ensemble_experimentation.src.vrac.dump_dict(ggv.statistics, ggv.cleaned_arguments[gpn.main_directory()] + "/" + gdv.statistics_file_name())
 
 
 def forest_entry_point():

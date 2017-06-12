@@ -1,3 +1,4 @@
+import json
 import time
 import ntpath
 import os
@@ -122,3 +123,13 @@ def get_filename(path: str, with_extension: bool = False) -> str:
 def create_dir(directory: str) -> None:
     """ Create a directory if it doesn't exists. Otherwise, do nothing"""
     os.makedirs(directory, exist_ok=True)
+
+
+def dump_dict(d: dict, path: str, encoding: str = None, indent: int = 4,
+              sort_keys: bool = True) -> None:
+    """ Dump the content of `d` into the path `path`.
+    You can pass an optional encoding, used to open the file, the indent used by the JSON writer and a boolean, which
+    makes you able to sort the keys into the file or not.
+    """
+    with open(path, 'w', encoding=encoding) as file:
+        return json.dump(d, file, indent=indent, sort_keys=sort_keys)

@@ -40,7 +40,7 @@ setup(
     author_email=ggv.email(),
 
     # Choose your license
-    license=ggv.license(),
+    license=ggv.license_used(),
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=ggv.classifiers(),
