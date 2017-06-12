@@ -37,6 +37,7 @@ _FORMAT_DICTIONARY = dict(
     param_modified_database_name=gpn.modified_database_name(),
     param_class_name=gpn.class_name(),
     param_main_directory=gpn.main_directory(),
+    param_reference_split_method=gpn.reference_split_method(),
 
     # Default values
     default_identificator=gdv.identificator(),
@@ -49,6 +50,7 @@ _FORMAT_DICTIONARY = dict(
     default_initial_split_train_name=gdv.initial_split_train_name(),
     default_initial_split_test_name=gdv.initial_split_test_name(),
     default_initial_split_method=gdv.initial_split_method(),
+    default_reference_split_method=gdv.reference_split_method(),
 
     # Global variables
     global_name=ggv.name()
@@ -118,6 +120,11 @@ def _clean_args(args: dict) -> dict:
     if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
         raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
 
+    # Reference split Method
+    cleaned_args[gpn.reference_split_method()] = _str_to_smenum(cleaned_args[gpn.reference_split_method()])
+    if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
+        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
+
     # Rename parameter database
     cleaned_args["{param_database}".format(**_FORMAT_DICTIONARY)] = cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
     del cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
@@ -164,7 +171,7 @@ def parse_args_main_entry_point() -> Tuple[dict, dict]:
     documentation = """{global_name}
 
 Usage:
-  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>] [{param_main_directory} <main_directory>]
+  ensemble_experimentation.py <{param_database}> [{param_training_value} <training_value>] [{param_trees_in_forest} <trees_in_forest>] [{param_reference_value} <reference_value>] [{param_identificator} <ID>] [{param_encoding} <encoding>] [{param_format_db} <format>] [{param_delimiter} <delimiter>] [{param_have_header} <have_header>] [{param_initial_split_train_name} <initial_split_train_name>] [{param_initial_split_test_name} <initial_split_test_name>] [{param_initial_split_method} <initial_split_method>] [{param_class_name} <class_name>] [{param_main_directory} <main_directory>] [{param_reference_split_method} <reference_split_method>]
 
 Options:
   -h --help                           Print this help message.
@@ -178,10 +185,13 @@ Options:
   {param_have_header}=<BOOL>         Set this boolean to 1 if your database have a header, or 0 otherwise. [default: {default_have_header}]
   {param_initial_split_train_name}=<STR> The name of the training database after the initial split. [default: {default_initial_split_train_name}]
   {param_initial_split_test_name}=<STR>   The name of the testing database after the initial split. [default: {default_initial_split_test_name}]
-  {param_initial_split_method}=<METHOD>         The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]
   {param_modified_database_name}=<STR>                      The name of the modified original database. Its defaulting to the database name prefixed with '~'.
   {param_class_name}=<STR>             The name or the index of the class attribute. The first index of the database is `0`.
   {param_main_directory}=<name>        The name of the main directory, where all the project will be outputed. It defaults to the name of the database.
+  
+  # Splitting Methods
+  {param_initial_split_method}=<METHOD>         The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]
+  {param_reference_split_method}=<METHOD>         The method to use with the split of the train database to the reference and subtrain databases. Values can be `halfing` or `keepdistribution` [default: {default_reference_split_method}]
 """.format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

@@ -1,4 +1,5 @@
 import csv
+from typing import Union
 
 
 def iter_rows(filepath: str) -> iter:
@@ -15,7 +16,7 @@ def get_number_of_rows(filepath: str) -> int:
         return len(list(csv.reader(csv_file))) - 1
 
 
-def get_row(filepath: str, row_number: int) -> list:
+def get_row(filepath: str, row_number: int) -> Union[list, None]:
     """ Return the `row_number`-th row as a list from the file located at `filepath`.
     The rows are indexed from 1 to len(`filepath`).
     If a `row_number` is out-of-bound, this function return the `None` value.

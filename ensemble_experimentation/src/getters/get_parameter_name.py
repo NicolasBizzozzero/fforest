@@ -60,6 +60,10 @@ def initial_split_method() -> str:
     return _get_name_from_file("initial_split_method")
 
 
+def reference_split_method() -> str:
+    return _get_name_from_file("reference_split_method")
+
+
 def modified_database_name() -> str:
     return _get_name_from_file("modified_database_name")
 

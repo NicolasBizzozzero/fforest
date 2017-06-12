@@ -9,5 +9,6 @@
     "initial_split_train_name": "train",
     "initial_split_test_name": "test",
     "initial_split_method": "keepdistribution",
+    "reference_split_method": "keepdistribution",
     "statistics_file_name": "statistics.json"
 }
