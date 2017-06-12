@@ -11,8 +11,9 @@ import docopt
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
+import ensemble_experimentation.src.getters.get_statistics_name as gsn
 from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
-from ensemble_experimentation.src.vrac import is_a_percentage
+from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.splitting_methods import _str_to_smenum, SplittingMethod
 import os
@@ -91,6 +92,8 @@ def _get_modified_db_name(args: dict) -> str:
 
 
 def _clean_args(args: dict) -> dict:
+    global statistics
+
     """ Clean the arguments to make the `args` dictionary usable more easily. """
     cleaned_args = copy.copy(args)
 
@@ -138,6 +141,9 @@ def _clean_args(args: dict) -> dict:
     cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
     cleaned_args[gpn.training_value()] = _convert_row_limit(cleaned_args[gpn.training_value()],
                                                             cleaned_args[ggv.number_of_rows()])
+
+    # Add statistics
+    statistics[gsn.database_path()] = get_filename()
 
     return cleaned_args
 

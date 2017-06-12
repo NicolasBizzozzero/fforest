@@ -1,4 +1,6 @@
 import time
+import ntpath
+import os
 
 
 def timeit(func: callable) -> callable:
@@ -76,3 +78,37 @@ def is_a_percentage(s: str) -> bool:
         False
     """
     return is_a_float(s) and 0.0 <= float(s) <= 1.0
+
+
+def get_filename(path: str, with_extension: bool = False) -> str:
+    """ Extract the filename from a path.
+
+    Examples:
+        >>> get_filename("file.txt")
+        'file'
+        >>> get_filename("file.txt", with_extension=True)
+        'file.txt'
+        >>> get_filename("dir/file.txt")
+        'file'
+        >>> get_filename("dir/subdir/file.txt")
+        'file'
+        >>> get_filename("dir/subdir/file")
+        'file'
+        >>> get_filename("dir/subdir/file.txt.txt")
+        'file.txt'
+        >>> get_filename("dir/subdir/file.txt.txt", with_extension=True)
+        'file.txt.txt'
+        >>> get_filename("dir/subdir/file.txt.txt/")
+        'file.txt'
+        >>> get_filename("dir/subdir/file.txt.txt/", with_extension=True)
+        'file.txt.txt'
+        >>> get_filename("/dir/subdir/file.txt.txt/")
+        'file.txt'
+        >>> get_filename("/dir/subdir/file.txt.txt/", with_extension=True)
+        'file.txt.txt'
+    """
+    head, tail = ntpath.split(path)
+    if with_extension:
+        return tail or ntpath.basename(head)
+    else:
+        return os.path.splitext(tail or ntpath.basename(head))[0]
