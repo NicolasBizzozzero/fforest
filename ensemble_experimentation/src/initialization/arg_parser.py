@@ -137,7 +137,7 @@ def _clean_args(args: dict) -> dict:
     # Training value
     cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
     cleaned_args[gpn.training_value()] = _convert_row_limit(cleaned_args[gpn.training_value()],
-                                                    cleaned_args[ggv.number_of_rows()])
+                                                            cleaned_args[ggv.number_of_rows()])
 
     return cleaned_args
 
