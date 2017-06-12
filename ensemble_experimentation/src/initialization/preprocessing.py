@@ -1,6 +1,7 @@
 import csv
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
+from ensemble_experimentation.src.vrac import create_dir
 
 
 def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str):
@@ -26,6 +27,8 @@ def preprocessing(args: dict) -> bool:
     """ Prepare the original database to be splitted.
     Return `True` if the database has been modifier, thus the modified database needs to be use, `False` otherwise.
     """
+    create_dir(args[gpn.main_directory()])
+
     if args[gpn.identificator()] is None:
         # We must add an identificator column
         _add_id(input_path=args[gpn.database()], output_path=args[gpn.modified_database_name()],

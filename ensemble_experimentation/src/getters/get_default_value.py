@@ -52,5 +52,9 @@ def initial_split_method() -> str:
     return _get_value_from_file("initial_split_method")
 
 
+def statistics_file_name() -> str:
+    return _get_value_from_file("statistics_file_name")
+
+
 if __name__ == '__main__':
     pass

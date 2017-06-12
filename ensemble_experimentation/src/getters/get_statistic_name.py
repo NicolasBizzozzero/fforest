@@ -12,6 +12,11 @@ def _get_stat_from_file(value):
         return json.load(file)[value]
 
 
+def output_dict(d: dict, path: str):
+    with open(path, 'w') as file:
+        return json.dump(d, file, indent=4, sort_keys=True)
+
+
 def database_path() -> str:
     return _get_stat_from_file("database_path")
 

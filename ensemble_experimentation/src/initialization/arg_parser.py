@@ -118,23 +118,29 @@ def _clean_args(args: dict) -> dict:
     if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
         raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
 
+    # Rename parameter database
+    cleaned_args["{param_database}".format(**_FORMAT_DICTIONARY)] = cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
+    del cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
+
+    # Main directory
+    if cleaned_args[gpn.main_directory()] is None:
+        cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
+
     # Initial split test database name
-    cleaned_args[gpn.initial_split_test_name()] += "." + cleaned_args[gpn.format_db()]
+    cleaned_args[gpn.initial_split_test_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.initial_split_test_name()] + "." + cleaned_args[gpn.format_db()]
 
     # Initial split train database name
     #TODO: I don't know why, but docopt can't parse the default value
     if cleaned_args[gpn.initial_split_train_name()] is None:
-        cleaned_args[gpn.initial_split_train_name()] = gdv.initial_split_train_name() + "." + cleaned_args[gpn.format_db()]
-
-    # Rename parameter database
-    cleaned_args["{param_database}".format(**_FORMAT_DICTIONARY)] = cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
-    del cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
+        cleaned_args[gpn.initial_split_train_name()] = cleaned_args[gpn.main_directory()] + "/" + gdv.initial_split_train_name() + "." + cleaned_args[gpn.format_db()]
+    else:
+        cleaned_args[gpn.initial_split_train_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.initial_split_train_name()]  + "." + cleaned_args[gpn.format_db()]
 
     # Default modified database name
     try:
         cleaned_args[gpn.modified_database_name()]
     except KeyError:
-        cleaned_args[gpn.modified_database_name()] = _get_modified_db_name(cleaned_args)
+        cleaned_args[gpn.modified_database_name()] = cleaned_args[gpn.main_directory()] + "/" + _get_modified_db_name(cleaned_args)
 
     # Training value
     cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
@@ -143,8 +149,11 @@ def _clean_args(args: dict) -> dict:
 
     # Add statistics
     ggv.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
-    ggv.statistics[gsn.database_name] = get_filename(cleaned_args[gpn.database()])
+    ggv.statistics[gsn.database_name()] = get_filename(cleaned_args[gpn.database()])
     ggv.statistics[gsn.modified_database_path()] = cleaned_args[gpn.modified_database_name()]
+    ggv.statistics[gsn.train_path()] = cleaned_args[gpn.initial_split_train_name()]
+    ggv.statistics[gsn.test_path()] = cleaned_args[gpn.initial_split_test_name()]
+    ggv.statistics[gsn.instances_in_database()] = cleaned_args[ggv.number_of_rows()]
 
     return cleaned_args
 

@@ -6,9 +6,13 @@ import csv
 import os
 import enum
 import itertools
+from typing import Tuple
+
 from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
 from ensemble_experimentation.src.csv_tools import write_header
 from ensemble_experimentation.src.vrac import is_an_int
+import ensemble_experimentation.src.getters.get_global_variable as ggv
+import ensemble_experimentation.src.getters.get_statistic_name as gsn
 
 
 class SplittingMethod(enum.IntEnum):
@@ -18,7 +22,7 @@ class SplittingMethod(enum.IntEnum):
 
 def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
            method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str, class_name=None,
-           number_of_rows: int = None):
+           number_of_rows: int = None) -> Tuple[int, int]:
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
     to the asked splitting2 method.
     """
@@ -35,7 +39,7 @@ def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = 
             if have_header:
                 write_header(input_reader, out_writer_train, out_writer_test)
 
-            halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
+            size_train, size_test = halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             if is_an_int(class_name):
                 input_reader = csv.reader(input_file, delimiter=delimiter)
@@ -46,8 +50,9 @@ def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = 
             if have_header:
                 write_header(input_reader, out_writer_train, out_writer_test)
 
-            keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows)
+            size_train, size_test = keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows)
 
+    return size_train, size_test
 
 def split():
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
@@ -97,7 +102,7 @@ def halfing(*, filepath: str, delimiter: str = ',', row_limit: int, output_name_
             current_out_writer.writerow(row)
 
 
-def halfing2(content, row_limit, out_writer_train, out_writer_test):
+def halfing2(content, row_limit, out_writer_train, out_writer_test) -> Tuple[int, int]:
     """Splits a CSV file into two pieces.
         You must pass each argument along with its name.
 
@@ -112,18 +117,25 @@ def halfing2(content, row_limit, out_writer_train, out_writer_test):
         Example:
             >> halfing2(filepath='input.csv', row_limit=100, output_name1="train.csv", output_name1="test.csv"));
     """
+    row_count_train, row_count_test = 0, 0
     for row_index, row in enumerate(content):
         if row_index + 1 <= row_limit:
             out_writer_train.writerow(row)
+            row_count_train += 1
         else:
             out_writer_test.writerow(row)
+            row_count_test += 1
+
+    return row_count_train, row_count_test
 
 
 def keep_distribution():
     pass
 
 
-def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows: int):
+def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows: int) ->\
+        Tuple[int, int]:
+    row_count_train, row_count_test = 0, 0
     # We store rows into the distribution dictionary
     distribution_dictionary = dict()
 
@@ -142,23 +154,29 @@ def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, cl
         for class_name in distribution_dictionary.keys():
             # Distribute to train
             rows_to_give = int(round(len(distribution_dictionary[class_name]) * percentage_train))
+            row_count_train += rows_to_give
             for _ in range(rows_to_give):
                 out_writer_train.writerow(distribution_dictionary[class_name].pop(0))
 
             # Then the rest to test
             for row in distribution_dictionary[class_name]:
                 out_writer_test.writerow(row)
+                row_count_test += 1
     # If it's a name
     else:
         for class_name in distribution_dictionary.keys():
             # Distribute to train
             rows_to_give = int(round(len(distribution_dictionary[class_name]) * percentage_train))
+            row_count_train += rows_to_give
             for _ in range(rows_to_give):
                 out_writer_train.writerow(distribution_dictionary[class_name].pop(0).values())
 
             # Then the rest to test
             for row in distribution_dictionary[class_name]:
                 out_writer_test.writerow(row.values())
+                row_count_test += 1
+
+    return row_count_train, row_count_test
 
 
 def _smenum_to_function(method: SplittingMethod, is2: bool) -> callable:

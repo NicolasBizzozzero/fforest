@@ -1,0 +1,10 @@
+{
+    "Database name": "bank",
+    "Database path": "../../bank.csv",
+    "Modified database path": "bank/~bank.csv",
+    "Number of instances in database": 4521,
+    "Number of instances in test database": 1130,
+    "Number of instances in train database": 3391,
+    "Test database path": "bank/test.csv",
+    "Train database path": "bank/train.csv"
+}
