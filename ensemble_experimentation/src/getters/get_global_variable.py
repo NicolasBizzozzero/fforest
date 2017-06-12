@@ -2,6 +2,15 @@ import json
 import os
 
 
+# Contains every parsed arguments without any modification
+arguments = dict()
+
+# Contains argument cleaned for better an faster uses by the program
+cleaned_arguments = dict()
+
+# Contains useful statistics for the user
+statistics = dict()
+
 _FILEPATH_GLOBAL_VARIABLES = "../../res/global_variables.json"
 
 

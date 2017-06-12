@@ -11,7 +11,7 @@ import docopt
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_global_variable as ggv
-import ensemble_experimentation.src.getters.get_statistics_name as gsn
+import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
 from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
 from ensemble_experimentation.src.csv_tools import get_number_of_rows
@@ -94,8 +94,6 @@ def _get_modified_db_name(args: dict) -> str:
 
 def _clean_args(args: dict) -> dict:
     """ Clean the arguments to make the `args` dictionary usable more easily. """
-    global statistics
-
     cleaned_args = copy.copy(args)
 
     # Class name
@@ -144,9 +142,9 @@ def _clean_args(args: dict) -> dict:
                                                             cleaned_args[ggv.number_of_rows()])
 
     # Add statistics
-    statistics[gsn.database_path()] = cleaned_args[gpn.database()]
-    statistics[gsn.database_name] = get_filename(cleaned_args[gpn.database()])
-    statistics[gsn.modified_database_path()] = cleaned_args[gpn.modified_database_name()()]
+    ggv.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
+    ggv.statistics[gsn.database_name] = get_filename(cleaned_args[gpn.database()])
+    ggv.statistics[gsn.modified_database_path()] = cleaned_args[gpn.modified_database_name()]
 
     return cleaned_args
 

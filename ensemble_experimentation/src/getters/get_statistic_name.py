@@ -2,54 +2,54 @@ import json
 import os
 
 
-_FILEPATH_DEFAULT_VALUES = "../../res/statistics_names.json"
+_FILEPATH_STATISTICS_NAMES = "../../res/statistics_names.json"
 
 
 def _get_stat_from_file(value):
     filepath = os.path.join(os.path.dirname(__file__),
-                            _FILEPATH_DEFAULT_VALUES)
+                            _FILEPATH_STATISTICS_NAMES)
     with open(filepath) as file:
         return json.load(file)[value]
 
 
 def database_path() -> str:
-    return _get_stat_from_file()["database_path"]
+    return _get_stat_from_file("database_path")
 
 
 def database_name() -> str:
-    return _get_stat_from_file()["database_name"]
+    return _get_stat_from_file("database_name")
 
 
 def modified_database_path() -> str:
-    return _get_stat_from_file()["modified_database_path"]
+    return _get_stat_from_file("modified_database_path")
 
 
 def train_path() -> str:
-    return _get_stat_from_file()["train_path"]
+    return _get_stat_from_file("train_path")
 
 
 def test_path() -> str:
-    return _get_stat_from_file()["test_path"]
+    return _get_stat_from_file("test_path")
 
 
 def instances_in_database() -> str:
-    return _get_stat_from_file()["instances_in_database"]
+    return _get_stat_from_file("instances_in_database")
 
 
 def instances_in_train() -> str:
-    return _get_stat_from_file()["instances_in_train"]
+    return _get_stat_from_file("instances_in_train")
 
 
 def instances_in_test() -> str:
-    return _get_stat_from_file()["instances_in_test"]
+    return _get_stat_from_file("instances_in_test")
 
 
 def instances_in_reference() -> str:
-    return _get_stat_from_file()["instances_in_reference"]
+    return _get_stat_from_file("instances_in_reference")
 
 
 def instances_in_subtrain() -> str:
-    return _get_stat_from_file()["instances_in_subtrain"]
+    return _get_stat_from_file("instances_in_subtrain")
 
 
 if __name__ == '__main__':
