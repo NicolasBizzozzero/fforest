@@ -15,7 +15,8 @@ import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.splitting_methods import str_to_splittingmethod, SplittingMethod
+from ensemble_experimentation.src.core.splitting_methods.splitting_methods import str_to_splittingmethod,\
+    SplittingMethod
 from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.file_tools.format import str_to_format
@@ -130,7 +131,7 @@ def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
         InvalidValue: The value "500.1" is neither a percentage nor a number of rows.
     """
     if not is_a_percentage(row_limit):
-        raise InvalidValue("The value \"" + row_limit + "\" is neither a percentage nor a number of rows.")
+        raise InvalidValue(row_limit)
     percentage = float(row_limit)
     return int(round(percentage * number_of_rows))
 
@@ -181,7 +182,7 @@ def _clean_args(args: dict) -> dict:
     cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
     if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
        cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
+        raise MissingClassificationAttribute(cleaned_args[gpn.initial_split_method()])
 
     # Main directory
     if cleaned_args[gpn.main_directory()] is None:
@@ -202,7 +203,7 @@ def _clean_args(args: dict) -> dict:
     cleaned_args[gpn.reference_split_method()] = str_to_splittingmethod(args[gpn.reference_split_method()])
     if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
        cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
+        raise MissingClassificationAttribute(cleaned_args[gpn.reference_split_method()])
 
     # Reference split value
 

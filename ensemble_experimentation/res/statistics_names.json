@@ -11,5 +11,6 @@
     "instances_in_train": "Number of instances in train database",
     "instances_in_test": "Number of instances in test database",
     "instances_in_reference": "Number of instances in reference database",
-    "instances_in_subtrain": "Number of instances in subtrain database"
+    "instances_in_subtrain": "Number of instances in subtrain database",
+    "instances_in_subsubtrain": "Number of instances in subsubtrain databases"
 }

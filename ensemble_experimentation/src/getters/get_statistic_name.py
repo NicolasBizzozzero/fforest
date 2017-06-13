@@ -73,5 +73,9 @@ def instances_in_subtrain() -> str:
     return _get_stat_from_file("instances_in_subtrain")
 
 
+def instances_in_subsubtrain() -> str:
+    return _get_stat_from_file("instances_in_subsubtrain")
+
+
 if __name__ == '__main__':
     pass

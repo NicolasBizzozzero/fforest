@@ -25,16 +25,18 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 output_writer.writerow(row)
 
 
-def preprocessing(args: dict):
+def preprocessing():
     """ Prepare the original database to be splitted. """
     # Create the main directory of the application
-    create_dir(args[gpn.main_directory()])
+    create_dir(env.cleaned_arguments[gpn.main_directory()])
 
     original_has_been_modified = False
-    if args[gpn.identifier()] is None:
+    if env.cleaned_arguments[gpn.identifier()] is None:
         # We must add an identificator column
-        _add_id(input_path=args[gpn.database()], output_path=env.statistics[gsn.preprocessed_database_path()],
-                id_name=gdv.identifier(), have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
+        _add_id(input_path=env.cleaned_arguments[gpn.database()],
+                output_path=env.statistics[gsn.preprocessed_database_path()],
+                id_name=gdv.identifier(), have_header=env.cleaned_arguments[gpn.have_header()],
+                delimiter=env.cleaned_arguments[gpn.delimiter()])
         original_has_been_modified = True
 
     if original_has_been_modified:
