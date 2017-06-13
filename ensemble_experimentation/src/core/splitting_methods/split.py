@@ -2,24 +2,33 @@
 All the methods postfixed by "2" are methods used to split the database into two other databases (usually a train and a
 test database).
 """
+
+print("Yo !1")
 import csv
+print("Yo !2")
 import enum
+print("Yo !3")
 import os
+print("Yo !4")
 from typing import Tuple
-
+print("Yo !5")
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
+print("Yo !6")
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
+print("Yo !7")
 from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
+print("Yo !8")
 from ensemble_experimentation.src.file_tools.csv_tools import write_header
+print("Yo !9")
 from ensemble_experimentation.src.vrac import is_an_int
-
+print("Yo !10")
 
 class SplittingMethod(enum.IntEnum):
     UNKNOWN = 0
     HALFING = 1
     KEEP_DISTRIBUTION = 2
 
-
+print("Yo !")
 def str_to_splittingmethod(string: str) -> SplittingMethod:
     """ Convert a String into its respective SplittingMethod enum. """
     string = string.lower()

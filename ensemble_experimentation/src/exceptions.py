@@ -1,4 +1,4 @@
-from ensemble_experimentation.src.core.splitting_methods.splitting_methods import SplittingMethod, splittingmethod_to_str
+from ensemble_experimentation.src.core.splitting_methods.split import SplittingMethod, splittingmethod_to_str
 
 
 class InvalidValue(Exception):

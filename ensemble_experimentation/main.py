@@ -1,4 +1,3 @@
-import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.initialization.arg_parser import parse_args_main_entry_point
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
