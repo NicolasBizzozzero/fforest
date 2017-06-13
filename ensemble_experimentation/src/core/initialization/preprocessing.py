@@ -2,6 +2,8 @@ import csv
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 from ensemble_experimentation.src.vrac import create_dir
+import ensemble_experimentation.src.getters.environment as env
+import ensemble_experimentation.src.getters.get_statistic_name as gsn
 
 
 def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str):
@@ -23,18 +25,23 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 output_writer.writerow(row)
 
 
-def preprocessing(args: dict) -> bool:
-    """ Prepare the original database to be splitted.
-    Return `True` if the database has been modifier, thus the modified database needs to be use, `False` otherwise.
-    """
+def preprocessing(args: dict):
+    """ Prepare the original database to be splitted. """
+    # Create the main directory of the application
     create_dir(args[gpn.main_directory()])
 
+    original_has_been_modified = False
     if args[gpn.identifier()] is None:
         # We must add an identificator column
-        _add_id(input_path=args[gpn.database()], output_path=args[gpn.preprocessed_database_name()],
+        _add_id(input_path=args[gpn.database()], output_path=env.statistics[gsn.preprocessed_database_path()],
                 id_name=gdv.identifier(), have_header=args[gpn.have_header()], delimiter=args[gpn.delimiter()])
-        return True
-    return False
+        original_has_been_modified = True
+
+    if original_has_been_modified:
+        # The database has been modified, we need to change the input path for the original split
+        env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
+    else:
+        env.initial_split_input_path = env.statistics[gsn.database_path()]
 
 
 if __name__ == '__main__':

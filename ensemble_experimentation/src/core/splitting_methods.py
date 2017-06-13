@@ -3,21 +3,19 @@ All the methods postfixed by "2" are methods used to split the database into two
 test database).
 """
 import csv
-import os
 import enum
-import itertools
+import os
 from typing import Tuple
 
 from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
-from ensemble_experimentation.src.csv_tools import write_header
+from ensemble_experimentation.src.file_tools.csv_tools import write_header
 from ensemble_experimentation.src.vrac import is_an_int
-import ensemble_experimentation.src.getters.get_global_variable as ggv
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
 
 
 class SplittingMethod(enum.IntEnum):
-    HALFING = 0
-    KEEP_DISTRIBUTION = 1
+    UNKNOWN = 0
+    HALFING = 1
+    KEEP_DISTRIBUTION = 2
 
 
 def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
@@ -179,20 +177,9 @@ def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, cl
     return row_count_train, row_count_test
 
 
-def _smenum_to_function(method: SplittingMethod, is2: bool) -> callable:
-    """ Convert a SplittingMethod enum into its respective function. """
-    if method == SplittingMethod.HALFING:
-        if is2:
-            return halfing2
-        return halfing
-    elif method == SplittingMethod.KEEP_DISTRIBUTION:
-        if is2:
-            return keep_distribution2
-        return keep_distribution
-
-
-def _str_to_smenum(string: str) -> SplittingMethod:
+def str_to_splittingmethod(string: str) -> SplittingMethod:
     """ Convert a String into its respective SplittingMethod enum. """
+    string = string.lower()
     if string == "halfing":
         return SplittingMethod.HALFING
     elif string == "keepdistribution":

@@ -1,6 +1,6 @@
 {
     "training_value": 0.75,
-    "reference_value": 0.25,
+    "reference_value": 0.10,
     "trees_in_forest": 10,
 
     "initial_split_method": "keepdistribution",

@@ -1,27 +1,53 @@
 """ This module contains all functions related to parsing command-line arguments for all entry points of the package.
 It uses the `docopt` package (listed as a dependencie) to easily combine the tedious task of writing documentation
 and parsing arguments.
+#TODO: We can gain time wy not formatting the helping message twice, but by directly formatting the documentation from
+#      the format dictionary
 """
+import copy
 import sys
 
 import docopt
-import ensemble_experimentation.src.getters.get_default_value as gdv
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
-import ensemble_experimentation.src.getters.get_global_variable as ggv
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
-import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
-from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
-from ensemble_experimentation.src.csv_tools import get_number_of_rows
-from ensemble_experimentation.src.splitting_methods import _str_to_smenum, SplittingMethod
-import os
-import copy
 
+import ensemble_experimentation.src.getters.environment as env
+import ensemble_experimentation.src.getters.get_default_value as gdv
+import ensemble_experimentation.src.getters.get_global_variable as ggv
+import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
+import ensemble_experimentation.src.getters.get_parameter_name as gpn
+import ensemble_experimentation.src.getters.get_statistic_name as gsn
+from ensemble_experimentation.src.core.splitting_methods import str_to_splittingmethod, SplittingMethod
+from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
+from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
+from ensemble_experimentation.src.file_tools.format import str_to_format
+from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
 
 _FORMAT_DICTIONARY = dict(
     # Documentation
     doc_usage=gpd.usage(),
+    doc_training_value=gpd.training_value(),
+    doc_reference_value=gpd.reference_value(),
+    doc_trees_in_forest=gpd.trees_in_forest(),
+    doc_initial_split_method=gpd.initial_split_method(),
+    doc_reference_split_method=gpd.reference_split_method(),
+    doc_train_name=gpd.train_name(),
+    doc_test_name=gpd.test_name(),
+    doc_preprocessed_db_name=gpd.preprocessed_database_name(),
+    doc_subtrain_name=gpd.subtrain_name(),
+    doc_reference_name=gpd.reference_name(),
+    doc_subsubtrain_name_pattern=gpd.subsubtrain_name_pattern(),
+    doc_statistics_name=gpd.statistics_file_name(),
+    doc_tree_file_extension=gpd.tree_file_extension(),
+    doc_vector_file_extension=gpd.vector_file_extension(),
+    doc_main_directory=gpd.main_directory(),
+    doc_subtrain_directory=gpd.subtrain_directory(),
+    doc_subsubtrain_directory_pattern=gpd.subsubtrain_directory_pattern(),
+    doc_help=gpd.help_doc(),
+    doc_identifier=gpd.identifier(),
+    doc_encoding=gpd.encoding(),
+    doc_format_db=gpd.format_db(),
+    doc_delimiter=gpd.delimiter(),
+    doc_have_header=gpd.have_header(),
+    doc_class_name=gpd.class_name(),
 
     # Parameters
     param_database=gpn.database(),
@@ -34,15 +60,15 @@ _FORMAT_DICTIONARY = dict(
     param_test_name=gpn.test_name(),
     param_preprocessed_db_name=gpn.preprocessed_database_name(),
     param_subtrain_name=gpn.subtrain_name(),
-    param_referencce_name=gpn.referencce_name(),
+    param_reference_name=gpn.reference_name(),
     param_subsubtrain_name_pattern=gpn.subsubtrain_name_pattern(),
-    param_statistics_name=gpn.statistics_name(),
+    param_statistics_name=gpn.statistics_file_name(),
     param_tree_file_extension=gpn.tree_file_extension(),
     param_vector_file_extension=gpn.vector_file_extension(),
     param_main_directory=gpn.main_directory(),
     param_subtrain_directory=gpn.subtrain_directory(),
     param_subsubtrain_directory_pattern=gpn.subsubtrain_directory_pattern(),
-    param_help=gpn.help(),
+    param_help=gpn.help_param(),
     param_identifier=gpn.identifier(),
     param_encoding=gpn.encoding(),
     param_format_db=gpn.format_db(),
@@ -62,7 +88,7 @@ _FORMAT_DICTIONARY = dict(
     default_subtrain_name=gdv.subtrain_name(),
     default_reference_name=gdv.reference_name(),
     default_subsubtrain_name_pattern=gdv.subsubtrain_name_pattern(),
-    default_statistics_name=gdv.statistics_name(),
+    default_statistics_name=gdv.statistics_file_name(),
     default_tree_file_extension=gdv.tree_file_extension(),
     default_vector_file_extension=gdv.vector_file_extension(),
     default_subtrain_directory=gdv.subtrain_directory(),
@@ -109,78 +135,116 @@ def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
     return int(round(percentage * number_of_rows))
 
 
-def _get_modified_db_name(args: dict) -> str:
+def _get_preprocessed_db_name(args: dict, extension: str = "") -> str:
     """ Return the name of the modified database given the path of the original database. """
-    return "~" + os.path.split(args[gpn.database()])[1]
+    return "~" + get_filename(args[gpn.database()], with_extension=False) + extension
 
 
 def _clean_args(args: dict) -> dict:
-    """ Clean the arguments to make the `args` dictionary usable more easily. """
+    """ Clean the arguments to make the `args` dictionary usable more easily.
+    This mainly consist of converting strings to int, float or enum.
+    """
     cleaned_args = copy.copy(args)
+
+    # Rename parameter database
+    cleaned_args[gpn.database()] = cleaned_args["<" + gpn.database() + ">"]
+    del cleaned_args["<" + gpn.database() + ">"]
+
+    # Count instances in initial database
+    env.statistics[gsn.instances_in_database()] = get_number_of_rows(cleaned_args[gpn.database()])
 
     # Class name
     try:
-        cleaned_args[gpn.class_name()]
+        args[gpn.class_name()]
     except KeyError:
         cleaned_args[gpn.class_name()] = None
 
+    # Delimiter
+
+    # Encoding
+
+    # Format
+    cleaned_args[gpn.format_db()] = str_to_format(args[gpn.format_db()])
+    extension = "." + args[gpn.format_db()].lower()
+
     # Have header
-    if cleaned_args[gpn.have_header()] == "0":
-        cleaned_args[gpn.have_header()] = False
-    else:
-        cleaned_args[gpn.have_header()] = True
+
+    # Help
 
     # ID
-    if _check_add_id(cleaned_args):
-        # We must add a column as identificator
+    if _check_add_id(args):
+        # We must add a column as an identifier
+        # It will be done in the preprocessing function
         cleaned_args[gpn.identifier()] = None
 
     # Initial split Method
-    cleaned_args[gpn.initial_split_method()] = _str_to_smenum(cleaned_args[gpn.initial_split_method()])
-    if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
+    cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
+    if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
+       cleaned_args[gpn.class_name()] is None:
         raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
-
-    # Reference split Method
-    cleaned_args[gpn.reference_split_method()] = _str_to_smenum(cleaned_args[gpn.reference_split_method()])
-    if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
-
-    # Rename parameter database
-    cleaned_args["{param_database}".format(**_FORMAT_DICTIONARY)] = cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
-    del cleaned_args["<{param_database}>".format(**_FORMAT_DICTIONARY)]
 
     # Main directory
     if cleaned_args[gpn.main_directory()] is None:
         cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
 
-    # Initial split test database name
-    cleaned_args[gpn.test_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.test_name()] + "." + cleaned_args[gpn.format_db()]
-
-    # Initial split train database name
-    #TODO: I don't know why, but docopt can't parse the default value
-    if cleaned_args[gpn.train_name()] is None:
-        cleaned_args[gpn.train_name()] = cleaned_args[gpn.main_directory()] + "/" + gdv.train_name() + "." + cleaned_args[gpn.format_db()]
+    # Preprocessed database name
+    if args[gpn.preprocessed_database_name()] is None:
+        cleaned_args[gpn.preprocessed_database_name()] = _get_preprocessed_db_name(cleaned_args, extension=extension)
     else:
-        cleaned_args[gpn.train_name()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.train_name()] + "." + cleaned_args[gpn.format_db()]
+        cleaned_args[gpn.preprocessed_database_name()] = get_filename(cleaned_args[gpn.preprocessed_database_name()],
+                                                                      with_extension=True)
 
-    # Default modified database name
-    try:
-        cleaned_args[gpn.preprocessed_database_name()]
-    except KeyError:
-        cleaned_args[gpn.preprocessed_database_name()] = cleaned_args[gpn.main_directory()] + "/" + _get_modified_db_name(cleaned_args)
+    # Reference database name
+    cleaned_args[gpn.reference_name()] = get_filename(cleaned_args[gpn.reference_name()],
+                                                      with_extension=False) + extension
+
+    # Reference split Method
+    cleaned_args[gpn.reference_split_method()] = str_to_splittingmethod(args[gpn.reference_split_method()])
+    if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
+       cleaned_args[gpn.class_name()] is None:
+        raise MissingClassificationAttribute("You need to pass a classification attribute for this splitting method")
+
+    # Reference split value
+
+    # Statistics file name
+
+    # Subsubtrain directory name pattern
+    # TODO: I don't know why, but docopt can't parse the default value
+    if cleaned_args[gpn.subsubtrain_directory_pattern()] is None:
+        cleaned_args[gpn.subsubtrain_directory_pattern()] = gdv.subsubtrain_directory_pattern()
+
+    # Subsubtrain name pattern
+
+    # Subtrain directory
+
+    # Subtrain name
+    cleaned_args[gpn.subtrain_name()] = get_filename(cleaned_args[gpn.subtrain_name()], with_extension=False) + extension
+
+    # Test database name
+    cleaned_args[gpn.test_name()] = get_filename(cleaned_args[gpn.test_name()], with_extension=False) + extension
+
+    # Train database name
+    cleaned_args[gpn.train_name()] = get_filename(cleaned_args[gpn.train_name()], with_extension=False) + extension
 
     # Training value
-    cleaned_args[ggv.number_of_rows()] = get_number_of_rows(cleaned_args[gpn.database()])
     cleaned_args[gpn.training_value()] = _convert_row_limit(cleaned_args[gpn.training_value()],
-                                                            cleaned_args[ggv.number_of_rows()])
+                                                            env.statistics[gsn.instances_in_database()])
+
+    # Tree file extension
+
+    # Trees in forest
+    cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
+
+    # Vector file extension
 
     # Add statistics
-    ggv.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
-    ggv.statistics[gsn.database_name()] = get_filename(cleaned_args[gpn.database()])
-    ggv.statistics[gsn.preprocessed_database_path()] = cleaned_args[gpn.preprocessed_database_name()]
-    ggv.statistics[gsn.train_path()] = cleaned_args[gpn.train_name()]
-    ggv.statistics[gsn.test_path()] = cleaned_args[gpn.test_name()]
-    ggv.statistics[gsn.instances_in_database()] = cleaned_args[ggv.number_of_rows()]
+    env.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
+    env.statistics[gsn.database_name()] = get_filename(cleaned_args[gpn.database()])
+    env.statistics[gsn.preprocessed_database_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.preprocessed_database_name()]
+    env.statistics[gsn.train_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.train_name()]
+    env.statistics[gsn.test_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.test_name()]
+    env.statistics[gsn.subtrain_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.subtrain_directory()] + "/" + cleaned_args[gpn.subtrain_name()]
+    env.statistics[gsn.reference_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.subtrain_directory()] + "/" + cleaned_args[gpn.reference_name()]
 
     return cleaned_args
 
@@ -206,7 +270,7 @@ Options:
   # File names
   {param_train_name}=<name>                 {doc_train_name}
   {param_test_name}=<name>                  {doc_test_name}
-  {param_preprocessed_db_name}=<name>       {doc_preprocessed_db}
+  {param_preprocessed_db_name}=<name>       {doc_preprocessed_db_name}
   {param_subtrain_name}=<name>              {doc_subtrain_name}
   {param_reference_name}=<name>             {doc_reference_name}
   {param_subsubtrain_name_pattern}=<name>   {doc_subsubtrain_name_pattern}
@@ -227,7 +291,7 @@ Options:
   {param_delimiter}=<char>                  {doc_delimiter}
   {param_have_header}                       {doc_have_header}
   {param_class_name}=<name>                 {doc_class_name}
-""".format(**_FORMAT_DICTIONARY)
+""".format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     cleaned_arguments = _clean_args(arguments)

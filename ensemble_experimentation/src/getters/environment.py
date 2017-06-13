@@ -8,6 +8,4 @@ cleaned_arguments = dict()
 # Contains useful statistics for the user
 statistics = dict()
 
-
-def number_of_rows() -> str:
-    return "number_of_rows"
+initial_split_input_path = None

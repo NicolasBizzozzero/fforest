@@ -12,7 +12,7 @@
 
     "train_name": "--train-name",
     "test_name": "--test-name",
-    "preprocessed_db_name":"--preprocessed-db-name",
+    "preprocessed_database_name":"--preprocessed-db-name",
     "subtrain_name": "--subtrain-name",
     "reference_name": "--refer-name",
     "subsubtrain_name_pattern": "--subsubtrain-name-pattern",
