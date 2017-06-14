@@ -46,7 +46,7 @@ def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
     elif splitting_method == SplittingMethod.KEEP_DISTRIBUTION:
         return "keepdistribution"
     else:
-        return "unknown"
+        return splitting_method.__str__()
 
 
 def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
@@ -80,7 +80,10 @@ def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = 
                 write_header(input_reader, out_writer_train, out_writer_test)
 
             size_train, size_test = keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows)
-    return size_train, size_test
+        else:
+            raise UnknownSplittingMethod(splittingmethod_to_str(method))
+
+        return size_train, size_test
 
 
 def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool, method: SplittingMethod, encoding: str,
@@ -113,9 +116,13 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
             if have_header:
                 write_header(input_reader, *out_writers)
 
-            databases_size = keep_distribution(input_reader, row_limit, out_writers, class_name, number_of_rows)
+            databases_size = keep_distribution(input_reader, row_limit, out_writers,
+                                               env.cleaned_arguments[gpn.trees_in_forest()], class_name, number_of_rows)
 
-    # Close all the file handlers
-    map(lambda f: f.close(), out_files)
+        else:
+            raise UnknownSplittingMethod(splittingmethod_to_str(method))
 
-    return databases_size
+        # Close all the file handlers
+        map(lambda f: f.close(), out_files)
+
+        return databases_size

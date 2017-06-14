@@ -29,6 +29,7 @@ _FORMAT_DICTIONARY = dict(
     doc_trees_in_forest=gpd.trees_in_forest(),
     doc_initial_split_method=gpd.initial_split_method(),
     doc_reference_split_method=gpd.reference_split_method(),
+    doc_subsubtrain_split_method=gpd.subsubtrain_split_method(),
     doc_train_name=gpd.train_name(),
     doc_test_name=gpd.test_name(),
     doc_preprocessed_db_name=gpd.preprocessed_database_name(),
@@ -56,6 +57,7 @@ _FORMAT_DICTIONARY = dict(
     param_trees_in_forest=gpn.trees_in_forest(),
     param_initial_split_method=gpn.initial_split_method(),
     param_reference_split_method=gpn.reference_split_method(),
+    param_subsubtrain_split_method=gpn.subsubtrain_split_method(),
     param_train_name=gpn.train_name(),
     param_test_name=gpn.test_name(),
     param_preprocessed_db_name=gpn.preprocessed_database_name(),
@@ -213,6 +215,15 @@ def _clean_args(args: dict) -> dict:
     if cleaned_args[gpn.subsubtrain_directory_pattern()] is None:
         cleaned_args[gpn.subsubtrain_directory_pattern()] = gdv.subsubtrain_directory_pattern()
 
+    # Subsubtrain split method
+    # TODO: I don't know why, but docopt can't parse the default value
+    if args[gpn.subsubtrain_split_method()] is None:
+        cleaned_args[gpn.subsubtrain_split_method()] = gdv.subsubtrain_split_method()
+    cleaned_args[gpn.subsubtrain_split_method()] = str_to_splittingmethod(cleaned_args[gpn.subsubtrain_split_method()])
+    if cleaned_args[gpn.subsubtrain_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
+       cleaned_args[gpn.class_name()] is None:
+        raise MissingClassificationAttribute(cleaned_args[gpn.subsubtrain_split_method()])
+
     # Subsubtrain name pattern
 
     # Subtrain directory
@@ -266,6 +277,7 @@ Options:
   # Splitting methods
   {param_initial_split_method}=<method>     {doc_initial_split_method}
   {param_reference_split_method}=<method>   {doc_reference_split_method}
+  {param_subsubtrain_split_method}=<method> {doc_subsubtrain_split_method}
 
   # File names
   {param_train_name}=<name>                 {doc_train_name}

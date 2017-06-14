@@ -1,8 +1,8 @@
 from math import floor
-from typing import Tuple
+from typing import Tuple, List
 
 
-def halfing(input_reader, row_limit: int, out_writers, number_of_trees: int):
+def halfing(input_reader, row_limit: int, out_writers, number_of_trees: int) -> List:
     """Splits a CSV file into multiple pieces.
         You must pass each argument along with its name.
 

@@ -1,7 +1,7 @@
 import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.splitting_methods.split import split, SplittingMethod
+from ensemble_experimentation.src.core.splitting_methods.split import split
 from ensemble_experimentation.src.vrac import create_dir
 
 
@@ -24,7 +24,7 @@ def subsubtrain_split():
         split(input_path=env.statistics[gsn.subtrain_path()],
               delimiter=env.cleaned_arguments[gpn.delimiter()],
               have_header=env.cleaned_arguments[gpn.have_header()],
-              method=SplittingMethod.HALFING,                           # TODO: Change this
+              method=env.cleaned_arguments[gpn.subsubtrain_split_method()],
               encoding=env.cleaned_arguments[gpn.encoding()],
               class_name=env.cleaned_arguments[gpn.class_name()],
               number_of_rows=env.statistics[gsn.instances_in_subtrain()],
