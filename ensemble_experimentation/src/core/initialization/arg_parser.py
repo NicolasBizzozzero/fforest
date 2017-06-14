@@ -15,8 +15,8 @@ import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
-from ensemble_experimentation.src.exceptions import InvalidValue, MissingClassificationAttribute
+from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod, \
+    splittingmethod_to_str
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.file_tools.format import str_to_format
 from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
@@ -310,3 +310,13 @@ def parse_args_forest_reduction_entry_point() -> dict:
 
 if __name__ == "__main__":
     pass
+
+
+class MissingClassificationAttribute(Exception):
+    def __init__(self, splitting_method: SplittingMethod):
+        Exception.__init__(self, "You need to pass a classification attribute for the splitting method : {method}".format(method=splittingmethod_to_str(splitting_method)))
+
+
+class InvalidValue(Exception):
+    def __init__(self, row_limit: int):
+        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor a number of rows.".format(row_limit=str(row_limit)))

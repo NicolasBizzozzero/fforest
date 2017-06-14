@@ -2,33 +2,32 @@
 All the methods postfixed by "2" are methods used to split the database into two other databases (usually a train and a
 test database).
 """
-
-print("Yo !1")
 import csv
-print("Yo !2")
 import enum
-print("Yo !3")
 import os
-print("Yo !4")
 from typing import Tuple
-print("Yo !5")
+
+import ensemble_experimentation.src.getters.environment as env
+import ensemble_experimentation.src.getters.get_parameter_name as gpn
+from ensemble_experimentation.src.core.splitting_methods.halfing import halfing
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
-print("Yo !6")
+from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
-print("Yo !7")
-from ensemble_experimentation.src.exceptions import UnknownSplittingMethod
-print("Yo !8")
 from ensemble_experimentation.src.file_tools.csv_tools import write_header
-print("Yo !9")
 from ensemble_experimentation.src.vrac import is_an_int
-print("Yo !10")
+
 
 class SplittingMethod(enum.IntEnum):
     UNKNOWN = 0
     HALFING = 1
     KEEP_DISTRIBUTION = 2
 
-print("Yo !")
+
+class UnknownSplittingMethod(Exception):
+    def __init__(self, method_name: str):
+        Exception.__init__(self, "The splitting method : \"{method_name}\" doesn't exists".format(method_name=method_name))
+
+
 def str_to_splittingmethod(string: str) -> SplittingMethod:
     """ Convert a String into its respective SplittingMethod enum. """
     string = string.lower()
@@ -84,8 +83,39 @@ def split2(*, filepath: str, delimiter: str, row_limit: int, output_path: str = 
     return size_train, size_test
 
 
-def split():
+def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool, method: SplittingMethod, encoding: str,
+          class_name=None, number_of_rows: int = None, tree_names: list, subtrain_path: str) -> Tuple:
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
     to the asked splitting method.
     """
-    pass
+    with open(input_path, encoding=encoding) as input_file:
+        out_files = [open("{path}/{tree_name}/{tree_name}.{extension}".format(path=subtrain_path,
+                                                                              tree_name=name,
+                                                                              extension=env.arguments[gpn.format_db()]),
+                          'w') for name in tree_names]
+        out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
+
+        if method == SplittingMethod.HALFING:
+            input_reader = csv.reader(input_file, delimiter=delimiter)
+
+            # Write the headers if asked to
+            if have_header:
+                write_header(input_reader, *out_writers)
+
+            databases_size = halfing(input_reader, row_limit, out_writers, env.cleaned_arguments[gpn.trees_in_forest()])
+        elif method == SplittingMethod.KEEP_DISTRIBUTION:
+            if is_an_int(class_name):
+                input_reader = csv.reader(input_file, delimiter=delimiter)
+            else:
+                input_reader = csv.DictReader(input_file, delimiter=delimiter)
+
+            # Write the headers if asked to
+            if have_header:
+                write_header(input_reader, *out_writers)
+
+            databases_size = keep_distribution(input_reader, row_limit, out_writers, class_name, number_of_rows)
+
+    # Close all the file handlers
+    map(lambda f: f.close(), out_files)
+
+    return databases_size

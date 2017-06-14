@@ -1,7 +1,7 @@
 import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
-from ensemble_experimentation.src.core.splitting_methods import split2
+import ensemble_experimentation.src.getters.get_statistic_name as gsn
+from ensemble_experimentation.src.core.splitting_methods.split import split2
 
 
 def initial_split():

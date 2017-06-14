@@ -1,7 +1,8 @@
 import json
-import time
 import ntpath
 import os
+import sys
+import time
 
 
 def timeit(func: callable) -> callable:
@@ -133,3 +134,8 @@ def dump_dict(d: dict, path: str, encoding: str = None, indent: int = 4,
     """
     with open(path, 'w', encoding=encoding) as file:
         return json.dump(d, file, indent=indent, sort_keys=sort_keys)
+
+
+def eprint(*args, **kwargs):
+    """ Print wrapper for `stderr`. """
+    print(*args, file=sys.stderr, **kwargs)
