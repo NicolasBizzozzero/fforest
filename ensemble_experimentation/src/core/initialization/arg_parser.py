@@ -1,12 +1,9 @@
 """ This module contains all functions related to parsing command-line arguments for all entry points of the package.
 It uses the `docopt` package (listed as a dependencie) to easily combine the tedious task of writing documentation
 and parsing arguments.
-#TODO: We can gain time wy not formatting the helping message twice, but by directly formatting the documentation from
+#TODO: We can gain time by not formatting the helping message twice, but by directly formatting the documentation from
 #      the format dictionary
 """
-import copy
-import sys
-
 import docopt
 
 import ensemble_experimentation.src.getters.environment as env
@@ -15,11 +12,8 @@ import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod, \
-    splittingmethod_to_str
-from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
-from ensemble_experimentation.src.file_tools.format import str_to_format
-from ensemble_experimentation.src.vrac import is_a_percentage, get_filename
+from ensemble_experimentation.src.core.initialization.arg_cleaner import clean_args
+from ensemble_experimentation.src.vrac import get_filename
 
 _FORMAT_DICTIONARY = dict(
     # Documentation
@@ -105,159 +99,18 @@ _FORMAT_DICTIONARY = dict(
 )
 
 
-def _check_add_id(args: dict) -> bool:
-    """Check if the user asked to use as an identificator the same string as the default identificator string.
-    If this function is not called, the program will overwrite all the identificator values in this specific case.
-    """
-    id_name = gpn.identifier()
-    if args[id_name] == gdv.identifier():
-        # Check if the parameter for the identificator has been used
-        for option in sys.argv:
-            if len(option) > len(id_name) and option[:len(id_name)] == id_name:
-                return False  # User asked for the default identificator
-        return True           # User didn't asked for an identificator at all
-    return False              # User asked for a different identificator than the default
-
-
-def _convert_row_limit(row_limit: str, number_of_rows: int) -> int:
-    """ Convert the parsed `row_limit` to a number of rows if it's a percentage, or return it if it's already a number
-    of rows.
-
-        Example :
-        >>> _convert_row_limit("0.5", 1000)
-        500
-        >>> _convert_row_limit("500", 1000)
-        500
-        >>> _convert_row_limit("500.1", 1000)
-        InvalidValue: The value "500.1" is neither a percentage nor a number of rows.
-    """
-    if not is_a_percentage(row_limit):
-        raise InvalidValue(row_limit)
-    percentage = float(row_limit)
-    return int(round(percentage * number_of_rows))
-
-
-def _get_preprocessed_db_name(args: dict, extension: str = "") -> str:
-    """ Return the name of the modified database given the path of the original database. """
-    return "~" + get_filename(args[gpn.database()], with_extension=False) + extension
-
-
-def _clean_args(args: dict) -> dict:
-    """ Clean the arguments to make the `args` dictionary usable more easily.
-    This mainly consist of converting strings to int, float or enum.
-    """
-    cleaned_args = copy.copy(args)
-
-    # Rename parameter database
-    cleaned_args[gpn.database()] = cleaned_args["<" + gpn.database() + ">"]
-    del cleaned_args["<" + gpn.database() + ">"]
-
-    # Count instances in initial database
-    env.statistics[gsn.instances_in_database()] = get_number_of_rows(cleaned_args[gpn.database()])
-
-    # Class name
-    try:
-        args[gpn.class_name()]
-    except KeyError:
-        cleaned_args[gpn.class_name()] = None
-
-    # Delimiter
-
-    # Encoding
-
-    # Format
-    cleaned_args[gpn.format_db()] = str_to_format(args[gpn.format_db()])
-    extension = "." + args[gpn.format_db()].lower()
-
-    # Have header
-
-    # Help
-
-    # ID
-    if _check_add_id(args):
-        # We must add a column as an identifier
-        # It will be done in the preprocessing function
-        cleaned_args[gpn.identifier()] = None
-
-    # Initial split Method
-    cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
-    if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.initial_split_method()])
-
-    # Main directory
-    if cleaned_args[gpn.main_directory()] is None:
-        cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
-
-    # Preprocessed database name
-    if args[gpn.preprocessed_database_name()] is None:
-        cleaned_args[gpn.preprocessed_database_name()] = _get_preprocessed_db_name(cleaned_args, extension=extension)
-    else:
-        cleaned_args[gpn.preprocessed_database_name()] = get_filename(cleaned_args[gpn.preprocessed_database_name()],
-                                                                      with_extension=True)
-
-    # Reference database name
-    cleaned_args[gpn.reference_name()] = get_filename(cleaned_args[gpn.reference_name()],
-                                                      with_extension=False) + extension
-
-    # Reference split Method
-    cleaned_args[gpn.reference_split_method()] = str_to_splittingmethod(args[gpn.reference_split_method()])
-    if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.reference_split_method()])
-
-    # Reference split value
-
-    # Statistics file name
-
-    # Subsubtrain directory name pattern
-    # TODO: I don't know why, but docopt can't parse the default value
-    if cleaned_args[gpn.subsubtrain_directory_pattern()] is None:
-        cleaned_args[gpn.subsubtrain_directory_pattern()] = gdv.subsubtrain_directory_pattern()
-
-    # Subsubtrain split method
-    # TODO: I don't know why, but docopt can't parse the default value
-    if args[gpn.subsubtrain_split_method()] is None:
-        cleaned_args[gpn.subsubtrain_split_method()] = gdv.subsubtrain_split_method()
-    cleaned_args[gpn.subsubtrain_split_method()] = str_to_splittingmethod(cleaned_args[gpn.subsubtrain_split_method()])
-    if cleaned_args[gpn.subsubtrain_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.subsubtrain_split_method()])
-
-    # Subsubtrain name pattern
-
-    # Subtrain directory
-
-    # Subtrain name
-    cleaned_args[gpn.subtrain_name()] = get_filename(cleaned_args[gpn.subtrain_name()], with_extension=False) + extension
-
-    # Test database name
-    cleaned_args[gpn.test_name()] = get_filename(cleaned_args[gpn.test_name()], with_extension=False) + extension
-
-    # Train database name
-    cleaned_args[gpn.train_name()] = get_filename(cleaned_args[gpn.train_name()], with_extension=False) + extension
-
-    # Training value
-    cleaned_args[gpn.training_value()] = _convert_row_limit(cleaned_args[gpn.training_value()],
-                                                            env.statistics[gsn.instances_in_database()])
-
-    # Tree file extension
-
-    # Trees in forest
-    cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
-
-    # Vector file extension
-
-    # Add statistics
-    env.statistics[gsn.database_path()] = cleaned_args[gpn.database()]
-    env.statistics[gsn.database_name()] = get_filename(cleaned_args[gpn.database()])
-    env.statistics[gsn.preprocessed_database_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.preprocessed_database_name()]
-    env.statistics[gsn.train_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.train_name()]
-    env.statistics[gsn.test_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.test_name()]
-    env.statistics[gsn.subtrain_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.subtrain_directory()] + "/" + cleaned_args[gpn.subtrain_name()]
-    env.statistics[gsn.reference_path()] = cleaned_args[gpn.main_directory()] + "/" + cleaned_args[gpn.subtrain_directory()] + "/" + cleaned_args[gpn.reference_name()]
-
-    return cleaned_args
+def _init_statistics(args: dict) -> None:
+    """ Initialize the `statistics` dictionary located inside the `env` module. """
+    env.statistics[gsn.database_path()] = args[gpn.database()]
+    env.statistics[gsn.database_name()] = get_filename(args[gpn.database()])
+    env.statistics[gsn.preprocessed_database_path()] = "{}/{}".format(args[gpn.main_directory()],
+                                                                      args[gpn.preprocessed_database_name()])
+    env.statistics[gsn.train_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.train_name()])
+    env.statistics[gsn.test_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.test_name()])
+    env.statistics[gsn.subtrain_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
+                                                            args[gpn.subtrain_name()])
+    env.statistics[gsn.reference_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
+                                                             args[gpn.reference_name()])
 
 
 def parse_args_main_entry_point() -> None:
@@ -306,10 +159,12 @@ Options:
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
-    cleaned_arguments = _clean_args(arguments)
+    cleaned_arguments = clean_args(arguments)
 
     env.arguments = arguments
     env.cleaned_arguments = cleaned_arguments
+
+    _init_statistics(cleaned_arguments)
 
 
 def parse_args_forest_entry_point() -> dict:
@@ -322,13 +177,3 @@ def parse_args_forest_reduction_entry_point() -> dict:
 
 if __name__ == "__main__":
     pass
-
-
-class MissingClassificationAttribute(Exception):
-    def __init__(self, splitting_method: SplittingMethod):
-        Exception.__init__(self, "You need to pass a classification attribute for the splitting method : {method}".format(method=splittingmethod_to_str(splitting_method)))
-
-
-class InvalidValue(Exception):
-    def __init__(self, row_limit: int):
-        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor a number of rows.".format(row_limit=str(row_limit)))

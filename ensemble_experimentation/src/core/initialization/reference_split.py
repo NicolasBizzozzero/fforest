@@ -1,24 +1,24 @@
 import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.initialization.arg_parser import _convert_row_limit
+from ensemble_experimentation.src.core.initialization.arg_cleaner import convert_row_limit
 from ensemble_experimentation.src.core.splitting_methods.split import split2
 from ensemble_experimentation.src.vrac import create_dir
 
 
 def _create_subtrain_directory():
-    create_dir(env.cleaned_arguments[gpn.main_directory()] + "/" +
-               env.cleaned_arguments[gpn.subtrain_directory()])
+    create_dir("{}/{}".format(env.cleaned_arguments[gpn.main_directory()],
+                              env.cleaned_arguments[gpn.subtrain_directory()]))
 
 
 def _calculate_row_limit():
-    env.cleaned_arguments[gpn.reference_value()] = _convert_row_limit(env.cleaned_arguments[gpn.reference_value()],
-                                                                      env.statistics[gsn.instances_in_train()])
+    env.cleaned_arguments[gpn.reference_value()] = convert_row_limit(env.cleaned_arguments[gpn.reference_value()],
+                                                                     env.statistics[gsn.instances_in_train()])
 
 
 def reference_split():
     """ Split the train database into the subtrain and reference databases.
-    Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary into
+    Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary, inside
     the `env` module.
     """
     _create_subtrain_directory()
@@ -28,7 +28,7 @@ def reference_split():
     # Split the database
     env.statistics[gsn.instances_in_reference()], \
         env.statistics[gsn.instances_in_subtrain()] = \
-        split2(filepath=env.statistics[gsn.train_path()],
+        split2(input_path=env.statistics[gsn.train_path()],
                delimiter=env.cleaned_arguments[gpn.delimiter()],
                row_limit=env.cleaned_arguments[gpn.reference_value()],
                have_header=env.cleaned_arguments[gpn.have_header()],

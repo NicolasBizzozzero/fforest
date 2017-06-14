@@ -1,10 +1,14 @@
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 from ensemble_experimentation.src.vrac import is_an_int
 
 
-def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees: int, class_name,
-                      number_of_rows: int) -> List:
+def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees: int, class_name: Union[str, int],
+                      number_of_rows: int) -> List[int]:
+    """ Splits a CSV file into multiple pieces with the `keep_distribution` method.
+    The keep_distribution method regroup the database content into its class subgroup. then redistribute each instance
+    with the same proportion as the initial content.
+    """
     rows_count = [0 for _ in range(number_of_trees)]
     # We store rows into the distribution dictionary
     distribution_dictionary = dict()
@@ -49,15 +53,19 @@ def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees
     return rows_count
 
 
-def keep_distribution2(content, row_limit, out_writer_train, out_writer_test, class_name, number_of_rows: int) ->\
-        Tuple[int, int]:
+def keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test, class_name: Union[str, int],
+                       number_of_rows: int) -> Tuple[int, int]:
+    """ Splits a CSV file into two pieces with the `keep_distribution` method.
+    The keep_distribution method regroup the database content into its class subgroup. then redistribute each instance
+    with the same proportion as the initial content.
+    """
     row_count_train, row_count_test = 0, 0
     # We store rows into the distribution dictionary
     distribution_dictionary = dict()
 
     if is_an_int(class_name):
         class_name = int(class_name)
-    for row in content:
+    for row in input_reader:
         if row[class_name] in distribution_dictionary:
             distribution_dictionary[row[class_name]].append(row)
         else:

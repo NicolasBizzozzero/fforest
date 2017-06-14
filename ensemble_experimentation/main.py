@@ -1,11 +1,12 @@
+from ensemble_experimentation.src.core.ending.ending import dump_statistics_dictionary, failure_safe
 from ensemble_experimentation.src.core.initialization.arg_parser import parse_args_main_entry_point
-from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
+from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.reference_split import reference_split
 from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
-from ensemble_experimentation.src.core.ending.ending import dump_statistics_dictionary
 
 
+@failure_safe
 def main_entry_point():
     print("Hello main_entry_point")
 

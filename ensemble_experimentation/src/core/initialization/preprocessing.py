@@ -1,12 +1,13 @@
 import csv
+
+import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
-from ensemble_experimentation.src.vrac import create_dir
-import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
+from ensemble_experimentation.src.vrac import create_dir
 
 
-def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str):
+def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str) -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
@@ -25,7 +26,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 output_writer.writerow(row)
 
 
-def preprocessing():
+def preprocessing() -> None:
     """ Prepare the original database to be splitted. """
     # Create the main directory of the application
     create_dir(env.cleaned_arguments[gpn.main_directory()])

@@ -3,13 +3,14 @@ import ntpath
 import os
 import sys
 import time
+from typing import Callable
 
 
-def timeit(func: callable) -> callable:
+def timeit(func: Callable) -> Callable:
     """ Decorator who calculate and print execution time of a function into the standard output. """
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         start = time.time()
-        result = func(*args)
+        result = func(*args, **kwargs)
         end = time.time()
         print("Execution time for \"" + str(func.func_name) + "\" : " + str(end - start) + " seconds")
         return result

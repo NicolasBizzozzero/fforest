@@ -4,14 +4,14 @@ import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.splitting_methods.split import split2
 
 
-def initial_split():
+def initial_split() -> None:
     """ Split the initial database into the train and test databases.
     Store the number of instances of the train and test databases into the `statistics` dictionary into the `env`
     module.
     """
     env.statistics[gsn.instances_in_train()], \
         env.statistics[gsn.instances_in_test()] = \
-        split2(filepath=env.initial_split_input_path,
+        split2(input_path=env.initial_split_input_path,
                delimiter=env.cleaned_arguments[gpn.delimiter()],
                row_limit=env.cleaned_arguments[gpn.training_value()],
                have_header=env.cleaned_arguments[gpn.have_header()],
