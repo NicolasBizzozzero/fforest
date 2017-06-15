@@ -1,33 +1,33 @@
 {
-    "usage": "ensemble_experimentation.py <{param_database}> [options] [{param_class_name} <name>] [{param_delimiter} <char>]",
+    "usage": "ensemble_experimentation.py <{param_database}> [options] [{param_class_name} <name>] [{param_delimiter} <char>] [{param_trees_in_forest} <trees>]",
 
-    "training_value": "% of training values to extract from the database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
-    "reference_value": "% of the values you want to extract from the training set and put in the reference set. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_reference_value}]",
-    "trees_in_forest": "Number of trees in to create in the base forest. [default: {default_trees_in_forest}]",
+    "training_value": "% of values you want to extract from the database and put in the train database. The rest will be put in the test database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
+    "reference_value": "% of values you want to extract from the training set and put in the reference set. The rest will be put in the subtrain database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_reference_value}]",
+    "trees_in_forest": "Number of trees to create in the forest. [default: {default_trees_in_forest}]",
 
-    "initial_split_method": "The method to use with the initial split of the database. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]",
-    "reference_split_method": "The method to use with the split of the train database to the reference and subtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_reference_split_method}]",
+    "initial_split_method": "The method to use with the initial split of the database into the train and test databases. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]",
+    "reference_split_method": "The method to use with the split of the train database into the reference and subtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_reference_split_method}]",
     "subsubtrain_split_method": "The method to use with the split of the subtrain database into multiple subsubtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_subsubtrain_split_method}]",
 
-    "train_name": "The name of the training database after the initial split. [default: {default_train_name}]",
-    "test_name": "The name of the testing database after the initial split. [default: {default_test_name}]",
-    "preprocessed_database_name":"The name of the modified original database. Its defaulting to the database name prefixed with '~'.",
+    "train_name": "The name of the train database after the initial split. [default: {default_train_name}]",
+    "test_name": "The name of the test database after the initial split. [default: {default_test_name}]",
+    "preprocessed_database_name":"The name of the preprocessed database. Its defaulting to the database name prefixed with '~'.",
     "subtrain_name": "The name of the subtrain database after the train split. [default: {default_subtrain_name}]",
     "reference_name": "The name of the reference database after the train split. [default: {default_reference_name}]",
-    "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. [default: {default_subsubtrain_name_pattern}]",
+    "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. It must follows a %s-style rule, which will be replaced by the ID of the subsubtrain database. [default: {default_subsubtrain_name_pattern}]",
     "statistics_file_name": "The name of the statistics file, dumped at the end of the program. [default: {default_statistics_name}]",
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
 
-    "main_directory": "The name of the main directory, where all the project will be outputed. It defaults to the name of the database.",
+    "main_directory": "The name of the main directory, where all the project will be dumped. It defaults to the name of the database.",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",
     "subsubtrain_directory_pattern": "The name of the subsubtrain directory pattern. Every subsubtrain database will be stored in this directory. You can indicate the number placement with a %s-style notation. [default: {default_subsubtrain_directory_pattern}]",
 
     "help": "Print this help message.",
-    "identifier": "The class name of the examples' identifier. [default: {default_identifier}]",
+    "identifier": "The class name of the examples' identifier. You can also pass an integer, which'll act as the index of the identifier column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on. If you don't pass this argument, an index column will be created in the preprocessed database. [default: {default_identifier}]",
     "encoding": "The encoding used to read the database and write the outputs. [default: {default_encoding}]",
     "format_db": "The format used to read the database and write the outputs. [default: {default_format_db}]",
-    "delimiter": "The symbol used to delimiting data in CSV database. [default: {default_delimiter}]",
-    "have_header": "Set this boolean to 1 if your database have a header, or 0 otherwise.",
-    "class": "The name or the index of the class attribute. The first index of the database is `0`."
+    "delimiter": "The symbol used to delimiting data in a CSV database. [default: {default_delimiter}]",
+    "have_header": "This option indicate that the initial database have a header.",
+    "class": "The name of the class attribute. You can also pass an integer, which'll act as the index of the class column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on."
 }
