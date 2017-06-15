@@ -1,6 +1,6 @@
 from typing import Tuple, List, Union
 
-from ensemble_experimentation.src.vrac import is_an_int
+from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
 def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees: int, class_name: Union[str, int],

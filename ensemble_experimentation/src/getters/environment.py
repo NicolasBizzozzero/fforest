@@ -9,3 +9,5 @@ cleaned_arguments = dict()
 statistics = dict()
 
 initial_split_input_path = None
+
+verbosity = None

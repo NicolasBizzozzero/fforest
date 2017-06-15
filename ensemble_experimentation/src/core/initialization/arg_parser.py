@@ -13,7 +13,7 @@ import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.initialization.arg_cleaner import clean_args
-from ensemble_experimentation.src.vrac import get_filename
+from ensemble_experimentation.src.vrac.file_system import get_filename
 
 _FORMAT_DICTIONARY = dict(
     # Documentation

@@ -1,0 +1,4 @@
+{
+    "prepend_id": "The ID column is not first, we preprend it to the database",
+    "append_class": "The Class column is not last, we append it to the database"
+}

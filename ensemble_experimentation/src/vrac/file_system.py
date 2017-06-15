@@ -31,11 +31,11 @@ def get_filename(path: str, with_extension: bool = False) -> str:
         >>> get_filename("/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt/")
         'file'
     """
-    head, tail = os.ntpath.split(path)
+    head, tail = os.path.split(path)
     if with_extension:
-        return tail or os.ntpath.basename(head)
+        return tail or os.path.basename(head)
     else:
-        result = tail or os.ntpath.basename(head)
+        result = tail or os.path.basename(head)
         while "." in result:
             result = os.path.splitext(result)[0]
         return result

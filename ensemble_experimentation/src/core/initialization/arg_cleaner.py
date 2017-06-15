@@ -5,18 +5,16 @@ import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod, \
-    splittingmethod_to_str
+from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.file_tools.format import str_to_format
-from ensemble_experimentation.src.vrac import get_filename
-from ensemble_experimentation.src.vrac import is_a_percentage
+from ensemble_experimentation.src.vrac.file_system import get_filename
+from ensemble_experimentation.src.vrac.maths import is_a_percentage
 
 
 class MissingClassificationAttribute(Exception):
-    def __init__(self, splitting_method: SplittingMethod):
-        Exception.__init__(self, "You need to pass a classification attribute for the "
-                                 "splitting method : {method}".format(method=splittingmethod_to_str(splitting_method)))
+    def __init__(self):
+        Exception.__init__(self, "You need to pass a classification attribute")
 
 
 class InvalidValue(Exception):
@@ -82,7 +80,7 @@ def clean_args(args: dict) -> dict:
     try:
         args[gpn.class_name()]
     except KeyError:
-        cleaned_args[gpn.class_name()] = None
+        raise MissingClassificationAttribute()
 
     # Delimiter
 
@@ -106,7 +104,7 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
     if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
        cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.initial_split_method()])
+        raise MissingClassificationAttribute()
 
     # Main directory
     if cleaned_args[gpn.main_directory()] is None:
@@ -127,7 +125,7 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.reference_split_method()] = str_to_splittingmethod(args[gpn.reference_split_method()])
     if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
        cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.reference_split_method()])
+        raise MissingClassificationAttribute()
 
     # Reference split value
 
@@ -145,7 +143,7 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.subsubtrain_split_method()] = str_to_splittingmethod(cleaned_args[gpn.subsubtrain_split_method()])
     if cleaned_args[gpn.subsubtrain_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
        cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute(cleaned_args[gpn.subsubtrain_split_method()])
+        raise MissingClassificationAttribute()
 
     # Subsubtrain name pattern
 

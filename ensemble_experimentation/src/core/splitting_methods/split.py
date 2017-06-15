@@ -16,7 +16,7 @@ from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
 from ensemble_experimentation.src.file_tools.csv_tools import write_header
-from ensemble_experimentation.src.vrac import is_an_int
+from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
 class SplittingMethod(enum.IntEnum):
