@@ -67,7 +67,7 @@ def get_identified_row(path: str, identifier_name: str, row_id: int, encoding: s
     return select_all_rows_where(path, lambda r: r[identifier_name] == row_id, encoding=encoding)[0]
 
 
-def write_header(input_reader, *out_writers):
+def write_header(input_reader, *out_writers, replace_fieldnames: bool = False):
     header = next(input_reader)
 
     for writer in out_writers:

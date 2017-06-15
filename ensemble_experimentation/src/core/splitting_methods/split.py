@@ -62,11 +62,11 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
     with open(input_path, encoding=encoding) as input_file,\
             open(os.path.join(output_path, output_name_train), 'w', encoding=encoding) as output_train,\
             open(os.path.join(output_path, output_name_test), 'w', encoding=encoding) as output_test:
-        out_writer_train = csv.writer(output_train, delimiter=delimiter)
-        out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
+            out_writer_train = csv.writer(output_train, delimiter=delimiter)
+            out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
             # Write the headers if asked to
             if have_header:
@@ -76,12 +76,19 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             if is_an_int(class_name):
                 input_reader = csv.reader(input_file, delimiter=delimiter)
+                out_writer_train = csv.writer(output_train, delimiter=delimiter)
+                out_writer_test = csv.writer(output_test, delimiter=delimiter)
             else:
                 input_reader = csv.DictReader(input_file, delimiter=delimiter)
+                out_writer_train = csv.DictWriter(output_train, fieldnames=input_reader.fieldnames, delimiter=delimiter)
+                out_writer_test = csv.DictWriter(output_test, fieldnames=input_reader.fieldnames, delimiter=delimiter)
 
             # Write the headers if asked to
-            if have_header:
+            if have_header and is_an_int(class_name):
                 write_header(input_reader, out_writer_train, out_writer_test)
+            else:
+                out_writer_train.writeheader()
+                out_writer_test.writeheader()
 
             size_train, size_test = keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test,
                                                        class_name, number_of_rows)
@@ -102,10 +109,10 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
                                                                               tree_name=name,
                                                                               extension=env.arguments[gpn.format_db()]),
                           'w') for name in tree_names]
-        out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
+            out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
 
             # Write the headers if asked to
             if have_header:
@@ -115,12 +122,18 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             if is_an_int(class_name):
                 input_reader = csv.reader(input_file, delimiter=delimiter)
+                out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
             else:
                 input_reader = csv.DictReader(input_file, delimiter=delimiter)
+                out_writers = [csv.DictWriter(file, fieldnames=input_reader.fieldnames,
+                                              delimiter=delimiter) for file in out_files]
 
             # Write the headers if asked to
-            if have_header:
+            if have_header and is_an_int(class_name):
                 write_header(input_reader, *out_writers)
+            else:
+                for writer in out_writers:
+                    writer.writeheader()
 
             databases_size = keep_distribution(input_reader, row_limit, out_writers,
                                                env.cleaned_arguments[gpn.trees_in_forest()], class_name, number_of_rows)
