@@ -41,6 +41,12 @@ def get_filename(path: str, with_extension: bool = False) -> str:
         return result
 
 
+def get_file_content(path: str, encoding: str = "utf8") -> str:
+    """ Return all the file content as a str. """
+    with open(path, encoding=encoding) as file:
+        return "".join(file.readlines())
+
+
 def create_dir(directory: str) -> None:
     """ Create a directory if it doesn't exists. Otherwise, do nothing"""
     os.makedirs(directory, exist_ok=True)

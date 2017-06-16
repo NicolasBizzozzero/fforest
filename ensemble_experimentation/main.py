@@ -27,10 +27,6 @@ def main_entry_point():
     # Split the subtrain database into multiple subsubtrain databases
     subsubtrain_split()
 
-    #print(execute_and_get_stdout("bin/Salammbo", "-L", "-R", "-c 2", "-N", "-M", "-f 2",
-    #                             "../bank/subtrain/001_sstrain/001_sstrain.csv",
-    #                             "../bank/subtrain/reference.csv"))
-
     dump_statistics_dictionary()
 
 
@@ -46,3 +42,6 @@ def forest_reduction_entry_point():
 
 if __name__ == "__main__":
     pass
+#    print(execute_and_get_stdout("bin/Salammbo", "-L", "-R", "-c 2", "-N", "-M", "-f 2",
+#                                 "../bank/subtrain/001_sstrain/001_sstrain.csv",
+#                                 "../bank/subtrain/reference.csv"))
