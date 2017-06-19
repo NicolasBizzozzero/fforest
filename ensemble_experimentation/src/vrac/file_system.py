@@ -72,9 +72,6 @@ def extract_first_line(path: str, encoding: str = "utf8") -> str:
     """ Remove the first line from a file, then return it. """
     content = get_file_content(path, encoding=encoding)
     first_line, *rest = content.split("\n")
-    print(first_line)
-    print("www")
     rest = filter(lambda s: s != "", rest)
-    print(rest)
     dump_string(path, "\n".join(rest))
     return first_line
