@@ -27,6 +27,7 @@ class Verbosity(IntEnum):
 class Message(Enum):
     PREPEND_ID = "prepend_id"
     APPEND_CLASS = "append_class"
+    EXTRACT_HEADER = "extract_header"
 
     def __str__(self):
         return _is_printable(self.value)
@@ -53,6 +54,10 @@ def _get_message_from_file(value):
                         _PATH_OUTPUT_MESSAGES)
     with open(path) as file:
         return json.load(file)[value]
+
+
+def vprint(message: Message) -> None:
+    print(message, end="", sep="")
 
 
 if __name__ == '__main__':

@@ -92,6 +92,10 @@ def clean_args(args: dict) -> dict:
 
     # Have header
 
+    # Header file name
+
+    # Header extension
+
     # Help
 
     # ID
@@ -168,5 +172,6 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
 
     # Vector file extension
+
 
     return cleaned_args

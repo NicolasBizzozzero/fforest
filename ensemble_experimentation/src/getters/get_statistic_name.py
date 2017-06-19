@@ -53,6 +53,10 @@ def subtrain_path() -> str:
     return _get_stat_from_file("subtrain_path")
 
 
+def header_path() -> str:
+    return _get_stat_from_file("header_path")
+
+
 def instances_in_database() -> str:
     return _get_stat_from_file("instances_in_database")
 

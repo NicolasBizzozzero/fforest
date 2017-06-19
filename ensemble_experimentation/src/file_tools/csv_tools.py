@@ -100,3 +100,14 @@ def append_column(input_path: str, output_path: str, column: str, encoding: str 
             for line in content:
                 line.append(line.pop(column))
                 output_writer.writerow(line)
+
+
+def find_index_for_class(input_path: str, class_name: str, encoding: str = "utf8", delimiter: str = ",") -> int:
+    """ Return the column index given a class name for a CSV file containing a header. """
+    with open(input_path, encoding=encoding) as file:
+        header = file.readline()
+
+    print(header)
+    list_header = header.split(delimiter)
+    print(list_header)
+    return list_header.index(class_name)

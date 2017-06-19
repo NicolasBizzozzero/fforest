@@ -16,8 +16,10 @@
     "reference_name": "The name of the reference database after the train split. [default: {default_reference_name}]",
     "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. It must follows a %s-style rule, which will be replaced by the ID of the subsubtrain database. [default: {default_subsubtrain_name_pattern}]",
     "statistics_file_name": "The name of the statistics file, dumped at the end of the program. [default: {default_statistics_name}]",
+    "header_name": "The name of the header file, extracted from the original database if it contains one. [default: {default_header_name}]",
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
+    "header_extension": "The extension of the header file, extracted from the original database if it contains one. [default: {default_header_extension}]",
 
     "main_directory": "The name of the main directory, where all the project will be dumped. It defaults to the name of the database.",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",

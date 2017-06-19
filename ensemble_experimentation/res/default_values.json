@@ -13,8 +13,10 @@
     "reference_name": "reference",
     "subsubtrain_name_pattern": "%s_sstrain",
     "statistics_file_name": "statistics.json",
+    "header_name": "header",
     "tree_file_extension": "tree",
     "vector_file_extension": "vector",
+    "header_extension": "att",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",

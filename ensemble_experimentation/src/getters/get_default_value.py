@@ -72,12 +72,20 @@ def statistics_file_name() -> str:
     return _get_value_from_file("statistics_file_name")
 
 
+def header_name() -> str:
+    return _get_value_from_file("header_name")
+
+
 def tree_file_extension() -> str:
     return _get_value_from_file("tree_file_extension")
 
 
 def vector_file_extension() -> str:
     return _get_value_from_file("vector_file_extension")
+
+
+def header_extension() -> str:
+    return _get_value_from_file("header_extension")
 
 
 def subtrain_directory() -> str:

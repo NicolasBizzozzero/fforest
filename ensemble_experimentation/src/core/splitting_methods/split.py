@@ -59,36 +59,20 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
     to the asked splitting2 method.
     You must pass each argument along with its name.
     """
-    with open(input_path, encoding=encoding) as input_file,\
-            open(os.path.join(output_path, output_name_train), 'w', encoding=encoding) as output_train,\
-            open(os.path.join(output_path, output_name_test), 'w', encoding=encoding) as output_test:
+    with open(input_path, mode="r") as input_file,\
+            open(os.path.join(output_path, output_name_train), mode='w') as output_train,\
+            open(os.path.join(output_path, output_name_test), mode='w') as output_test:
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
             out_writer_train = csv.writer(output_train, delimiter=delimiter)
             out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
-            # Write the headers if asked to
-            if have_header:
-                write_header(input_reader, out_writer_train, out_writer_test)
-
             size_train, size_test = halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
-            if is_an_int(class_name):
-                input_reader = csv.reader(input_file, delimiter=delimiter)
-                out_writer_train = csv.writer(output_train, delimiter=delimiter)
-                out_writer_test = csv.writer(output_test, delimiter=delimiter)
-            else:
-                input_reader = csv.DictReader(input_file, delimiter=delimiter)
-                out_writer_train = csv.DictWriter(output_train, fieldnames=input_reader.fieldnames, delimiter=delimiter)
-                out_writer_test = csv.DictWriter(output_test, fieldnames=input_reader.fieldnames, delimiter=delimiter)
-
-            # Write the headers if asked to
-            if have_header and is_an_int(class_name):
-                write_header(input_reader, out_writer_train, out_writer_test)
-            else:
-                out_writer_train.writeheader()
-                out_writer_test.writeheader()
+            input_reader = csv.reader(input_file, delimiter=delimiter)
+            out_writer_train = csv.writer(output_train, delimiter=delimiter)
+            out_writer_test = csv.writer(output_test, delimiter=delimiter)
 
             size_train, size_test = keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test,
                                                        class_name, number_of_rows)
@@ -104,11 +88,11 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
     to the asked splitting method.
     You must pass each argument along with its name.
     """
-    with open(input_path, encoding=encoding) as input_file:
+    with open(input_path, mode='r') as input_file:
         out_files = [open("{path}/{tree_name}/{tree_name}.{extension}".format(path=subtrain_path,
                                                                               tree_name=name,
                                                                               extension=env.arguments[gpn.format_db()]),
-                          'w') for name in tree_names]
+                          mode='w') for name in tree_names]
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
@@ -129,7 +113,7 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
                                               delimiter=delimiter) for file in out_files]
 
             # Write the headers if asked to
-            if have_header and is_an_int(class_name):
+            if is_an_int(class_name):
                 write_header(input_reader, *out_writers)
             else:
                 for writer in out_writers:

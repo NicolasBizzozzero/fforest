@@ -6,6 +6,7 @@
     "test_path": "Test database path",
     "reference_path": "Reference database path",
     "subtrain_path": "Subtrain database path",
+    "header_path": "Header file path",
 
     "instances_in_database": "Number of instances in database",
     "instances_in_train": "Number of instances in train database",
