@@ -6,7 +6,7 @@ from ensemble_experimentation.src.core.splitting_methods.split import split2
 
 def initial_split() -> None:
     """ Split the initial database into the train and test databases.
-    Store the number of instances of the train and test databases into the `statistics` dictionary into the `env`
+    Store the number of instances of the train and test databases into the `statistics` dictionary in the `env`
     module.
     """
     env.statistics[gsn.instances_in_train()], \

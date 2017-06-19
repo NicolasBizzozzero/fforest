@@ -60,3 +60,17 @@ def dump_dict(d: dict, path: str, encoding: str = None, indent: int = 4,
     """
     with open(path, 'w', encoding=encoding) as file:
         return json.dump(d, file, indent=indent, sort_keys=sort_keys)
+
+
+def dump_string(path: str, string: str, mode: str = "w", encoding: str = "utf8") -> None:
+    """ Dump the string into the file located at `path` with the mode `mode`. """
+    with open(path, mode, encoding=encoding) as file:
+        file.write(string)
+
+
+def extract_first_line(path: str, encoding: str = "utf8") -> str:
+    """ Remove the first line from a file, then return it. """
+    content = get_file_content(path, encoding=encoding)
+    first_line, *rest = content.split("\n")[0]
+    dump_string(path, "".join(rest))
+    return first_line

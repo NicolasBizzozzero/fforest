@@ -7,7 +7,7 @@ import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns
 from ensemble_experimentation.src.file_tools.csv_tools import preprend_column, append_column
 from ensemble_experimentation.src.getters.get_output_message import Message
-from ensemble_experimentation.src.vrac.file_system import create_dir
+from ensemble_experimentation.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
@@ -61,6 +61,11 @@ def _class_at_end(path: str, class_name: str):
         return header[-1] == class_name
 
 
+def _extract_header(input_path: str, header_path: str, encoding: str = "utf8"):
+    header = extract_first_line(input_path, encoding=encoding)
+    dump_string(header_path, header)
+
+
 def preprocessing() -> None:
     """ Prepare the original database to be processed. """
     env.initial_split_input_path = env.statistics[gsn.database_path()]
@@ -83,10 +88,13 @@ def preprocessing() -> None:
     if not _identifier_at_beginning(env.initial_split_input_path, env.cleaned_arguments[gpn.identifier()]):
         print(Message.PREPEND_ID)
         preprend_column(input_path=env.initial_split_input_path,
+                        output_path=env.statistics[gsn.preprocessed_database_path()],
                         column=env.cleaned_arguments[gpn.identifier()],
                         encoding=env.cleaned_arguments[gpn.encoding()],
                         delimiter=env.cleaned_arguments[gpn.delimiter()])
 
+        # The identifier is now a the beginning of the database, we change it to the index 0
+        env.cleaned_arguments[gpn.identifier()] = "0"
 
         # Change the database path to the modified database
         env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
@@ -95,12 +103,30 @@ def preprocessing() -> None:
     if not _class_at_end(env.initial_split_input_path, env.cleaned_arguments[gpn.class_name()]):
         print(Message.APPEND_CLASS)
         append_column(input_path=env.initial_split_input_path,
+                      output_path=env.statistics[gsn.preprocessed_database_path()],
                       column=env.cleaned_arguments[gpn.class_name()],
                       encoding=env.cleaned_arguments[gpn.encoding()],
                       delimiter=env.cleaned_arguments[gpn.delimiter()])
 
+        # The class column is now a the end of the database, we change it to the index -1
+        env.cleaned_arguments[gpn.class_name()] = str(get_number_of_columns(env.initial_split_input_path,
+                                                                            delimiter=env.cleaned_arguments[gpn.delimiter()],
+                                                                            encoding=env.cleaned_arguments[gpn.encoding()]) - 1)
+
         # Change the database path to the modified database
         env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
+
+    # Check if the database have a header
+    if env.cleaned_arguments[gpn.have_header]:
+        print(Message.EXTRACT_HEADER)
+
+        header_path = env.cleaned_arguments[gpn.header_path()] + env.cleaned_arguments[gpn.header_extension()]
+        _extract_header(input_path=env.initial_split_input_path,
+                        header_path=header_path,
+                        encoding=env.cleaned_arguments[gpn.encoding()])
+
+        # The header have been extracted, we store its path
+        env.statistics[gpn.header_path] = header_path
 
 
 if __name__ == '__main__':
