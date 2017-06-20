@@ -107,7 +107,5 @@ def find_index_for_class(input_path: str, class_name: str, encoding: str = "utf8
     with open(input_path, encoding=encoding) as file:
         header = file.readline()
 
-    print(header)
     list_header = header.split(delimiter)
-    print(list_header)
     return list_header.index(class_name)

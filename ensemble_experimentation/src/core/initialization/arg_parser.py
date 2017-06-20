@@ -41,6 +41,7 @@ _FORMAT_DICTIONARY = dict(
     doc_discretization_threshold=gpd.discretization_threshold(),
     doc_entropy_threshold=gpd.entropy_threshold(),
     doc_entropy_measure=gpd.entropy_measure(),
+    doc_number_of_tnorms=gpd.number_of_tnorms(),
     doc_help=gpd.help_doc(),
     doc_identifier=gpd.identifier(),
     doc_encoding=gpd.encoding(),
@@ -74,6 +75,7 @@ _FORMAT_DICTIONARY = dict(
     param_discretization_threshold=gpn.discretization_threshold(),
     param_entropy_threshold=gpn.entropy_threshold(),
     param_entropy_measure=gpn.entropy_measure(),
+    param_number_of_tnorms=gpn.number_of_tnorms(),
     param_help=gpn.help_param(),
     param_identifier=gpn.identifier(),
     param_encoding=gpn.encoding(),
@@ -104,6 +106,7 @@ _FORMAT_DICTIONARY = dict(
     default_discretization_threshold=gdv.discretization_threshold(),
     default_entropy_threshold=gdv.entropy_threshold(),
     default_entropy_measure=gdv.entropy_measure(),
+    default_number_of_tnorms=gdv.number_of_tnorms(),
     default_identifier=gdv.identifier(),
     default_encoding=gdv.encoding(),
     default_format_db=gdv.format_db(),
@@ -166,9 +169,10 @@ Options:
   {param_subsubtrain_directory_pattern}=<name> {doc_subsubtrain_directory_pattern}
   
   # Salammbô parameters
-  {param_discretization_threshold}          {doc_discretization_threshold}
-  {param_entropy_threshold}                 {doc_entropy_threshold}
-  {param_entropy_measure}                   {doc_entropy_measure}
+  {param_discretization_threshold}=<value>  {doc_discretization_threshold}
+  {param_entropy_threshold}=<value>         {doc_entropy_threshold}
+  {param_entropy_measure}=<measure>         {doc_entropy_measure}
+  {param_number_of_tnorms}=<int>            {doc_number_of_tnorms}
 
   # Miscellaneous
   {param_help}                              {doc_help}

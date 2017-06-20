@@ -41,6 +41,39 @@ def get_filename(path: str, with_extension: bool = False) -> str:
         return result
 
 
+def get_path(path: str) -> str:
+    """ Extract the path from a path with a filename.
+
+    Examples:
+        >>> get_path("")
+        ''
+        >>> get_path("file.txt")
+        ''
+        >>> get_path("dir/file.txt")
+        'dir'
+        >>> get_path("dir/subdir/file.txt")
+        'dir/subdir'
+        >>> get_path("dir/subdir/file")
+        'dir/subdir'
+        >>> get_path("dir/subdir/file.txt.txt")
+        'dir/subdir'
+        >>> get_path("dir/subdir/file.txt.txt/")
+        'dir/subdir'
+        >>> get_path("/dir/subdir/file.txt.txt/")
+        '/dir/subdir'
+        >>> get_path("/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt/")
+        '/dir/subdir'
+    """
+    if not path:
+        return ""
+    if path[-1] == "/":
+        path = path[:-1]
+    result = path[:-len(get_filename(path, with_extension=True))]
+    if result and result[-1] == "/":
+        result = result[:-1]
+    return result
+
+
 def get_file_content(path: str, encoding: str = "utf8") -> str:
     """ Return all the file content as a str. """
     with open(path, encoding=encoding) as file:

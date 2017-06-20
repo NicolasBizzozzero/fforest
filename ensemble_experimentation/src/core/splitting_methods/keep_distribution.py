@@ -66,7 +66,6 @@ def keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_tes
         row_count_train += rows_to_give
         for _ in range(rows_to_give):
             row_to_write = distribution_dictionary[class_name].pop(0)
-            print(row_to_write)
             out_writer_train.writerow(row_to_write)
 
         # Then the rest to test

@@ -24,6 +24,7 @@
     "discretization_threshold": 2,
     "entropy_threshold": 0.00,
     "entropy_measure": "shannon",
+    "number_of_tnorms": 2,
 
     "identifier": "_ID",
     "encoding": "utf8",

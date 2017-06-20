@@ -108,6 +108,10 @@ def entropy_measure() -> str:
     return _get_value_from_file("entropy_measure")
 
 
+def number_of_tnorms() -> str:
+    return _get_value_from_file("number_of_tnorms")
+
+
 def identifier() -> str:
     return _get_value_from_file("identifier")
 

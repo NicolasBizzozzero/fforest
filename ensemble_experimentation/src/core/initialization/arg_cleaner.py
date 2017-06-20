@@ -5,6 +5,7 @@ import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
+from ensemble_experimentation.src.core.learning_process.forest_construction import str_to_entropy_measure
 from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
 from ensemble_experimentation.src.file_tools.format import str_to_format
@@ -84,7 +85,16 @@ def clean_args(args: dict) -> dict:
 
     # Delimiter
 
+    # Discretization threshold
+    cleaned_args[gpn.discretization_threshold()] = int(args[gpn.discretization_threshold()])
+
     # Encoding
+
+    # Entropy measure
+    cleaned_args[gpn.entropy_measure()] = str_to_entropy_measure(args[gpn.entropy_measure()])
+
+    # Entropy threshold
+    cleaned_args[gpn.entropy_threshold()] = float(args[gpn.entropy_threshold()])
 
     # Format
     cleaned_args[gpn.format_db()] = str_to_format(args[gpn.format_db()])
@@ -113,6 +123,9 @@ def clean_args(args: dict) -> dict:
     # Main directory
     if cleaned_args[gpn.main_directory()] is None:
         cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
+
+    # Number of t-norms
+    cleaned_args[gpn.number_of_tnorms()] = int(args[gpn.number_of_tnorms()])
 
     # Preprocessed database name
     if args[gpn.preprocessed_database_name()] is None:
@@ -172,8 +185,5 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
 
     # Vector file extension
-
-
-    print(cleaned_args)
 
     return cleaned_args

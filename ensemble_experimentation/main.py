@@ -3,9 +3,8 @@ from ensemble_experimentation.src.core.initialization.arg_parser import parse_ar
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.reference_split import reference_split
+from ensemble_experimentation.src.core.learning_process.forest_construction import forest_construction
 from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
-
-import ensemble_experimentation.src.getters.environment as env
 
 
 @failure_safe
@@ -16,8 +15,6 @@ def main_entry_point():
     # After calling this method, the parsed arguments and the cleaned arguments will be stored as dictionaries into the
     # `environment` module.
     parse_args_main_entry_point()
-    print(env.cleaned_arguments)
-    print(env.statistics)
 
     # Preprocessing of the database
     preprocessing()
@@ -30,6 +27,9 @@ def main_entry_point():
 
     # Split the subtrain database into multiple subsubtrain databases
     subsubtrain_split()
+
+    # Construct forest and compute efficiency vectors
+    forest_construction()
 
     dump_statistics_dictionary()
 

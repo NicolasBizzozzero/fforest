@@ -25,9 +25,10 @@
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",
     "subsubtrain_directory_pattern": "The name of the subsubtrain directory pattern. Every subsubtrain database will be stored in this directory. You can indicate the number placement with a %s-style notation. [default: {default_subsubtrain_directory_pattern}]",
 
-    "discretization_threshold": "Number of different values for an attribute to be discretized. [default: {default_discretized_threshold}]",
+    "discretization_threshold": "Number of different values for an attribute to be discretized. [default: {default_discretization_threshold}]",
     "entropy_threshold": "The entropy threshold. [default: {default_entropy_threshold}]",
     "entropy_measure": "The measure used to calculate the entropy. Values can be `shannon`. [default: {default_entropy_measure}]",
+    "number_of_tnorms": "The number of t-norms (aggregation of the classification degres) to use. Each t-norm will create a new vector file. T-norms are as follows: 0 = Classical classification, 1 = Zadeh's t-norm, 2 = Lukasiewicz's t-norm. [default: {default_number_of_tnorms}]",
 
     "help": "Print this help message.",
     "identifier": "The class name of the examples' identifier. You can also pass an integer, which'll act as the index of the identifier column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on. If you don't pass this argument, an index column will be created in the preprocessed database. [default: {default_identifier}]",

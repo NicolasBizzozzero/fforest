@@ -29,6 +29,7 @@
     "discretization_threshold": "--discretization-threshold",
     "entropy_threshold": "--entropy-threshold",
     "entropy_measure": "--entropy-measure",
+    "number_of_tnorms": "--t-norms",
 
     "identifier": "--id",
     "encoding": "--encoding",

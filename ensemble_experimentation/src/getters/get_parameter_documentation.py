@@ -120,6 +120,10 @@ def entropy_measure() -> str:
     return _get_doc_from_file("entropy_measure")
 
 
+def number_of_tnorms() -> str:
+    return _get_doc_from_file("number_of_tnorms")
+
+
 def help_doc() -> str:
     return _get_doc_from_file("help")
 
