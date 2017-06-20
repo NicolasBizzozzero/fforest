@@ -29,5 +29,7 @@
     "identifier": "_ID",
     "encoding": "utf8",
     "format_db": "csv",
-    "delimiter": ","
+    "delimiter": ",",
+    "quoting": "all",
+    "quote_char": "\""
 }

@@ -128,5 +128,13 @@ def delimiter() -> str:
     return _get_value_from_file("delimiter")
 
 
+def quoting() -> str:
+    return _get_value_from_file("quoting")
+
+
+def quote_char() -> str:
+    return _get_value_from_file("quote_char")
+
+
 if __name__ == '__main__':
     pass

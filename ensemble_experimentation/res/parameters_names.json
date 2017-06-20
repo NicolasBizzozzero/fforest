@@ -31,10 +31,12 @@
     "entropy_measure": "--entropy-measure",
     "number_of_tnorms": "--t-norms",
 
-    "identifier": "--id",
+    "identifier": "--identifier",
     "encoding": "--encoding",
     "format_db": "--format",
     "delimiter": "--delimiter",
+    "quoting": "--quoting",
+    "quote_char": "--quote-character",
     "have_header": "--have-header",
     "class": "--class"
 }

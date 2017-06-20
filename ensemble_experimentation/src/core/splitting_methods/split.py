@@ -53,7 +53,7 @@ def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
 
 def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
            method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str, class_name=None,
-           number_of_rows: int = None) -> Tuple[int, int]:
+           number_of_rows: int = None, quoting: int = 1, quotechar: str = "\"") -> Tuple[int, int]:
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
     to the asked splitting2 method.
     You must pass each argument along with its name.
@@ -64,14 +64,14 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
-            out_writer_train = csv.writer(output_train, delimiter=delimiter)
-            out_writer_test = csv.writer(output_test, delimiter=delimiter)
+            out_writer_train = csv.writer(output_train, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
+            out_writer_test = csv.writer(output_test, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
 
             size_train, size_test = halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             input_reader = csv.reader(input_file, delimiter=delimiter)
-            out_writer_train = csv.writer(output_train, delimiter=delimiter)
-            out_writer_test = csv.writer(output_test, delimiter=delimiter)
+            out_writer_train = csv.writer(output_train, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
+            out_writer_test = csv.writer(output_test, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
 
             size_train, size_test = keep_distribution2(input_reader, row_limit, out_writer_train, out_writer_test,
                                                        class_name, number_of_rows)
@@ -82,7 +82,8 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
 
 
 def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool, method: SplittingMethod, encoding: str,
-          class_name=None, number_of_rows: int = None, tree_names: list, subtrain_path: str) -> List[int]:
+          class_name=None, number_of_rows: int = None, tree_names: list, subtrain_path: str, quoting: int = 1,
+          quotechar: str = "\"") -> List[int]:
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
     to the asked splitting method.
     You must pass each argument along with its name.
@@ -95,17 +96,20 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
 
         if method == SplittingMethod.HALFING:
             input_reader = csv.reader(input_file, delimiter=delimiter)
-            out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
+            out_writers = [csv.writer(file, delimiter=delimiter, quoting=quoting,
+                                      quotechar=quotechar) for file in out_files]
 
             databases_size = halfing(input_reader, row_limit, out_writers, env.cleaned_arguments[gpn.trees_in_forest()])
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             if is_an_int(class_name):
                 input_reader = csv.reader(input_file, delimiter=delimiter)
-                out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
+                out_writers = [csv.writer(file, delimiter=delimiter, quoting=quoting,
+                                          quotechar=quotechar) for file in out_files]
             else:
                 input_reader = csv.DictReader(input_file, delimiter=delimiter)
                 out_writers = [csv.DictWriter(file, fieldnames=input_reader.fieldnames,
-                                              delimiter=delimiter) for file in out_files]
+                                              delimiter=delimiter, quoting=quoting,
+                                              quotechar=quotechar) for file in out_files]
 
             databases_size = keep_distribution(input_reader, row_limit, out_writers,
                                                env.cleaned_arguments[gpn.trees_in_forest()], class_name, number_of_rows)

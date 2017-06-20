@@ -144,6 +144,14 @@ def delimiter() -> str:
     return _get_doc_from_file("delimiter")
 
 
+def quoting() -> str:
+    return _get_doc_from_file("quoting")
+
+
+def quote_char() -> str:
+    return _get_doc_from_file("quote_char")
+
+
 def have_header() -> str:
     return _get_doc_from_file("have_header")
 

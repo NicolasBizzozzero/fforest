@@ -35,6 +35,8 @@
     "encoding": "The encoding used to read the database and write the outputs. [default: {default_encoding}]",
     "format_db": "The format used to read the database and write the outputs. [default: {default_format_db}]",
     "delimiter": "The symbol used to delimiting data in a CSV database. [default: {default_delimiter}]",
+    "quoting": "The usage of the quote character. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting}]",
+    "quote_char": "The symbol used to quote the required fields. [default: {default_quote_char}]",
     "have_header": "This option indicate that the initial database have a header.",
     "class": "The name of the class attribute. You can also pass an integer, which'll act as the index of the class column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on."
 }

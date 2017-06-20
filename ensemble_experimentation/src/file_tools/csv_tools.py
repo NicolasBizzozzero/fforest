@@ -4,6 +4,26 @@ from typing import Union
 from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
+class UndefinedQuoting(Exception):
+    def __init__(self, quoting: str):
+        Exception.__init__(self, "The quoting value : \"{quoting}\" doesn't"
+                                 " exists".format(quoting=quoting))
+
+
+def str_to_quoting(string: str) -> int:
+    string = string.lower()
+    if string == "all":
+        return csv.QUOTE_ALL
+    elif string == "minimal":
+        return csv.QUOTE_MINIMAL
+    elif string == "nonnumeric":
+        return csv.QUOTE_NONNUMERIC
+    elif string == "none":
+        return csv.QUOTE_NONE
+    else:
+        raise UndefinedQuoting(string)
+
+
 def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",") -> iter:
     """ Iterate trough the rows of the file located at `path`. """
     with open(path, encoding=encoding) as csv_file:

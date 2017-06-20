@@ -7,7 +7,7 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.learning_process.forest_construction import str_to_entropy_measure
 from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
-from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
+from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows, str_to_quoting
 from ensemble_experimentation.src.file_tools.format import str_to_format
 from ensemble_experimentation.src.vrac.file_system import get_filename
 from ensemble_experimentation.src.vrac.maths import is_a_percentage
@@ -134,6 +134,11 @@ def clean_args(args: dict) -> dict:
         cleaned_args[gpn.preprocessed_database_name()] = get_filename(cleaned_args[gpn.preprocessed_database_name()],
                                                                       with_extension=True)
 
+    # Quote character
+
+    # Quoting
+    cleaned_args[gpn.quoting()] = str_to_quoting(args[gpn.quoting()])
+
     # Reference database name
     cleaned_args[gpn.reference_name()] = get_filename(cleaned_args[gpn.reference_name()],
                                                       with_extension=False) + extension
@@ -185,5 +190,7 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
 
     # Vector file extension
+
+    print(cleaned_args)
 
     return cleaned_args

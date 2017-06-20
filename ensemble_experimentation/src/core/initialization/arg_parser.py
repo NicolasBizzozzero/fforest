@@ -47,6 +47,8 @@ _FORMAT_DICTIONARY = dict(
     doc_encoding=gpd.encoding(),
     doc_format_db=gpd.format_db(),
     doc_delimiter=gpd.delimiter(),
+    doc_quoting=gpd.quoting(),
+    doc_quote_char=gpd.quote_char(),
     doc_have_header=gpd.have_header(),
     doc_class_name=gpd.class_name(),
 
@@ -81,6 +83,8 @@ _FORMAT_DICTIONARY = dict(
     param_encoding=gpn.encoding(),
     param_format_db=gpn.format_db(),
     param_delimiter=gpn.delimiter(),
+    param_quoting=gpn.quoting(),
+    param_quote_char=gpn.quote_char(),
     param_have_header=gpn.have_header(),
     param_class_name=gpn.class_name(),
 
@@ -111,6 +115,8 @@ _FORMAT_DICTIONARY = dict(
     default_encoding=gdv.encoding(),
     default_format_db=gdv.format_db(),
     default_delimiter=gdv.delimiter(),
+    default_quoting=gdv.quoting(),
+    default_quote_char=gdv.quote_char(),
 
     # Miscellaneous
     global_name=ggv.name()
@@ -180,6 +186,8 @@ Options:
   {param_encoding}=<encoding>               {doc_encoding}
   {param_format_db}=<format>                {doc_format_db}
   {param_delimiter}=<char>                  {doc_delimiter}
+  {param_quoting}=<quoting>                 {doc_quoting}
+  {param_quote_char}=<char>                 {doc_quote_char}
   {param_have_header}                       {doc_have_header}
   {param_class_name}=<name>                 {doc_class_name}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
