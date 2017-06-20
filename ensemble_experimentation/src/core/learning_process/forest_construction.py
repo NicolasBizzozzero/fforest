@@ -11,7 +11,7 @@ from ensemble_experimentation.src.vrac.iterators import grouper
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
 HERE = path.abspath(path.dirname(__file__))
-PATH_TO_SALAMMBO = HERE + "../../../bin/Salammbo"
+PATH_TO_SALAMMBO = HERE + "/../../../bin/Salammbo"
 MANDATORY_OPTIONS = ("-R", "-L", "-M", "-N")
 
 # Key values
@@ -143,22 +143,26 @@ def _parameters_to_salammbo_options(parameters: dict) -> iter:
 
 
 def _tree_construction(path_to_db: str, number_of_methods: int, choosen_options: iter):
+    print("callin Salammbo for:", path_to_db)
     lines = _construct_tree(path_to_db, choosen_options)
     result = _parse_result(lines, number_of_methods)
     _clean_result(result, number_of_methods)
     vectors = _get_boolean_vectors(result, number_of_methods)
+    print("vectors for:", path_to_db, "=", vectors)
     _save_vectors(vectors, get_path(path_to_db))
+    print("Finished calling for:", path_to_db)
 
 
 def forest_construction():
     # Create the threads
-    subtrain_dir_path = env.cleaned_arguments[gpn.subtrain_directory()]
+    subtrain_dir_path = env.statistics[gsn.subtrain_path()]
     number_of_methods = env.cleaned_arguments[gpn.number_of_tnorms()]
     chosen_options = _parameters_to_salammbo_options(env.cleaned_arguments)
     number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
+    counter_size = len(str(number_of_trees))
     threads = list()
     for tree_index in range(1, number_of_trees + 1):
-        db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(number_of_trees)
+        db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
         thread = Thread(target=_tree_construction,
                         args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
                               number_of_methods,
