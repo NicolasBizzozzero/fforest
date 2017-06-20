@@ -4,7 +4,7 @@ import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column,\
+from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
     append_column, find_index_for_class
 from ensemble_experimentation.src.getters.get_output_message import Message, vprint
 from ensemble_experimentation.src.vrac.file_system import create_dir, extract_first_line, dump_string
@@ -28,6 +28,9 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
             header = next(input_reader)
             header.insert(0, id_name)
             output_writer.writerow(header)
+        else:
+            output_writer.writerow([id_name])
+        env.cleaned_arguments[gpn.have_header()] = True
 
         for row_index, row in enumerate(input_reader):
             if row:
@@ -127,9 +130,13 @@ def preprocessing() -> None:
 
         # The header have been extracted, we store its path
         env.statistics[gsn.header_path()] = header_path
-        env.cleaned_arguments[gpn.class_name()] = find_index_for_class(header_path,
-                                                                       env.cleaned_arguments[gpn.class_name()],
-                                                                       delimiter=env.cleaned_arguments[gpn.delimiter()])
+        env.cleaned_arguments[gpn.have_header()] = False
+
+        # We change the class name if it wasn't an index
+        if not is_an_int(env.cleaned_arguments[gpn.class_name()]):
+            env.cleaned_arguments[gpn.class_name()] = find_index_for_class(header_path,
+                                                                           env.cleaned_arguments[gpn.class_name()],
+                                                                           delimiter=env.cleaned_arguments[gpn.delimiter()])
         env.cleaned_arguments[gpn.have_header()] = False
 
 

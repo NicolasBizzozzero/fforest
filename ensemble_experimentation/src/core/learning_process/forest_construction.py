@@ -109,7 +109,7 @@ def _clean_result(result: dict, number_of_methods: int) -> None:
 
 def _get_boolean_vectors(result: dict, number_of_methods: int) -> Dict[str, List[bool]]:
     vectors = dict()
-    for method_number in range(number_of_methods):
+    for method_number in range(number_of_methods + 1):
         method_key = _methodnum_to_str(method_number)
         vectors[method_key] = [result[identifier][method_key] for identifier in result]
     return vectors
@@ -178,7 +178,7 @@ def forest_construction():
 # Execution time for "forest_construction" : 0.5033886432647705 seconds
 
 
-def forest_construction_syncrhonous():
+def forest_construction_synchronous():
     # Create the threads
     subtrain_dir_path = get_path(env.statistics[gsn.subtrain_path()])
     number_of_methods = env.cleaned_arguments[gpn.number_of_tnorms()]
@@ -191,7 +191,7 @@ def forest_construction_syncrhonous():
         _tree_construction(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
                            number_of_methods,
                            chosen_options)
-# Execution time for "forest_construction" : 3.3870317935943604 seconds
+# Execution time for "forest_construction_synchronous" : 3.3870317935943604 seconds
 
 
 if __name__ == "__main__":

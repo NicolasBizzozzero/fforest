@@ -15,7 +15,6 @@ from ensemble_experimentation.src.core.splitting_methods.halfing import halfing
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
-from ensemble_experimentation.src.file_tools.csv_tools import write_header
 from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
@@ -98,10 +97,6 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
             input_reader = csv.reader(input_file, delimiter=delimiter)
             out_writers = [csv.writer(file, delimiter=delimiter) for file in out_files]
 
-            # Write the headers if asked to
-            if have_header:
-                write_header(input_reader, *out_writers)
-
             databases_size = halfing(input_reader, row_limit, out_writers, env.cleaned_arguments[gpn.trees_in_forest()])
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
             if is_an_int(class_name):
@@ -111,13 +106,6 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
                 input_reader = csv.DictReader(input_file, delimiter=delimiter)
                 out_writers = [csv.DictWriter(file, fieldnames=input_reader.fieldnames,
                                               delimiter=delimiter) for file in out_files]
-
-            # Write the headers if asked to
-            if is_an_int(class_name):
-                write_header(input_reader, *out_writers)
-            else:
-                for writer in out_writers:
-                    writer.writeheader()
 
             databases_size = keep_distribution(input_reader, row_limit, out_writers,
                                                env.cleaned_arguments[gpn.trees_in_forest()], class_name, number_of_rows)
