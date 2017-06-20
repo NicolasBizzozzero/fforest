@@ -21,6 +21,10 @@
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",
 
+    "discretization_threshold": 2,
+    "entropy_threshold": 0.00,
+    "entropy_measure": "shannon",
+
     "identifier": "_ID",
     "encoding": "utf8",
     "format_db": "csv",

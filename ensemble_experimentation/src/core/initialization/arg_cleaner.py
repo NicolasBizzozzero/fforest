@@ -174,4 +174,6 @@ def clean_args(args: dict) -> dict:
     # Vector file extension
 
 
+    print(cleaned_args)
+
     return cleaned_args

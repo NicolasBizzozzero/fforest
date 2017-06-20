@@ -38,6 +38,9 @@ _FORMAT_DICTIONARY = dict(
     doc_main_directory=gpd.main_directory(),
     doc_subtrain_directory=gpd.subtrain_directory(),
     doc_subsubtrain_directory_pattern=gpd.subsubtrain_directory_pattern(),
+    doc_discretization_threshold=gpd.discretization_threshold(),
+    doc_entropy_threshold=gpd.entropy_threshold(),
+    doc_entropy_measure=gpd.entropy_measure(),
     doc_help=gpd.help_doc(),
     doc_identifier=gpd.identifier(),
     doc_encoding=gpd.encoding(),
@@ -68,6 +71,9 @@ _FORMAT_DICTIONARY = dict(
     param_main_directory=gpn.main_directory(),
     param_subtrain_directory=gpn.subtrain_directory(),
     param_subsubtrain_directory_pattern=gpn.subsubtrain_directory_pattern(),
+    param_discretization_threshold=gpn.discretization_threshold(),
+    param_entropy_threshold=gpn.entropy_threshold(),
+    param_entropy_measure=gpn.entropy_measure(),
     param_help=gpn.help_param(),
     param_identifier=gpn.identifier(),
     param_encoding=gpn.encoding(),
@@ -95,6 +101,9 @@ _FORMAT_DICTIONARY = dict(
     default_header_extension=gdv.header_extension(),
     default_subtrain_directory=gdv.subtrain_directory(),
     default_subsubtrain_directory_pattern=gdv.subsubtrain_directory_pattern(),
+    default_discretization_threshold=gdv.discretization_threshold(),
+    default_entropy_threshold=gdv.entropy_threshold(),
+    default_entropy_measure=gdv.entropy_measure(),
     default_identifier=gdv.identifier(),
     default_encoding=gdv.encoding(),
     default_format_db=gdv.format_db(),
@@ -155,6 +164,11 @@ Options:
   {param_main_directory}=<name>             {doc_main_directory}
   {param_subtrain_directory}=<name>         {doc_subtrain_directory}
   {param_subsubtrain_directory_pattern}=<name> {doc_subsubtrain_directory_pattern}
+  
+  # Salammbô parameters
+  {param_discretization_threshold}          {doc_discretization_threshold}
+  {param_entropy_threshold}                 {doc_entropy_threshold}
+  {param_entropy_measure}                   {doc_entropy_measure}
 
   # Miscellaneous
   {param_help}                              {doc_help}

@@ -7,9 +7,10 @@ import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.vrac.iterators import grouper
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
+
 HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "../../../bin/Salammbo"
-MANDATORY_OPTIONS = ("-R", "-L", "-M")
+MANDATORY_OPTIONS = ("-R", "-L", "-M", "-N")
 
 # Key values
 KEY_DEFAULT_METHOD = "method_"

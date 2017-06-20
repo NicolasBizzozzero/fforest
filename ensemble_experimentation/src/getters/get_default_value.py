@@ -96,6 +96,18 @@ def subsubtrain_directory_pattern() -> str:
     return _get_value_from_file("subsubtrain_directory_pattern")
 
 
+def discretization_threshold() -> str:
+    return _get_value_from_file("discretization_threshold")
+
+
+def entropy_threshold() -> str:
+    return _get_value_from_file("entropy_threshold")
+
+
+def entropy_measure() -> str:
+    return _get_value_from_file("entropy_measure")
+
+
 def identifier() -> str:
     return _get_value_from_file("identifier")
 
