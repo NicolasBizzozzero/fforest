@@ -16,6 +16,11 @@ def execute(command: str, *parameters: str, stdin=None, stdout=None, stderr=None
 
 
 def execute_and_get_stdout(command: str, *parameters: str, stdin=None, stderr=None, encoding: str = "utf8") -> str:
-    """ Execute `command` in a subprocess and return all the output from stdout of the command. """
+    """ Execute `command` in a subprocess and return all the output from stdout of the command.
+
+        Example:
+            >>> execute_and_get_stdout("printf", "Hello World !")
+            'Hello World !'
+    """
     return subprocess.check_output([command, *parameters], stdin=stdin, stderr=stderr, shell=False,
                                    timeout=None).decode(encoding)

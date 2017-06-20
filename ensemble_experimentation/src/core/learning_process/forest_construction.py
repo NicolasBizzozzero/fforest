@@ -1,6 +1,6 @@
 from enum import IntEnum
+from multiprocessing import Process
 from os import path
-from threading import Thread
 from typing import List, Dict
 
 import ensemble_experimentation.src.getters.environment as env
@@ -12,7 +12,7 @@ from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
 HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "/../../../bin/Salammbo"
-MANDATORY_OPTIONS = ("-R", "-L", "-M", "-N")
+MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
 # Key values
 KEY_DEFAULT_METHOD = "method_"
@@ -49,13 +49,13 @@ def _methodnum_to_str(method_number: int) -> str:
         return KEY_DEFAULT_METHOD + str(method_number)
 
 
-def _construct_tree(path_to_db: str, choosen_options: iter) -> str:
+def _construct_tree(path_to_db: str, chosen_options: iter) -> str:
     """ Call the Salammbo executable with the choosen options and parameters, then return the output. """
+    parameters = MANDATORY_OPTIONS + chosen_options
+    parameters.append(path_to_db)
+    parameters.append(env.statistics[gsn.reference_path()])
     result = execute_and_get_stdout(PATH_TO_SALAMMBO,
-                                    *MANDATORY_OPTIONS,
-                                    *choosen_options,
-                                    path_to_db,
-                                    env.statistics[gsn.reference_path()])
+                                    *parameters)
     return result
 
 
@@ -130,32 +130,31 @@ def _parameters_to_salammbo_options(parameters: dict) -> iter:
     options = list()
 
     # Discretization threshold
-    options.append("-c " + str(parameters[gpn.discretization_threshold()]))
+    options.append("-c")
+    options.append(str(parameters[gpn.discretization_threshold()]))
 
     # Entropy measure
     if parameters[gpn.discretization_threshold()] == EntropyMeasure.SHANNON:
         options.append("-u")
 
     # Number of t-norms
-    options.append("-f " + str(parameters[gpn.number_of_tnorms()]))
+    options.append("-f")
+    options.append(str(parameters[gpn.number_of_tnorms()]))
 
     return options
 
 
 def _tree_construction(path_to_db: str, number_of_methods: int, choosen_options: iter):
-    print("callin Salammbo for:", path_to_db)
     lines = _construct_tree(path_to_db, choosen_options)
     result = _parse_result(lines, number_of_methods)
     _clean_result(result, number_of_methods)
     vectors = _get_boolean_vectors(result, number_of_methods)
-    print("vectors for:", path_to_db, "=", vectors)
     _save_vectors(vectors, get_path(path_to_db))
-    print("Finished calling for:", path_to_db)
 
 
 def forest_construction():
     # Create the threads
-    subtrain_dir_path = env.statistics[gsn.subtrain_path()]
+    subtrain_dir_path = get_path(env.statistics[gsn.subtrain_path()])
     number_of_methods = env.cleaned_arguments[gpn.number_of_tnorms()]
     chosen_options = _parameters_to_salammbo_options(env.cleaned_arguments)
     number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
@@ -163,10 +162,10 @@ def forest_construction():
     threads = list()
     for tree_index in range(1, number_of_trees + 1):
         db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
-        thread = Thread(target=_tree_construction,
-                        args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
-                              number_of_methods,
-                              chosen_options))
+        thread = Process(target=_tree_construction,
+                         args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
+                               number_of_methods,
+                               chosen_options))
         threads.append(thread)
 
     # Start the threads
@@ -176,6 +175,23 @@ def forest_construction():
     # Wait for all threads to finish
     for thread in threads:
         thread.join()
+# Execution time for "forest_construction" : 0.5033886432647705 seconds
+
+
+def forest_construction_syncrhonous():
+    # Create the threads
+    subtrain_dir_path = get_path(env.statistics[gsn.subtrain_path()])
+    number_of_methods = env.cleaned_arguments[gpn.number_of_tnorms()]
+    chosen_options = _parameters_to_salammbo_options(env.cleaned_arguments)
+    number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
+    counter_size = len(str(number_of_trees))
+
+    for tree_index in range(1, number_of_trees + 1):
+        db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
+        _tree_construction(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
+                           number_of_methods,
+                           chosen_options)
+# Execution time for "forest_construction" : 3.3870317935943604 seconds
 
 
 if __name__ == "__main__":
