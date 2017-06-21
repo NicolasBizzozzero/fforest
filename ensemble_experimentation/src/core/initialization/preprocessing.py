@@ -16,12 +16,13 @@ class NamedAttributeButNoHeader(Exception):
         Exception.__init__(self, "Impossible to access a named attribute with no header")
 
 
-def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str) -> None:
+def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str,
+            quoting: int = 1, quotechar: str = "\"") -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
     with open(input_path) as input_file, open(output_path, "w") as output_file:
-        output_writer = csv.writer(output_file, delimiter=delimiter)
+        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
         input_reader = csv.reader(input_file, delimiter=delimiter)
 
         if have_header:
@@ -81,7 +82,9 @@ def preprocessing() -> None:
         _add_id(input_path=env.cleaned_arguments[gpn.database()],
                 output_path=env.statistics[gsn.preprocessed_database_path()],
                 id_name=gdv.identifier(), have_header=env.cleaned_arguments[gpn.have_header()],
-                delimiter=env.cleaned_arguments[gpn.delimiter()])
+                delimiter=env.cleaned_arguments[gpn.delimiter()],
+                quoting=env.cleaned_arguments[gpn.quoting()],
+                quotechar=env.cleaned_arguments[gpn.quote_char()])
         env.cleaned_arguments[gpn.identifier()] = gdv.identifier()
 
         # Change the database path to the modified database
