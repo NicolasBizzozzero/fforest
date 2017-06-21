@@ -16,5 +16,14 @@ def grouper(n: int, iterable: iter, fillvalue=None) -> iter:
     return itertools.zip_longest(*args, fillvalue=fillvalue)
 
 
+def subsubtrain_dir_path(number_of_names: int, subsubtrain_directory_pattern: str) -> iter:
+    """ Generate subsubtrain directories names with a pattern and a number of names to generate.
+    It automatically prepend '0' to the name if it's not the same size as the longest name generated.
+    """
+    counter_size = len(str(number_of_names))
+    for tree_index in range(1, number_of_names + 1):
+        yield subsubtrain_directory_pattern % str(tree_index).zfill(counter_size)
+
+
 if __name__ == '__main__':
     pass

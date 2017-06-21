@@ -5,14 +5,16 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.splitting_methods.split import split
 from ensemble_experimentation.src.vrac.file_system import create_dir
+from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
 
 
+#TODO: Return the path not the name ?
 def _create_subtrain_directories(number_of_trees: int) -> List[str]:
-    counter_size = len(str(number_of_trees))
+    """ Create all needed directories which will each serves as a workplace for a single tree.
+    Return all the names of the directories created.
+    """
     subsubtrain_names = []
-
-    for tree_index in range(1, number_of_trees + 1):
-        dir_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
+    for dir_name in subsubtrain_dir_path(number_of_trees, env.cleaned_arguments[gpn.subsubtrain_directory_pattern()]):
         subsubtrain_names.append(dir_name)
         create_dir(env.cleaned_arguments[gpn.main_directory()] + "/" +
                    env.cleaned_arguments[gpn.subtrain_directory()] + "/" + dir_name)
