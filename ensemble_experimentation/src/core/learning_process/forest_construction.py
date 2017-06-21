@@ -75,7 +75,7 @@ def _parse_result(lines: str, number_of_methods: int) -> dict:
         for method_chunk in grouper(number_of_methods, lines.split("\n")):
             for instance in method_chunk:
                 _, method, identifier, true_class, *rest = instance.split()
-                identifier = int(identifier)
+                identifier = int(identifier.strip("\""))
                 try:
                     result[identifier][_methodnum_to_str(int(method))] = {class_found: float(membership_degree)
                                                                           for class_found, membership_degree in
@@ -153,28 +153,28 @@ def _tree_construction(path_to_db: str, number_of_methods: int, choosen_options:
 
 
 def forest_construction():
-    # Create the threads
+    # Create the Processes
     subtrain_dir_path = get_path(env.statistics[gsn.subtrain_path()])
     number_of_methods = env.cleaned_arguments[gpn.number_of_tnorms()]
     chosen_options = _parameters_to_salammbo_options(env.cleaned_arguments)
     number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
     counter_size = len(str(number_of_trees))
-    threads = list()
+    processes = list()
     for tree_index in range(1, number_of_trees + 1):
         db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
-        thread = Process(target=_tree_construction,
+        process = Process(target=_tree_construction,
                          args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
                                number_of_methods,
                                chosen_options))
-        threads.append(thread)
+        processes.append(process)
 
-    # Start the threads
-    for thread in threads:
-        thread.start()
+    # Start the processes
+    for process in processes:
+        process.start()
 
-    # Wait for all threads to finish
-    for thread in threads:
-        thread.join()
+    # Wait for all processes to finish
+    for process in processes:
+        process.join()
 # Execution time for "forest_construction" : 0.5033886432647705 seconds
 
 

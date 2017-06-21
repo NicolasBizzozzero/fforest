@@ -24,10 +24,12 @@ def str_to_quoting(string: str) -> int:
         raise UndefinedQuoting(string)
 
 
-def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",") -> iter:
+def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = 1,
+              quote_char: str = "\"", skipinitialspace: bool = True) -> iter:
     """ Iterate trough the rows of the file located at `path`. """
     with open(path, encoding=encoding) as csv_file:
-        content = csv.reader(csv_file, delimiter=delimiter)
+        content = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                             skipinitialspace=skipinitialspace)
         for line in content:
             yield line
 
@@ -127,5 +129,11 @@ def find_index_for_class(input_path: str, class_name: str, encoding: str = "utf8
     with open(input_path, encoding=encoding) as file:
         header = file.readline()
 
-    list_header = header.split(delimiter)
+    list_header = [s.strip().strip("'\"") for s in header.split(delimiter)]
     return list_header.index(class_name)
+
+
+def index_in_bounds(input_path: str, index: int, encoding: str = "utf8", delimiter: str = ",") -> bool:
+    """ Check if an index is inbound of the CSV file columns. Columns can be accessed with a negative index. """
+    length = get_number_of_columns(path=input_path, encoding=encoding, delimiter=delimiter)
+    return (-length <= index < 0) or (0 <= index < length)

@@ -7,10 +7,12 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.learning_process.forest_construction import str_to_entropy_measure
 from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
+from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
+    get_number_of_columns
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows, str_to_quoting
 from ensemble_experimentation.src.file_tools.format import str_to_format
 from ensemble_experimentation.src.vrac.file_system import get_filename
-from ensemble_experimentation.src.vrac.maths import is_a_percentage
+from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
 
 
 class MissingClassificationAttribute(Exception):
@@ -22,6 +24,12 @@ class InvalidValue(Exception):
     def __init__(self, row_limit: str):
         Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
                                  " a number of rows.".format(row_limit=row_limit))
+
+
+class IndexOutOfBounds(Exception):
+    def __init__(self, index: int, length: int, column: str):
+        Exception.__init__(self, "The {column} index \"{index}\" can't be used in a "
+                                 "database with {length} columns.".format(index=index, length=length, column=column))
 
 
 def _check_default_value_id(args: dict) -> bool:
@@ -82,6 +90,21 @@ def clean_args(args: dict) -> dict:
         args[gpn.class_name()]
     except KeyError:
         raise MissingClassificationAttribute()
+    if not is_an_int(cleaned_args[gpn.class_name()]):
+        # User asked for a named class, we retrieve its index then change it
+        cleaned_args[gpn.class_name()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
+                                                              class_name=cleaned_args[gpn.class_name()],
+                                                              encoding=cleaned_args[gpn.encoding()],
+                                                              delimiter=cleaned_args[gpn.delimiter()])
+    else:
+        # User asked for an index, we convert it to int then check if it's inbound
+        cleaned_args[gpn.class_name()] = int(cleaned_args[gpn.class_name()])
+        if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.class_name()],
+                               encoding=cleaned_args[gpn.encoding()], delimiter=cleaned_args[gpn.delimiter()]):
+            raise IndexOutOfBounds(index=cleaned_args[gpn.class_name()], column="class",
+                                   length=get_number_of_columns(path=cleaned_args[gpn.database()],
+                                                                encoding=cleaned_args[gpn.encoding()],
+                                                                delimiter=cleaned_args[gpn.delimiter()]))
 
     # Delimiter
 
@@ -108,11 +131,26 @@ def clean_args(args: dict) -> dict:
 
     # Help
 
-    # ID
+    # Identifier
     if _check_default_value_id(args):
         # We must add a column as an identifier
         # It will be done in the preprocessing function
         cleaned_args[gpn.identifier()] = None
+    elif not is_an_int(cleaned_args[gpn.identifier()]):
+        # User asked for a named identifier, we retrieve its index then change it
+        cleaned_args[gpn.identifier()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
+                                                              class_name=cleaned_args[gpn.identifier()],
+                                                              encoding=cleaned_args[gpn.encoding()],
+                                                              delimiter=cleaned_args[gpn.delimiter()])
+    else:
+        # User asked for an index, we convert it to int then check if it's inbound
+        cleaned_args[gpn.identifier()] = int(cleaned_args[gpn.identifier()])
+        if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.identifier()],
+                               encoding=cleaned_args[gpn.encoding()], delimiter=cleaned_args[gpn.delimiter()]):
+            raise IndexOutOfBounds(index=cleaned_args[gpn.identifier()], column="identifier",
+                                   length=get_number_of_columns(path=cleaned_args[gpn.database()],
+                                                                encoding=cleaned_args[gpn.encoding()],
+                                                                delimiter=cleaned_args[gpn.delimiter()]))
 
     # Initial split Method
     cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
@@ -190,7 +228,5 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
 
     # Vector file extension
-
-    print(cleaned_args)
 
     return cleaned_args

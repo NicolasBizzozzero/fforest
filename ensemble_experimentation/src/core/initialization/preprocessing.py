@@ -5,7 +5,7 @@ import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
-    append_column, find_index_for_class
+    append_column
 from ensemble_experimentation.src.getters.get_output_message import Message, vprint
 from ensemble_experimentation.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from ensemble_experimentation.src.vrac.maths import is_an_int
@@ -17,13 +17,15 @@ class NamedAttributeButNoHeader(Exception):
 
 
 def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str,
-            quoting: int = 1, quotechar: str = "\"") -> None:
+            quoting: int = 1, quotechar: str = "\"", skipinitialspace: bool = True) -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
     with open(input_path) as input_file, open(output_path, "w") as output_file:
-        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar)
-        input_reader = csv.reader(input_file, delimiter=delimiter)
+        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+                                   skipinitialspace=skipinitialspace)
+        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+                                  skipinitialspace=skipinitialspace)
 
         if have_header:
             header = next(input_reader)
@@ -39,7 +41,8 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 output_writer.writerow(row)
 
 
-def _identifier_at_beginning(path: str, identifier: str):
+def _identifier_at_beginning(path: str, identifier: str, quoting: int = 1, quote_char: str = "\"",
+                             skipinitialspace: bool = True):
     if is_an_int(identifier):
         return int(identifier) == 0
 
@@ -47,11 +50,13 @@ def _identifier_at_beginning(path: str, identifier: str):
         raise NamedAttributeButNoHeader()
     else:
         header = next(iter_rows(path, delimiter=env.cleaned_arguments[gpn.delimiter()],
-                                encoding=env.cleaned_arguments[gpn.encoding()]))
+                                encoding=env.cleaned_arguments[gpn.encoding()], quoting=quoting,
+                                quote_char=quote_char, skipinitialspace=skipinitialspace))
         return header[0] == identifier
 
 
-def _class_at_end(path: str, class_name: str):
+def _class_at_end(path: str, class_name: str, quoting: int = 1, quote_char: str = "\"",
+                             skipinitialspace: bool = True):
     if is_an_int(class_name):
         return int(class_name) == -1 or \
                int(class_name) == get_number_of_columns(path, delimiter=env.cleaned_arguments[gpn.delimiter()],
@@ -61,7 +66,8 @@ def _class_at_end(path: str, class_name: str):
         raise NamedAttributeButNoHeader()
     else:
         header = next(iter_rows(path, delimiter=env.cleaned_arguments[gpn.delimiter()],
-                                encoding=env.cleaned_arguments[gpn.encoding()]))
+                                encoding=env.cleaned_arguments[gpn.encoding()], quoting=quoting,
+                                quote_char=quote_char, skipinitialspace=skipinitialspace))
         return header[-1] == class_name
 
 
@@ -85,7 +91,9 @@ def preprocessing() -> None:
                 delimiter=env.cleaned_arguments[gpn.delimiter()],
                 quoting=env.cleaned_arguments[gpn.quoting()],
                 quotechar=env.cleaned_arguments[gpn.quote_char()])
-        env.cleaned_arguments[gpn.identifier()] = gdv.identifier()
+        env.cleaned_arguments[gpn.identifier()] = 0
+        if env.cleaned_arguments[gpn.class_name()] >= 0:
+            env.cleaned_arguments[gpn.class_name()] += 1
 
         # Change the database path to the modified database
         env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
@@ -100,7 +108,7 @@ def preprocessing() -> None:
                         delimiter=env.cleaned_arguments[gpn.delimiter()])
 
         # The identifier is now a the beginning of the database, we change it to the index 0
-        env.cleaned_arguments[gpn.identifier()] = "0"
+        env.cleaned_arguments[gpn.identifier()] = 0
 
         # Change the database path to the modified database
         env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
@@ -114,10 +122,10 @@ def preprocessing() -> None:
                       encoding=env.cleaned_arguments[gpn.encoding()],
                       delimiter=env.cleaned_arguments[gpn.delimiter()])
 
-        # The class column is now a the end of the database, we change it to the index -1
-        env.cleaned_arguments[gpn.class_name()] = str(get_number_of_columns(env.initial_split_input_path,
-                                                                            delimiter=env.cleaned_arguments[gpn.delimiter()],
-                                                                            encoding=env.cleaned_arguments[gpn.encoding()]) - 1)
+        # The class column is now a the end of the database, we change it to the last index
+        env.cleaned_arguments[gpn.class_name()] = get_number_of_columns(env.initial_split_input_path,
+                                                                        delimiter=env.cleaned_arguments[gpn.delimiter()],
+                                                                        encoding=env.cleaned_arguments[gpn.encoding()]) - 1
 
         # Change the database path to the modified database
         env.initial_split_input_path = env.statistics[gsn.preprocessed_database_path()]
@@ -133,13 +141,6 @@ def preprocessing() -> None:
 
         # The header have been extracted, we store its path
         env.statistics[gsn.header_path()] = header_path
-        env.cleaned_arguments[gpn.have_header()] = False
-
-        # We change the class name if it wasn't an index
-        if not is_an_int(env.cleaned_arguments[gpn.class_name()]):
-            env.cleaned_arguments[gpn.class_name()] = find_index_for_class(header_path,
-                                                                           env.cleaned_arguments[gpn.class_name()],
-                                                                           delimiter=env.cleaned_arguments[gpn.delimiter()])
         env.cleaned_arguments[gpn.have_header()] = False
 
 

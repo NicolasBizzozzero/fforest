@@ -3,6 +3,14 @@ from typing import Tuple, List, Union
 from ensemble_experimentation.src.vrac.maths import is_an_int
 
 
+class TooManyTreesToSplit(Exception):
+    def __init__(self, number_of_trees, number_of_rows, percentage_per_db):
+        Exception.__init__(self, "You can't split {number_of_rows} rows into {number_of_trees} trees with "
+                                 "a {percentage_per_db} distribution".format(number_of_trees=number_of_trees,
+                                                                             number_of_rows=number_of_rows,
+                                                                             percentage_per_db=percentage_per_db))
+
+
 def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees: int, class_name: Union[str, int],
                       number_of_rows: int) -> List[int]:
     """ Splits a CSV file into multiple pieces with the `keep_distribution` method.
@@ -27,9 +35,12 @@ def keep_distribution(input_reader, row_limit: int, out_writers, number_of_trees
     for class_name in distribution_dictionary.keys():
         rows_to_give = int(round(len(distribution_dictionary[class_name]) * percentage_per_db))
         for index, writer in enumerate(out_writers[:-1]):
-            rows_count[index] += rows_to_give
             for _ in range(rows_to_give):
-                writer.writerow(distribution_dictionary[class_name].pop(0))
+                try:
+                    writer.writerow(distribution_dictionary[class_name].pop(0))
+                    rows_count[index] += 1
+                except IndexError:
+                    raise TooManyTreesToSplit(number_of_trees, number_of_rows, percentage_per_db)
 
         # Then the rest to the last writer
         for row in distribution_dictionary[class_name]:
