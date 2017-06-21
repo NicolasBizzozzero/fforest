@@ -35,11 +35,14 @@ _FORMAT_DICTIONARY = dict(
     doc_tree_file_extension=gpd.tree_file_extension(),
     doc_vector_file_extension=gpd.vector_file_extension(),
     doc_header_extension=gpd.header_extension(),
+    doc_difficulty_vector_prefix=gpd.difficulty_vector_prefix(),
+    doc_quality_vector_prefix=gpd.quality_vector_prefix(),
     doc_main_directory=gpd.main_directory(),
     doc_subtrain_directory=gpd.subtrain_directory(),
     doc_subsubtrain_directory_pattern=gpd.subsubtrain_directory_pattern(),
     doc_discretization_threshold=gpd.discretization_threshold(),
     doc_entropy_threshold=gpd.entropy_threshold(),
+    doc_min_size_leaf=gpd.min_size_leaf(),
     doc_entropy_measure=gpd.entropy_measure(),
     doc_number_of_tnorms=gpd.number_of_tnorms(),
     doc_help=gpd.help_doc(),
@@ -71,11 +74,14 @@ _FORMAT_DICTIONARY = dict(
     param_tree_file_extension=gpn.tree_file_extension(),
     param_vector_file_extension=gpn.vector_file_extension(),
     param_header_extension=gpn.header_extension(),
+    param_difficulty_vector_prefix=gpn.difficulty_vector_prefix(),
+    param_quality_vector_prefix=gpn.quality_vector_prefix(),
     param_main_directory=gpn.main_directory(),
     param_subtrain_directory=gpn.subtrain_directory(),
     param_subsubtrain_directory_pattern=gpn.subsubtrain_directory_pattern(),
     param_discretization_threshold=gpn.discretization_threshold(),
     param_entropy_threshold=gpn.entropy_threshold(),
+    param_min_size_leaf=gpn.min_size_leaf(),
     param_entropy_measure=gpn.entropy_measure(),
     param_number_of_tnorms=gpn.number_of_tnorms(),
     param_help=gpn.help_param(),
@@ -105,10 +111,13 @@ _FORMAT_DICTIONARY = dict(
     default_tree_file_extension=gdv.tree_file_extension(),
     default_vector_file_extension=gdv.vector_file_extension(),
     default_header_extension=gdv.header_extension(),
+    default_difficulty_vector_prefix=gdv.difficulty_vector_prefix(),
+    default_quality_vector_prefix=gdv.quality_vector_prefix(),
     default_subtrain_directory=gdv.subtrain_directory(),
     default_subsubtrain_directory_pattern=gdv.subsubtrain_directory_pattern(),
     default_discretization_threshold=gdv.discretization_threshold(),
     default_entropy_threshold=gdv.entropy_threshold(),
+    default_min_size_leaf=gdv.min_size_leaf(),
     default_entropy_measure=gdv.entropy_measure(),
     default_number_of_tnorms=gdv.number_of_tnorms(),
     default_identifier=gdv.identifier(),
@@ -168,6 +177,8 @@ Options:
   {param_tree_file_extension}=<name>        {doc_tree_file_extension}
   {param_vector_file_extension}=<name>      {doc_vector_file_extension}
   {param_header_extension}=<name>           {doc_header_extension}
+  {param_difficulty_vector_prefix}=<prefix> {doc_difficulty_vector_prefix}
+  {param_quality_vector_prefix}=<prefix>    {doc_quality_vector_prefix}
 
   # Directories names
   {param_main_directory}=<name>             {doc_main_directory}
@@ -177,6 +188,7 @@ Options:
   # Salammbô parameters
   {param_discretization_threshold}=<value>  {doc_discretization_threshold}
   {param_entropy_threshold}=<value>         {doc_entropy_threshold}
+  {param_min_size_leaf}=<size>              {doc_min_size_leaf}
   {param_entropy_measure}=<measure>         {doc_entropy_measure}
   {param_number_of_tnorms}=<int>            {doc_number_of_tnorms}
 

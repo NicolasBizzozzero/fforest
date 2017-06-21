@@ -21,6 +21,8 @@
     "tree_file_extension": "--tree-file-extension",
     "vector_file_extension": "--vector-file-extension",
     "header_extension": "--header-extension",
+    "difficulty_vector_prefix": "--difficulty-vector-prefix",
+    "quality_vector_prefix": "--quality-vector-prefix",
 
     "main_directory": "--main-directory",
     "subtrain_directory": "--subtrain-directory",
@@ -28,6 +30,7 @@
 
     "discretization_threshold": "--discretization-threshold",
     "entropy_threshold": "--entropy-threshold",
+    "min_size_leaf": "--min-size-leaf",
     "entropy_measure": "--entropy-measure",
     "number_of_tnorms": "--t-norms",
 

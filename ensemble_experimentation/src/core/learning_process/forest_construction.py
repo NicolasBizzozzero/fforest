@@ -8,6 +8,7 @@ import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.vrac.file_system import dump_string, get_path
 from ensemble_experimentation.src.vrac.iterators import grouper
+from ensemble_experimentation.src.vrac.maths import is_a_percentage
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
 HERE = path.abspath(path.dirname(__file__))
@@ -141,6 +142,18 @@ def _parameters_to_salammbo_options(parameters: dict) -> iter:
     options.append("-f")
     options.append(str(parameters[gpn.number_of_tnorms()]))
 
+    # Entropy threshold
+    options.append("-e")
+    options.append(str(parameters[gpn.entropy_threshold()]))
+
+    # Min size leaf
+    size = parameters[gpn.min_size_leaf()]
+    if is_a_percentage(size):
+        options.append("-i")
+    else:
+        options.append("-I")
+    options.append(size)
+
     return options
 
 
@@ -163,9 +176,9 @@ def forest_construction():
     for tree_index in range(1, number_of_trees + 1):
         db_name = env.cleaned_arguments[gpn.subsubtrain_directory_pattern()] % str(tree_index).zfill(counter_size)
         process = Process(target=_tree_construction,
-                         args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
-                               number_of_methods,
-                               chosen_options))
+                          args=(subtrain_dir_path + "/" + db_name + "/" + db_name + "." + "csv",
+                                number_of_methods,
+                                chosen_options))
         processes.append(process)
 
     # Start the processes

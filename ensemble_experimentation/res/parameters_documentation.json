@@ -20,6 +20,8 @@
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
     "header_extension": "The extension of the header file, extracted from the original database if it contains one. [default: {default_header_extension}]",
+    "difficulty_vector_prefix": "The prefix of every difficulty vector created in the subtrain directory. [default: {default_difficulty_vector_prefix}]",
+    "quality_vector_prefix": "The prefix of every quality vector created in every subsubtrain directory. [default: {default_quality_vector_prefix}]",
 
     "main_directory": "The name of the main directory, where all the project will be dumped. It defaults to the name of the database.",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",
@@ -27,6 +29,7 @@
 
     "discretization_threshold": "Number of different values for an attribute to be discretized. [default: {default_discretization_threshold}]",
     "entropy_threshold": "The entropy threshold. [default: {default_entropy_threshold}]",
+    "min_size_leaf": "Minimum size of a leaf. If you pass a value between 0 and 1, it'll be treated as % of the training set. If you pass an higher integer, it'll be treated as a number of examples. [default: {default_min_size_leaf}]",
     "entropy_measure": "The measure used to calculate the entropy. Values can be `shannon`. [default: {default_entropy_measure}]",
     "number_of_tnorms": "The number of t-norms (aggregation of the classification degres) to use. Each t-norm will create a new vector file. T-norms are as follows: 0 = Classical classification, 1 = Zadeh's t-norm, 2 = Lukasiewicz's t-norm. [default: {default_number_of_tnorms}]",
 

@@ -96,6 +96,14 @@ def header_extension() -> str:
     return _get_name_from_file("header_extension")
 
 
+def difficulty_vector_prefix() -> str:
+    return _get_name_from_file("difficulty_vector_prefix")
+
+
+def quality_vector_prefix() -> str:
+    return _get_name_from_file("quality_vector_prefix")
+
+
 def main_directory() -> str:
     return _get_name_from_file("main_directory")
 
@@ -114,6 +122,10 @@ def discretization_threshold() -> str:
 
 def entropy_threshold() -> str:
     return _get_name_from_file("entropy_threshold")
+
+
+def min_size_leaf() -> str:
+    return _get_name_from_file("min_size_leaf")
 
 
 def entropy_measure() -> str:

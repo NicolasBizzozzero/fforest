@@ -17,12 +17,15 @@
     "tree_file_extension": "tree",
     "vector_file_extension": "vector",
     "header_extension": "att",
+    "difficulty_vector_prefix": "difficulty_",
+    "quality_vector_prefix": "quality_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",
 
     "discretization_threshold": 2,
     "entropy_threshold": 0.00,
+    "min_size_leaf": 0.00,
     "entropy_measure": "shannon",
     "number_of_tnorms": 2,
 

@@ -17,13 +17,18 @@ from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
 
 class MissingClassificationAttribute(Exception):
     def __init__(self):
-        Exception.__init__(self, "You need to pass a classification attribute")
+        Exception.__init__(self, "You need to pass a classification attribute.")
 
 
 class InvalidValue(Exception):
     def __init__(self, row_limit: str):
         Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
                                  " a number of rows.".format(row_limit=row_limit))
+
+
+class InvalidPercentage(Exception):
+    def __init__(self, percentage: str):
+        Exception.__init__(self, "The value \"{percentage}\" is not a percentage.".format(percentage=percentage))
 
 
 class IndexOutOfBounds(Exception):
@@ -108,6 +113,8 @@ def clean_args(args: dict) -> dict:
 
     # Delimiter
 
+    # Difficulty vector prefix
+
     # Discretization threshold
     cleaned_args[gpn.discretization_threshold()] = int(args[gpn.discretization_threshold()])
 
@@ -117,7 +124,8 @@ def clean_args(args: dict) -> dict:
     cleaned_args[gpn.entropy_measure()] = str_to_entropy_measure(args[gpn.entropy_measure()])
 
     # Entropy threshold
-    cleaned_args[gpn.entropy_threshold()] = float(args[gpn.entropy_threshold()])
+    if not is_a_percentage(cleaned_args[gpn.entropy_threshold()]):
+        raise InvalidPercentage(cleaned_args[gpn.entropy_threshold()])
 
     # Format
     cleaned_args[gpn.format_db()] = str_to_format(args[gpn.format_db()])
@@ -162,6 +170,8 @@ def clean_args(args: dict) -> dict:
     if cleaned_args[gpn.main_directory()] is None:
         cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
 
+    # Min size leaf
+
     # Number of t-norms
     cleaned_args[gpn.number_of_tnorms()] = int(args[gpn.number_of_tnorms()])
 
@@ -171,6 +181,8 @@ def clean_args(args: dict) -> dict:
     else:
         cleaned_args[gpn.preprocessed_database_name()] = get_filename(cleaned_args[gpn.preprocessed_database_name()],
                                                                       with_extension=True)
+
+    # Quality vector prefix
 
     # Quote character
 
