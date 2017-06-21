@@ -156,52 +156,52 @@ Usage:
 
 Options:
   # Splitting values
-  {param_training_value}=<value>            {doc_training_value}
-  {param_reference_value}=<value>           {doc_reference_value}
-  {param_trees_in_forest}=<value>           {doc_trees_in_forest}
+  {param_training_value}=<value>                {doc_training_value}
+  {param_reference_value}=<value>               {doc_reference_value}
+  {param_trees_in_forest}=<value>               {doc_trees_in_forest}
 
   # Splitting methods
-  {param_initial_split_method}=<method>     {doc_initial_split_method}
-  {param_reference_split_method}=<method>   {doc_reference_split_method}
-  {param_subsubtrain_split_method}=<method> {doc_subsubtrain_split_method}
+  {param_initial_split_method}=<method>         {doc_initial_split_method}
+  {param_reference_split_method}=<method>       {doc_reference_split_method}
+  {param_subsubtrain_split_method}=<method>     {doc_subsubtrain_split_method}
 
   # File names
-  {param_train_name}=<name>                 {doc_train_name}
-  {param_test_name}=<name>                  {doc_test_name}
-  {param_preprocessed_db_name}=<name>       {doc_preprocessed_db_name}
-  {param_subtrain_name}=<name>              {doc_subtrain_name}
-  {param_reference_name}=<name>             {doc_reference_name}
-  {param_subsubtrain_name_pattern}=<name>   {doc_subsubtrain_name_pattern}
-  {param_statistics_name}=<name>            {doc_statistics_name}
-  {param_header_name}=<name>                {doc_header_name}
-  {param_tree_file_extension}=<name>        {doc_tree_file_extension}
-  {param_vector_file_extension}=<name>      {doc_vector_file_extension}
-  {param_header_extension}=<name>           {doc_header_extension}
-  {param_difficulty_vector_prefix}=<prefix> {doc_difficulty_vector_prefix}
-  {param_quality_vector_prefix}=<prefix>    {doc_quality_vector_prefix}
+  {param_train_name}=<name>                     {doc_train_name}
+  {param_test_name}=<name>                      {doc_test_name}
+  {param_preprocessed_db_name}=<name>           {doc_preprocessed_db_name}
+  {param_subtrain_name}=<name>                  {doc_subtrain_name}
+  {param_reference_name}=<name>                 {doc_reference_name}
+  {param_subsubtrain_name_pattern}=<name>       {doc_subsubtrain_name_pattern}
+  {param_statistics_name}=<name>                {doc_statistics_name}
+  {param_header_name}=<name>                    {doc_header_name}
+  {param_tree_file_extension}=<name>            {doc_tree_file_extension}
+  {param_vector_file_extension}=<name>          {doc_vector_file_extension}
+  {param_header_extension}=<name>               {doc_header_extension}
+  {param_difficulty_vector_prefix}=<prefix>     {doc_difficulty_vector_prefix}
+  {param_quality_vector_prefix}=<prefix>        {doc_quality_vector_prefix}
 
   # Directories names
-  {param_main_directory}=<name>             {doc_main_directory}
-  {param_subtrain_directory}=<name>         {doc_subtrain_directory}
-  {param_subsubtrain_directory_pattern}=<name> {doc_subsubtrain_directory_pattern}
+  {param_main_directory}=<name>                 {doc_main_directory}
+  {param_subtrain_directory}=<name>             {doc_subtrain_directory}
+  {param_subsubtrain_directory_pattern}=<name>  {doc_subsubtrain_directory_pattern}
   
   # Salammbô parameters
-  {param_discretization_threshold}=<value>  {doc_discretization_threshold}
-  {param_entropy_threshold}=<value>         {doc_entropy_threshold}
-  {param_min_size_leaf}=<size>              {doc_min_size_leaf}
-  {param_entropy_measure}=<measure>         {doc_entropy_measure}
-  {param_number_of_tnorms}=<int>            {doc_number_of_tnorms}
+  {param_discretization_threshold}=<value>      {doc_discretization_threshold}
+  {param_entropy_threshold}=<value>             {doc_entropy_threshold}
+  {param_min_size_leaf}=<size>                  {doc_min_size_leaf}
+  {param_entropy_measure}=<measure>             {doc_entropy_measure}
+  {param_number_of_tnorms}=<int>                {doc_number_of_tnorms}
 
   # Miscellaneous
-  {param_help}                              {doc_help}
-  {param_identifier}=<ID>                   {doc_identifier}
-  {param_encoding}=<encoding>               {doc_encoding}
-  {param_format_db}=<format>                {doc_format_db}
-  {param_delimiter}=<char>                  {doc_delimiter}
-  {param_quoting}=<quoting>                 {doc_quoting}
-  {param_quote_char}=<char>                 {doc_quote_char}
-  {param_have_header}                       {doc_have_header}
-  {param_class_name}=<name>                 {doc_class_name}
+  {param_help}                                  {doc_help}
+  {param_identifier}=<ID>                       {doc_identifier}
+  {param_encoding}=<encoding>                   {doc_encoding}
+  {param_format_db}=<format>                    {doc_format_db}
+  {param_delimiter}=<char>                      {doc_delimiter}
+  {param_quoting}=<quoting>                     {doc_quoting}
+  {param_quote_char}=<char>                     {doc_quote_char}
+  {param_have_header}                           {doc_have_header}
+  {param_class_name}=<name>                     {doc_class_name}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

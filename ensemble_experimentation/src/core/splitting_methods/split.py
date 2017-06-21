@@ -15,6 +15,7 @@ from ensemble_experimentation.src.core.splitting_methods.halfing import halfing
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
+from ensemble_experimentation.src.vrac.file_system import get_filename
 
 
 class SplittingMethod(enum.IntEnum):
@@ -88,9 +89,9 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
     You must pass each argument along with its name.
     """
     with open(input_path, mode='r', encoding=encoding) as input_file:
-        out_files = [open("{path}/{tree_name}/{tree_name}.{extension}".format(path=subtrain_path,
-                                                                              tree_name=name,
-                                                                              extension=env.arguments[gpn.format_db()]),
+        out_files = [open("{dir_path}/{tree_name}.{extension}".format(dir_path=name,
+                                                                      tree_name=get_filename(name),
+                                                                      extension=env.arguments[gpn.format_db()]),
                           mode='w') for name in tree_names]
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,

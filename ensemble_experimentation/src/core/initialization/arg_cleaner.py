@@ -5,7 +5,7 @@ import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.learning_process.forest_construction import str_to_entropy_measure
+from ensemble_experimentation.src.core.learning_process.entropy_measures import str_to_entropy_measure
 from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
     get_number_of_columns

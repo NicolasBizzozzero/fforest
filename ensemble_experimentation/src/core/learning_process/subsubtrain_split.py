@@ -14,10 +14,11 @@ def _create_subtrain_directories(number_of_trees: int) -> List[str]:
     Return all the names of the directories created.
     """
     subsubtrain_names = []
-    for dir_name in subsubtrain_dir_path(number_of_trees, env.cleaned_arguments[gpn.subsubtrain_directory_pattern()]):
+    for dir_name in subsubtrain_dir_path(number_of_trees, env.cleaned_arguments[gpn.main_directory()],
+                                         env.cleaned_arguments[gpn.subtrain_directory()],
+                                         env.cleaned_arguments[gpn.subsubtrain_directory_pattern()]):
         subsubtrain_names.append(dir_name)
-        create_dir(env.cleaned_arguments[gpn.main_directory()] + "/" +
-                   env.cleaned_arguments[gpn.subtrain_directory()] + "/" + dir_name)
+        create_dir(dir_name)
     return subsubtrain_names
 
 

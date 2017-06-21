@@ -4,6 +4,7 @@ from ensemble_experimentation.src.core.initialization.initial_split import initi
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.reference_split import reference_split
 from ensemble_experimentation.src.core.learning_process.forest_construction import forest_construction
+from ensemble_experimentation.src.core.learning_process.forest_reduction import forest_reduction
 from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
 
 
@@ -30,6 +31,7 @@ def main_entry_point():
 
     # Construct forest and compute efficiency vectors
     forest_construction()
+    forest_reduction()
 
     dump_statistics_dictionary()
 
