@@ -17,15 +17,14 @@ class NamedAttributeButNoHeader(Exception):
 
 
 def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str,
-            quoting: int = 1, quotechar: str = "\"", skipinitialspace: bool = True) -> None:
+            quoting: int, quotechar: str, skipinitialspace: bool = True) -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
     with open(input_path) as input_file, open(output_path, "w") as output_file:
         output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
                                    skipinitialspace=skipinitialspace)
-        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
-                                  skipinitialspace=skipinitialspace)
+        input_reader = csv.reader(input_file, delimiter=delimiter, skipinitialspace=skipinitialspace)
 
         if have_header:
             header = next(input_reader)
@@ -36,6 +35,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
         env.cleaned_arguments[gpn.have_header()] = True
 
         for row_index, row in enumerate(input_reader):
+            print(row_index, row)
             if row:
                 row.insert(0, row_index)
                 output_writer.writerow(row)
@@ -78,12 +78,14 @@ def _extract_header(input_path: str, header_path: str, encoding: str = "utf8"):
 
 def preprocessing() -> None:
     """ Prepare the original database to be processed. """
+    print("hello preprocessing")
     env.initial_split_input_path = env.statistics[gsn.database_path()]
 
     # Create the main directory of the application
     create_dir(env.cleaned_arguments[gpn.main_directory()])
 
     # Check if the database contains an identifier column
+    print(env.cleaned_arguments[gpn.quoting()])
     if env.cleaned_arguments[gpn.identifier()] is None:
         _add_id(input_path=env.cleaned_arguments[gpn.database()],
                 output_path=env.statistics[gsn.preprocessed_database_path()],

@@ -33,6 +33,6 @@
     "encoding": "utf8",
     "format_db": "csv",
     "delimiter": ",",
-    "quoting": "all",
+    "quoting": "nonnumeric",
     "quote_char": "\""
 }

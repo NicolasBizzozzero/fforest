@@ -205,8 +205,9 @@ Options:
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
+    print(arguments)
     cleaned_arguments = clean_args(arguments)
-
+    print(arguments)
     env.arguments = arguments
     env.cleaned_arguments = cleaned_arguments
 
