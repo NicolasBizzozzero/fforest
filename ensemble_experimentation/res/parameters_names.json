@@ -1,5 +1,5 @@
 {
-    "help": "-h --help",
+    "help": "-h -? --help",
     "database": "database",
 
     "training_value": "--training-value",

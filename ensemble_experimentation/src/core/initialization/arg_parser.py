@@ -47,13 +47,18 @@ _FORMAT_DICTIONARY = dict(
     doc_number_of_tnorms=gpd.number_of_tnorms(),
     doc_help=gpd.help_doc(),
     doc_identifier=gpd.identifier(),
-    doc_encoding=gpd.encoding(),
-    doc_format_db=gpd.format_db(),
-    doc_delimiter=gpd.delimiter(),
-    doc_quoting=gpd.quoting(),
-    doc_quote_char=gpd.quote_char(),
-    doc_have_header=gpd.have_header(),
     doc_class_name=gpd.class_name(),
+    doc_have_header=gpd.have_header(),
+    doc_encoding_input=gpd.encoding_input(),
+    doc_encoding_output=gpd.encoding_output(),
+    doc_format_input=gpd.format_input(),
+    doc_format_output=gpd.format_output(),
+    doc_delimiter_input=gpd.delimiter_input(),
+    doc_delimiter_output=gpd.delimiter_output(),
+    doc_quoting_input=gpd.quoting_input(),
+    doc_quoting_output=gpd.quoting_output(),
+    doc_quote_char_input=gpd.quote_char_input(),
+    doc_quote_char_output=gpd.quote_char_output(),
 
     # Parameters
     param_database=gpn.database(),
@@ -86,13 +91,18 @@ _FORMAT_DICTIONARY = dict(
     param_number_of_tnorms=gpn.number_of_tnorms(),
     param_help=gpn.help_param(),
     param_identifier=gpn.identifier(),
-    param_encoding=gpn.encoding(),
-    param_format_db=gpn.format_db(),
-    param_delimiter=gpn.delimiter(),
-    param_quoting=gpn.quoting(),
-    param_quote_char=gpn.quote_char(),
-    param_have_header=gpn.have_header(),
     param_class_name=gpn.class_name(),
+    param_have_header=gpn.have_header(),
+    param_encoding_input=gpn.encoding_input(),
+    param_encoding_output=gpn.encoding_output(),
+    param_format_input=gpn.format_input(),
+    param_format_output=gpn.format_output(),
+    param_delimiter_input=gpn.delimiter_input(),
+    param_delimiter_output=gpn.delimiter_output(),
+    param_quoting_input=gpn.quoting_input(),
+    param_quoting_output=gpn.quoting_output(),
+    param_quote_char_input=gpn.quote_char_input(),
+    param_quote_char_output=gpn.quote_char_output(),
 
     # Default values
     default_training_value=gdv.training_value(),
@@ -121,11 +131,16 @@ _FORMAT_DICTIONARY = dict(
     default_entropy_measure=gdv.entropy_measure(),
     default_number_of_tnorms=gdv.number_of_tnorms(),
     default_identifier=gdv.identifier(),
-    default_encoding=gdv.encoding(),
-    default_format_db=gdv.format_db(),
-    default_delimiter=gdv.delimiter(),
-    default_quoting=gdv.quoting(),
-    default_quote_char=gdv.quote_char(),
+    default_encoding_input=gdv.encoding_input(),
+    default_encoding_output=gdv.encoding_output(),
+    default_format_input=gdv.format_input(),
+    default_format_output=gdv.format_output(),
+    default_delimiter_input=gdv.delimiter_input(),
+    default_delimiter_output=gdv.delimiter_output(),
+    default_quoting_input=gdv.quoting_input(),
+    default_quoting_output=gdv.quoting_output(),
+    default_quote_char_input=gdv.quote_char_input(),
+    default_quote_char_output=gdv.quote_char_output(),
 
     # Miscellaneous
     global_name=ggv.name()
@@ -156,52 +171,57 @@ Usage:
 
 Options:
   # Splitting values
-  {param_training_value}=<value>                {doc_training_value}
-  {param_reference_value}=<value>               {doc_reference_value}
-  {param_trees_in_forest}=<value>               {doc_trees_in_forest}
+  {param_training_value}=VALUE                {doc_training_value}
+  {param_reference_value}=VALUE               {doc_reference_value}
+  {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
 
   # Splitting methods
-  {param_initial_split_method}=<method>         {doc_initial_split_method}
-  {param_reference_split_method}=<method>       {doc_reference_split_method}
-  {param_subsubtrain_split_method}=<method>     {doc_subsubtrain_split_method}
+  {param_initial_split_method}=METHOD         {doc_initial_split_method}
+  {param_reference_split_method}=METHOD       {doc_reference_split_method}
+  {param_subsubtrain_split_method}=METHOD     {doc_subsubtrain_split_method}
 
   # File names
-  {param_train_name}=<name>                     {doc_train_name}
-  {param_test_name}=<name>                      {doc_test_name}
-  {param_preprocessed_db_name}=<name>           {doc_preprocessed_db_name}
-  {param_subtrain_name}=<name>                  {doc_subtrain_name}
-  {param_reference_name}=<name>                 {doc_reference_name}
-  {param_subsubtrain_name_pattern}=<name>       {doc_subsubtrain_name_pattern}
-  {param_statistics_name}=<name>                {doc_statistics_name}
-  {param_header_name}=<name>                    {doc_header_name}
-  {param_tree_file_extension}=<name>            {doc_tree_file_extension}
-  {param_vector_file_extension}=<name>          {doc_vector_file_extension}
-  {param_header_extension}=<name>               {doc_header_extension}
-  {param_difficulty_vector_prefix}=<prefix>     {doc_difficulty_vector_prefix}
-  {param_quality_vector_prefix}=<prefix>        {doc_quality_vector_prefix}
+  {param_train_name}=NAME                     {doc_train_name}
+  {param_test_name}=NAME                      {doc_test_name}
+  {param_preprocessed_db_name}=NAME           {doc_preprocessed_db_name}
+  {param_subtrain_name}=NAME                  {doc_subtrain_name}
+  {param_reference_name}=NAME                 {doc_reference_name}
+  {param_statistics_name}=NAME                {doc_statistics_name}
+  {param_header_name}=NAME                    {doc_header_name}
+  {param_subsubtrain_name_pattern}=NAME       {doc_subsubtrain_name_pattern}
+  {param_difficulty_vector_prefix}=PREFIX     {doc_difficulty_vector_prefix}
+  {param_quality_vector_prefix}=PREFIX        {doc_quality_vector_prefix}
+  {param_tree_file_extension}=NAME            {doc_tree_file_extension}
+  {param_vector_file_extension}=NAME          {doc_vector_file_extension}
+  {param_header_extension}=NAME               {doc_header_extension}
 
   # Directories names
-  {param_main_directory}=<name>                 {doc_main_directory}
-  {param_subtrain_directory}=<name>             {doc_subtrain_directory}
-  {param_subsubtrain_directory_pattern}=<name>  {doc_subsubtrain_directory_pattern}
+  {param_main_directory}=NAME                 {doc_main_directory}
+  {param_subtrain_directory}=NAME             {doc_subtrain_directory}
+  {param_subsubtrain_directory_pattern}=NAME  {doc_subsubtrain_directory_pattern}
   
   # Salammbô parameters
-  {param_discretization_threshold}=<value>      {doc_discretization_threshold}
-  {param_entropy_threshold}=<value>             {doc_entropy_threshold}
-  {param_min_size_leaf}=<size>                  {doc_min_size_leaf}
+  {param_discretization_threshold}=VALUE      {doc_discretization_threshold}
+  {param_entropy_threshold}=VALUE             {doc_entropy_threshold}
+  {param_min_size_leaf}=SIZE                  {doc_min_size_leaf}
   {param_entropy_measure}=<measure>             {doc_entropy_measure}
-  {param_number_of_tnorms}=<int>                {doc_number_of_tnorms}
+  {param_number_of_tnorms}=INT                {doc_number_of_tnorms}
 
   # Miscellaneous
   {param_help}                                  {doc_help}
-  {param_identifier}=<ID>                       {doc_identifier}
-  {param_encoding}=<encoding>                   {doc_encoding}
-  {param_format_db}=<format>                    {doc_format_db}
-  {param_delimiter}=<char>                      {doc_delimiter}
-  {param_quoting}=<quoting>                     {doc_quoting}
-  {param_quote_char}=<char>                     {doc_quote_char}
+  {param_identifier}=ID                      {doc_identifier}
+  {param_class_name}=NAME                     {doc_class_name}
   {param_have_header}                           {doc_have_header}
-  {param_class_name}=<name>                     {doc_class_name}
+  {param_encoding_input}=ENCODING                  {doc_encoding_input}
+  {param_encoding_output}=ENCODING                  {doc_encoding_output}
+  {param_format_input}=FORMAT                    {doc_format_input}
+  {param_format_output}=FORMAT                    {doc_format_output}
+  {param_delimiter_input}=CHAR                      {doc_delimiter_input}
+  {param_delimiter_output}=CHAR                      {doc_delimiter_output}
+  {param_quoting_input}=QUOTING                     {doc_quoting_input}
+  {param_quoting_output}=QUOTING                     {doc_quoting_output}
+  {param_quote_char_input}=CHAR                     {doc_quote_char_input}
+  {param_quote_char_output}=CHAR                     {doc_quote_char_output}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
