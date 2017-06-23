@@ -176,8 +176,8 @@ Options:
   {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
 
   # Splitting methods
-  {param_initial_split_method}=METHOD         {doc_initial_split_method}
-  {param_reference_split_method}=METHOD       {doc_reference_split_method}
+  {param_initial_split_method}=METHOD            {doc_initial_split_method}
+  {param_reference_split_method}=METHOD           {doc_reference_split_method}
   {param_subsubtrain_split_method}=METHOD     {doc_subsubtrain_split_method}
 
   # File names
@@ -185,8 +185,8 @@ Options:
   {param_test_name}=NAME                      {doc_test_name}
   {param_preprocessed_db_name}=NAME           {doc_preprocessed_db_name}
   {param_subtrain_name}=NAME                  {doc_subtrain_name}
-  {param_reference_name}=NAME                 {doc_reference_name}
-  {param_statistics_name}=NAME                {doc_statistics_name}
+  {param_reference_name}=NAME                     {doc_reference_name}
+  {param_statistics_name}=NAME           {doc_statistics_name}
   {param_header_name}=NAME                    {doc_header_name}
   {param_subsubtrain_name_pattern}=NAME       {doc_subsubtrain_name_pattern}
   {param_difficulty_vector_prefix}=PREFIX     {doc_difficulty_vector_prefix}
@@ -204,28 +204,27 @@ Options:
   {param_discretization_threshold}=VALUE      {doc_discretization_threshold}
   {param_entropy_threshold}=VALUE             {doc_entropy_threshold}
   {param_min_size_leaf}=SIZE                  {doc_min_size_leaf}
-  {param_entropy_measure}=<measure>             {doc_entropy_measure}
-  {param_number_of_tnorms}=INT                {doc_number_of_tnorms}
+  {param_entropy_measure}=<measure>           {doc_entropy_measure}
+  {param_number_of_tnorms}=INT                         {doc_number_of_tnorms}
 
   # Miscellaneous
-  {param_help}                                  {doc_help}
-  {param_identifier}=ID                      {doc_identifier}
-  {param_class_name}=NAME                     {doc_class_name}
-  {param_have_header}                           {doc_have_header}
-  {param_encoding_input}=ENCODING                  {doc_encoding_input}
-  {param_encoding_output}=ENCODING                  {doc_encoding_output}
-  {param_format_input}=FORMAT                    {doc_format_input}
-  {param_format_output}=FORMAT                    {doc_format_output}
-  {param_delimiter_input}=CHAR                      {doc_delimiter_input}
-  {param_delimiter_output}=CHAR                      {doc_delimiter_output}
-  {param_quoting_input}=QUOTING                     {doc_quoting_input}
-  {param_quoting_output}=QUOTING                     {doc_quoting_output}
-  {param_quote_char_input}=CHAR                     {doc_quote_char_input}
-  {param_quote_char_output}=CHAR                     {doc_quote_char_output}
+  {param_help}                          {doc_help}
+  {param_identifier}=ID                       {doc_identifier}
+  {param_class_name}=NAME                          {doc_class_name}
+  {param_have_header}                         {doc_have_header}
+  {param_encoding_input}=ENCODING             {doc_encoding_input}
+  {param_encoding_output}=ENCODING            {doc_encoding_output}
+  {param_format_input}=FORMAT                 {doc_format_input}
+  {param_format_output}=FORMAT                {doc_format_output}
+  {param_delimiter_input}=CHAR                {doc_delimiter_input}
+  {param_delimiter_output}=CHAR               {doc_delimiter_output}
+  {param_quoting_input}=QUOTING               {doc_quoting_input}
+  {param_quoting_output}=QUOTING              {doc_quoting_output}
+  {param_quote_char_input}=CHAR          {doc_quote_char_input}
+  {param_quote_char_output}=CHAR         {doc_quote_char_output}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
-    print(arguments)
     cleaned_arguments = clean_args(arguments)
     print(arguments)
     env.arguments = arguments

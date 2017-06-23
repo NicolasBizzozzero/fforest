@@ -24,7 +24,8 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
     with open(input_path) as input_file, open(output_path, "w") as output_file:
         output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
                                    skipinitialspace=skipinitialspace)
-        input_reader = csv.reader(input_file, delimiter=delimiter, skipinitialspace=skipinitialspace)
+        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+                                  skipinitialspace=skipinitialspace)
 
         if have_header:
             header = next(input_reader)
