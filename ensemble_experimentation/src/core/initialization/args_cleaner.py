@@ -22,12 +22,6 @@ class MissingClassificationAttribute(Exception):
         Exception.__init__(self, "You need to pass a classification attribute.")
 
 
-class InvalidValue(Exception):
-    def __init__(self, row_limit: str):
-        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
-                                 " a number of rows.".format(row_limit=row_limit))
-
-
 class InvalidPercentage(Exception):
     def __init__(self, percentage: str):
         Exception.__init__(self, "The value \"{percentage}\" is not a percentage.".format(percentage=percentage))
@@ -92,8 +86,8 @@ def clean_args(args: dict) -> None:
         elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
             args[param_name] = get_filename(args[param_name], with_extension=False) + extension
 
-        from pprint import pprint
-        pprint(args)
+    from pprint import pprint
+    pprint(args)
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:
@@ -111,7 +105,7 @@ def _clean_column_index_or_name(args: dict, param_name: str, column_name: str) -
     """ If the specified name value is a column name, convert it to it's respective index. Otherwise, check if it's
     inbounds and convert it to an integer.
     """
-    if not is_an_int(args[param_name]):
+    if (not is_an_int(args[param_name])) and (type(args[param_name]) == str):
         # User asked for a named class, we retrieve its index then change it
         args[param_name] = find_index_for_class(input_path=args[gpn.database()],
                                                 class_name=args[gpn.class_name()],

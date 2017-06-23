@@ -1,4 +1,5 @@
 from ensemble_experimentation.src.core.ending.ending import dump_statistics_dictionary
+from ensemble_experimentation.src.core.ending.ending import failure_safe
 from ensemble_experimentation.src.core.initialization.args_parser import parse_args_main_entry_point
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
@@ -17,7 +18,7 @@ def main_entry_point():
     # `environment` module.
     parse_args_main_entry_point()
 
-    _init_statistics(cleaned_arguments)
+    #_init_statistics(cleaned_arguments)
 
     # Preprocessing of the database
     preprocessing()

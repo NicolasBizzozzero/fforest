@@ -1,6 +1,3 @@
-from ensemble_experimentation.src.core.initialization.args_cleaner import InvalidValue
-
-
 def is_a_float(s: str) -> bool:
     """ Check if a parsed string is a float.
 
@@ -86,3 +83,9 @@ def convert_row_limit(row_limit: str, number_of_rows: int) -> int:
         raise InvalidValue(row_limit)
     percentage = float(row_limit)
     return int(round(percentage * number_of_rows))
+
+
+class InvalidValue(Exception):
+    def __init__(self, row_limit: str):
+        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
+                                 " a number of rows.".format(row_limit=row_limit))
