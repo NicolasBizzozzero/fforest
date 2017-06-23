@@ -5,7 +5,6 @@ statistics = dict()
 
 # Command-line parameters
 class_name = None
-initial_database_name = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
@@ -19,6 +18,7 @@ have_header = None
 header_extension = None
 header_name = None
 identifier = None
+initial_database_name = None
 initial_split_method = None
 main_directory = None
 minimal_size_leaf = None
@@ -44,7 +44,7 @@ training_value = None
 tree_file_extension = None
 trees_in_forest = None
 vector_file_extension = None
+verbosity = None
 
 # Special values
 initial_split_input_path = None
-verbosity = None
