@@ -46,5 +46,6 @@
     "quoting_input": "The usage of the quote character for the input database in CSV format. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting_input}]",
     "quoting_output": "The usage of the quote character for the output databases in CSV format. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting_output}]",
     "quote_char_input": "The symbol used to quote the required fields for the input database in CSV format. [default: {default_quote_char_input}]",
-    "quote_char_output": "The symbol used to quote the required fields for the output databases in CSV format. [default: {default_quote_char_output}]"
+    "quote_char_output": "The symbol used to quote the required fields for the output databases in CSV format. [default: {default_quote_char_output}]",
+    "verbosity": "Change the output behavior of the software. Values can be `quiet`, `normal` or `verbose`. [default: {default_verbosity}]"
 }

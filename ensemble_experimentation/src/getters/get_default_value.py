@@ -168,5 +168,9 @@ def quote_char_output() -> str:
     return _get_value_from_file("quote_char_output")
 
 
+def verbosity() -> str:
+    return _get_value_from_file("verbosity")
+
+
 if __name__ == '__main__':
     pass

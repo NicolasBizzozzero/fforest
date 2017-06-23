@@ -39,5 +39,6 @@
     "quoting_input": "nonnumeric",
     "quoting_output": "nonnumeric",
     "quote_char_input": "\"",
-    "quote_char_output": "\""
+    "quote_char_output": "\"",
+    "verbosity": "normal"
 }

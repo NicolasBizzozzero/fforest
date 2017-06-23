@@ -46,5 +46,6 @@
     "quoting_input": "--quoting-input",
     "quoting_output": "--quoting-output",
     "quote_char_input": "--quote-character-input",
-    "quote_char_output": "--quote-character-output"
+    "quote_char_output": "--quote-character-output",
+    "verbosity": "--verbosity"
 }

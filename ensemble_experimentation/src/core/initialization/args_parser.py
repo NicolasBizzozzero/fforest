@@ -61,6 +61,7 @@ _FORMAT_DICTIONARY = dict(
     doc_quoting_output=gpd.quoting_output(),
     doc_quote_char_input=gpd.quote_char_input(),
     doc_quote_char_output=gpd.quote_char_output(),
+    doc_verbosity=gpd.verbosity(),
 
     # Parameters
     param_database=gpn.database(),
@@ -105,6 +106,7 @@ _FORMAT_DICTIONARY = dict(
     param_quoting_output=gpn.quoting_output(),
     param_quote_char_input=gpn.quote_char_input(),
     param_quote_char_output=gpn.quote_char_output(),
+    param_verbosity=gpn.verbosity(),
 
     # Default values
     default_training_value=gdv.training_value(),
@@ -143,6 +145,7 @@ _FORMAT_DICTIONARY = dict(
     default_quoting_output=gdv.quoting_output(),
     default_quote_char_input=gdv.quote_char_input(),
     default_quote_char_output=gdv.quote_char_output(),
+    default_verbosity=gdv.verbosity(),
 
     # Miscellaneous
     global_name=ggv.name()
@@ -223,6 +226,7 @@ Options:
   {param_quoting_output}=QUOTING              {doc_quoting_output}
   {param_quote_char_input}=CHAR          {doc_quote_char_input}
   {param_quote_char_output}=CHAR         {doc_quote_char_output}
+  {param_verbosity}=LEVEL         {doc_verbosity}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

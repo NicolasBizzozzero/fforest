@@ -13,6 +13,7 @@ from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_cla
     get_number_of_columns
 from ensemble_experimentation.src.file_tools.csv_tools import str_to_quoting
 from ensemble_experimentation.src.file_tools.format import str_to_format
+from ensemble_experimentation.src.getters.get_output_message import string_to_verbosity
 from ensemble_experimentation.src.vrac.file_system import get_filename
 from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
 
@@ -85,6 +86,8 @@ def clean_args(args: dict) -> None:
             args[param_name] = str_to_quoting(args[param_name])
         elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
             args[param_name] = get_filename(args[param_name], with_extension=False) + extension
+        elif param_name == gpn.verbosity():
+            args[param_name] = string_to_verbosity(args[param_name])
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:
