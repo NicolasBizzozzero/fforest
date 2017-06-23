@@ -10,12 +10,12 @@ one location (the `res` folder) for a quicker and easier maintenance.
 """
 import docopt
 
-import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 from ensemble_experimentation.src.core.initialization.args_cleaner import clean_args
+from ensemble_experimentation.src.core.initialization.init_environment import init_environment
 
 _FORMAT_DICTIONARY = dict(
     # Documentation
@@ -227,8 +227,7 @@ Options:
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     clean_args(arguments)
-
-    env.args = arguments
+    init_environment(arguments)
 
 
 if __name__ == "__main__":

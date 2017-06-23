@@ -1,3 +1,4 @@
+""" Initialize the variables contained in the `environment` module. """
 from ensemble_experimentation.src.getters import environment as env, get_statistic_name as gsn, \
     get_parameter_name as gpn
 from ensemble_experimentation.src.vrac.file_system import get_filename
@@ -15,3 +16,7 @@ def _init_statistics(args: dict) -> None:
                                                             args[gpn.subtrain_name()])
     env.statistics[gsn.reference_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
                                                              args[gpn.reference_name()])
+
+
+def init_environment(args: dict) -> None:
+    _init_statistics(args)

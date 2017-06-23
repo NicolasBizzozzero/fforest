@@ -14,11 +14,8 @@ def main_entry_point():
     print("Hello main_entry_point")
 
     # Parsing and cleaning command-line arguments.
-    # After calling this method, the parsed arguments and the cleaned arguments will be stored as dictionaries into the
-    # `environment` module.
+    # After calling this method, all variables defined in the `environment` module will be initialized
     parse_args_main_entry_point()
-
-    #_init_statistics(cleaned_arguments)
 
     # Preprocessing of the database
     preprocessing()

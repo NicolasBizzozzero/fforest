@@ -1,11 +1,50 @@
-""" This module defines environment variables which'll be used by all the modules and packages of the program.
+""" This module defines environment variables which'll be used globally by all the modules and packages of the program.
 """
-# Contains command-line argument parsed and cleaned
-args = dict()
-
 # Contains useful statistics for the user
 statistics = dict()
 
-initial_split_input_path = None
+# Command-line parameters
+class_name = None
+initial_database_name = None
+delimiter_input = None
+delimiter_output = None
+difficulty_vector_prefix = None
+discretization_threshold = None
+encoding_input = None
+encoding_output = None
+entropy_measure = None
+format_input = None
+format_output = None
+have_header = None
+header_extension = None
+header_name = None
+identifier = None
+initial_split_method = None
+main_directory = None
+minimal_size_leaf = None
+preprocessed_database_name = None
+quality_vector_prefix = None
+quote_character_input = None
+quote_character_output = None
+quoting_input = None
+quoting_output = None
+reference_database_name = None
+reference_split_method = None
+reference_value = None
+statistics_file_name = None
+subsubtrain_directory_pattern = None
+subsubtrain_name_pattern = None
+subsubtrain_split_method = None
+subtrain_directory = None
+subtrain_name = None
+t_norms = None
+test_database_name = None
+train_database_name = None
+training_value = None
+tree_file_extension = None
+trees_in_forest = None
+vector_file_extension = None
 
+# Special values
+initial_split_input_path = None
 verbosity = None

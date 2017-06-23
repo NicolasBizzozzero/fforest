@@ -86,9 +86,6 @@ def clean_args(args: dict) -> None:
         elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
             args[param_name] = get_filename(args[param_name], with_extension=False) + extension
 
-    from pprint import pprint
-    pprint(args)
-
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:
     """ Check if a key exists inside a dictionary. Otherwise, raise KeyError or a custom exception. """
