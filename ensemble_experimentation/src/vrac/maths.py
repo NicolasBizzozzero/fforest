@@ -1,3 +1,6 @@
+from ensemble_experimentation.src.core.initialization.args_cleaner import InvalidValue
+
+
 def is_a_float(s: str) -> bool:
     """ Check if a parsed string is a float.
 
@@ -62,3 +65,24 @@ def is_a_percentage(s: str) -> bool:
         False
     """
     return is_a_float(s) and 0.0 <= float(s) <= 1.0
+
+
+def convert_row_limit(row_limit: str, number_of_rows: int) -> int:
+    """ Convert the parsed `row_limit` to a number of rows if it's a percentage, or raise an exception otherwise
+
+        Example :
+        >>> convert_row_limit("0.5", 1000)
+        500
+        >>> convert_row_limit("500", 1000)
+        Traceback (most recent call last):
+         ...
+        arg_parser.InvalidValue: The value "500" is neither a percentage nor a number of rows.
+        >>> convert_row_limit("500.1", 1000)
+        Traceback (most recent call last):
+         ...
+        arg_parser.InvalidValue: The value "500.1" is neither a percentage nor a number of rows.
+    """
+    if not is_a_percentage(row_limit):
+        raise InvalidValue(row_limit)
+    percentage = float(row_limit)
+    return int(round(percentage * number_of_rows))

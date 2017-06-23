@@ -1,9 +1,9 @@
 import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
 import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.initialization.args_cleaner import convert_row_limit
 from ensemble_experimentation.src.core.splitting_methods.split import split2
 from ensemble_experimentation.src.vrac.file_system import create_dir
+from ensemble_experimentation.src.vrac.maths import convert_row_limit
 
 
 def _create_subtrain_directory():

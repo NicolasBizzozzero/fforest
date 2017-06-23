@@ -1,15 +1,17 @@
-import copy
+""" This module contains all functions related to cleaning command-line arguments parsed by the `docopt` package
+(listed as a dependency). It mainly convert string values to their numeric and enum counterpart. If a parameter
+requiring an index or a column name has been completed with a name, it change it to its corresponding index. It also
+checks if some of the parameters are invalids and raises exceptions accordingly.
+"""
 import sys
 
-import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.learning_process.entropy_measures import str_to_entropy_measure
 from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
     get_number_of_columns
-from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows, str_to_quoting
+from ensemble_experimentation.src.file_tools.csv_tools import str_to_quoting
 from ensemble_experimentation.src.file_tools.format import str_to_format
 from ensemble_experimentation.src.vrac.file_system import get_filename
 from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
@@ -37,12 +39,103 @@ class IndexOutOfBounds(Exception):
                                  "database with {length} columns.".format(index=index, length=length, column=column))
 
 
-def _check_default_value_id(args: dict) -> bool:
-    """ Check if the user asked to use as an identifier the same string as the default identifier string.
-    Calling this function prevent the program from overwriting all the identifier values in this specific case.
+class InvalidParameter(Exception):
+    def __init__(self, invalid_parameter_name: str):
+        Exception.__init__(self, "The \"{param}\" parameter doesn't exists.".format(param=invalid_parameter_name))
+
+
+def clean_args(args: dict) -> None:
+    """ Clean the command-line arguments parsed by the `docopt` package.
+    It mainly convert string values to their numeric and enum counterpart. If a parameter requiring an index or a column
+    name has been completed with a name, it change it to its corresponding index. It also checks if some of the
+    parameters are invalids and raises exceptions accordingly.
     """
-    id_name = gpn.identifier()
-    if args[id_name] == gdv.identifier():
+    # Rename parameter database
+    args[gpn.database()] = args["<" + gpn.database() + ">"]
+    del args["<" + gpn.database() + ">"]
+
+    extension = "." + args[gpn.format_output()].lower()
+
+    for param_name in args.keys():
+        if param_name == gpn.class_name():
+            _check_key_exists(args, param_name, custom_exception=MissingClassificationAttribute)
+            _clean_column_index_or_name(args=args, param_name=param_name, column_name="class")
+        elif param_name in (gpn.discretization_threshold(), gpn.number_of_tnorms(), gpn.trees_in_forest()):
+            args[param_name] = int(args[param_name])
+        elif param_name in (gpn.format_input(), gpn.format_output):
+            args[param_name] = str_to_format(args[param_name])
+        elif param_name == gpn.entropy_measure():
+            args[param_name] = str_to_entropy_measure(args[param_name])
+        elif param_name == gpn.entropy_threshold():
+            if not is_a_percentage(args[param_name]):
+                raise InvalidPercentage(args[param_name])
+        elif param_name == gpn.identifier():
+            if _check_default_value_id(param_name, gdv.identifier()):
+                # We must add a column as an identifier. It will be done in the preprocessing function
+                args[param_name] = None
+            else:
+                _clean_column_index_or_name(args=args, param_name=param_name, column_name="identifier")
+        elif param_name in (gpn.initial_split_method(), gpn.reference_split_method(), gpn.subsubtrain_split_method()):
+            args[param_name] = str_to_splittingmethod(args[param_name])
+            if args[param_name] == SplittingMethod.KEEP_DISTRIBUTION and args[gpn.class_name()] is None:
+                raise MissingClassificationAttribute()
+        elif param_name == gpn.main_directory():
+            if args[param_name] is None:
+                args[param_name] = get_filename(args[gpn.database()])
+        elif param_name == gpn.preprocessed_database_name():
+            if args[param_name] is None:
+                args[param_name] = _get_preprocessed_db_name(database_name=args[gpn.database()], extension=extension)
+            else:
+                args[param_name] = get_filename(args[param_name], with_extension=True)
+        elif param_name in (gpn.quoting_input(), gpn.quoting_output()):
+            args[param_name] = str_to_quoting(args[param_name])
+        elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
+            args[param_name] = get_filename(args[param_name], with_extension=False) + extension
+
+        from pprint import pprint
+        pprint(args)
+
+
+def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:
+    """ Check if a key exists inside a dictionary. Otherwise, raise KeyError or a custom exception. """
+    try:
+        d[key]
+    except KeyError:
+        if custom_exception:
+            raise custom_exception
+        else:
+            raise KeyError
+
+
+def _clean_column_index_or_name(args: dict, param_name: str, column_name: str) -> None:
+    """ If the specified name value is a column name, convert it to it's respective index. Otherwise, check if it's
+    inbounds and convert it to an integer.
+    """
+    if not is_an_int(args[param_name]):
+        # User asked for a named class, we retrieve its index then change it
+        args[param_name] = find_index_for_class(input_path=args[gpn.database()],
+                                                class_name=args[gpn.class_name()],
+                                                encoding=args[gpn.encoding_input()],
+                                                delimiter=args[gpn.delimiter_input()])
+    else:
+        # User asked for an index, we convert it to int then check if it's inbound
+        args[param_name] = int(args[param_name])
+        if not index_in_bounds(input_path=args[gpn.database()],
+                               index=args[param_name],
+                               encoding=args[gpn.encoding_input()],
+                               delimiter=args[gpn.delimiter_input()]):
+            raise IndexOutOfBounds(index=args[param_name],
+                                   column=column_name,
+                                   length=get_number_of_columns(path=args[gpn.database()],
+                                                                encoding=args[gpn.encoding_input()],
+                                                                delimiter=args[gpn.delimiter_input()]))
+
+
+def _check_default_value_id(id_name: str, default_value: str) -> bool:
+    """ Check if the user asked to use as an identifier the same string used for the default identifier string.
+    Calling this function prevent the software from overwriting all the identifier values in this specific case.
+    """
+    if id_name == default_value:
         # Check if the parameter for the identifier has been used
         for option in sys.argv:
             if len(option) > len(id_name) and option[:len(id_name)] == id_name:
@@ -51,206 +144,10 @@ def _check_default_value_id(args: dict) -> bool:
     return False              # User asked for a different identifier than the default
 
 
-def convert_row_limit(row_limit: str, number_of_rows: int) -> int:
-    """ Convert the parsed `row_limit` to a number of rows if it's a percentage, or raise an exception otherwise
-
-        Example :
-        >>> convert_row_limit("0.5", 1000)
-        500
-        >>> convert_row_limit("500", 1000)
-        Traceback (most recent call last):
-         ...
-        arg_parser.InvalidValue: The value "500" is neither a percentage nor a number of rows.
-        >>> convert_row_limit("500.1", 1000)
-        Traceback (most recent call last):
-         ...
-        arg_parser.InvalidValue: The value "500.1" is neither a percentage nor a number of rows.
+def _get_preprocessed_db_name(database_name: str, extension: str = "") -> str:
+    """ Return the name of the modified database given the path of the original database.
+        Example:
+        >>> _get_preprocessed_db_name("database", "csv")
+        '~database.csv'
     """
-    if not is_a_percentage(row_limit):
-        raise InvalidValue(row_limit)
-    percentage = float(row_limit)
-    return int(round(percentage * number_of_rows))
-
-
-def _get_preprocessed_db_name(args: dict, extension: str = "") -> str:
-    """ Return the name of the modified database given the path of the original database. """
-    return "~" + get_filename(args[gpn.database()], with_extension=False) + extension
-
-
-def clean_args(args: dict) -> dict:
-    """ Clean the arguments to make the `args` dictionary usable more easily.
-    This mainly consist of converting strings to int, float or enum.
-    """
-    cleaned_args = copy.copy(args)
-
-    # Rename parameter database
-    cleaned_args[gpn.database()] = cleaned_args["<" + gpn.database() + ">"]
-    del cleaned_args["<" + gpn.database() + ">"]
-
-    # Count instances in initial database
-    env.statistics[gsn.instances_in_database()] = get_number_of_rows(cleaned_args[gpn.database()])
-
-    # Class name
-    try:
-        args[gpn.class_name()]
-    except KeyError:
-        raise MissingClassificationAttribute()
-    if not is_an_int(cleaned_args[gpn.class_name()]):
-        # User asked for a named class, we retrieve its index then change it
-        cleaned_args[gpn.class_name()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
-                                                              class_name=cleaned_args[gpn.class_name()],
-                                                              encoding=cleaned_args[gpn.encoding_input()],
-                                                              delimiter=cleaned_args[gpn.delimiter_input()])
-    else:
-        # User asked for an index, we convert it to int then check if it's inbound
-        cleaned_args[gpn.class_name()] = int(cleaned_args[gpn.class_name()])
-        if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.class_name()],
-                               encoding=cleaned_args[gpn.encoding_input()],
-                               delimiter=cleaned_args[gpn.delimiter_input()]):
-            raise IndexOutOfBounds(index=cleaned_args[gpn.class_name()], column="class",
-                                   length=get_number_of_columns(path=cleaned_args[gpn.database()],
-                                                                encoding=cleaned_args[gpn.encoding_input()],
-                                                                delimiter=cleaned_args[gpn.delimiter_input()]))
-
-    # Delimiter input
-
-    # Delimiter output
-
-    # Difficulty vector prefix
-
-    # Discretization threshold
-    cleaned_args[gpn.discretization_threshold()] = int(args[gpn.discretization_threshold()])
-
-    # Encoding input
-
-    # Encoding output
-
-    # Entropy measure
-    cleaned_args[gpn.entropy_measure()] = str_to_entropy_measure(args[gpn.entropy_measure()])
-
-    # Entropy threshold
-    if not is_a_percentage(cleaned_args[gpn.entropy_threshold()]):
-        raise InvalidPercentage(cleaned_args[gpn.entropy_threshold()])
-
-    # Format input
-    cleaned_args[gpn.format_input()] = str_to_format(args[gpn.format_input()])
-
-    # Format output
-    cleaned_args[gpn.format_output()] = str_to_format(args[gpn.format_output()])
-    extension = "." + args[gpn.format_output()].lower()
-    # Have header
-
-    # Header file name
-
-    # Header extension
-
-    # Help
-
-    # Identifier
-    if _check_default_value_id(args):
-        # We must add a column as an identifier
-        # It will be done in the preprocessing function
-        cleaned_args[gpn.identifier()] = None
-    elif not is_an_int(cleaned_args[gpn.identifier()]):
-        # User asked for a named identifier, we retrieve its index then change it
-        cleaned_args[gpn.identifier()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
-                                                              class_name=cleaned_args[gpn.identifier()],
-                                                              encoding=cleaned_args[gpn.encoding_input()],
-                                                              delimiter=cleaned_args[gpn.delimiter_input()])
-    else:
-        # User asked for an index, we convert it to int then check if it's inbound
-        cleaned_args[gpn.identifier()] = int(cleaned_args[gpn.identifier()])
-        if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.identifier()],
-                               encoding=cleaned_args[gpn.encoding_input()],
-                               delimiter=cleaned_args[gpn.delimiter_input()]):
-            raise IndexOutOfBounds(index=cleaned_args[gpn.identifier()], column="identifier",
-                                   length=get_number_of_columns(path=cleaned_args[gpn.database()],
-                                                                encoding=cleaned_args[gpn.encoding_input()],
-                                                                delimiter=cleaned_args[gpn.delimiter_input()]))
-
-    # Initial split Method
-    cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
-    if cleaned_args[gpn.initial_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute()
-
-    # Main directory
-    if cleaned_args[gpn.main_directory()] is None:
-        cleaned_args[gpn.main_directory()] = get_filename(cleaned_args[gpn.database()])
-
-    # Min size leaf
-
-    # Number of t-norms
-    cleaned_args[gpn.number_of_tnorms()] = int(args[gpn.number_of_tnorms()])
-
-    # Preprocessed database name
-    if args[gpn.preprocessed_database_name()] is None:
-        cleaned_args[gpn.preprocessed_database_name()] = _get_preprocessed_db_name(cleaned_args, extension=extension)
-    else:
-        cleaned_args[gpn.preprocessed_database_name()] = get_filename(cleaned_args[gpn.preprocessed_database_name()],
-                                                                      with_extension=True)
-
-    # Quality vector prefix
-
-    # Quote character input
-
-    # Quote character output
-
-    # Quoting input
-    cleaned_args[gpn.quoting_input()] = str_to_quoting(args[gpn.quoting_input()])
-
-    # Quoting output
-    cleaned_args[gpn.quoting_output()] = str_to_quoting(args[gpn.quoting_output()])
-
-    # Reference database name
-    cleaned_args[gpn.reference_name()] = get_filename(cleaned_args[gpn.reference_name()],
-                                                      with_extension=False) + extension
-
-    # Reference split Method
-    cleaned_args[gpn.reference_split_method()] = str_to_splittingmethod(args[gpn.reference_split_method()])
-    if cleaned_args[gpn.reference_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute()
-
-    # Reference split value
-
-    # Statistics file name
-
-    # Subsubtrain directory name pattern
-    if cleaned_args[gpn.subsubtrain_directory_pattern()] is None:
-        cleaned_args[gpn.subsubtrain_directory_pattern()] = gdv.subsubtrain_directory_pattern()
-
-    # Subsubtrain split method
-    if args[gpn.subsubtrain_split_method()] is None:
-        cleaned_args[gpn.subsubtrain_split_method()] = gdv.subsubtrain_split_method()
-    cleaned_args[gpn.subsubtrain_split_method()] = str_to_splittingmethod(cleaned_args[gpn.subsubtrain_split_method()])
-    if cleaned_args[gpn.subsubtrain_split_method()] == SplittingMethod.KEEP_DISTRIBUTION and \
-       cleaned_args[gpn.class_name()] is None:
-        raise MissingClassificationAttribute()
-
-    # Subsubtrain name pattern
-
-    # Subtrain directory
-
-    # Subtrain name
-    cleaned_args[gpn.subtrain_name()] = get_filename(cleaned_args[gpn.subtrain_name()],
-                                                     with_extension=False) + extension
-
-    # Test database name
-    cleaned_args[gpn.test_name()] = get_filename(cleaned_args[gpn.test_name()], with_extension=False) + extension
-
-    # Train database name
-    cleaned_args[gpn.train_name()] = get_filename(cleaned_args[gpn.train_name()], with_extension=False) + extension
-
-    # Training value
-    cleaned_args[gpn.training_value()] = convert_row_limit(cleaned_args[gpn.training_value()],
-                                                           env.statistics[gsn.instances_in_database()])
-
-    # Tree file extension
-
-    # Trees in forest
-    cleaned_args[gpn.trees_in_forest()] = int(cleaned_args[gpn.trees_in_forest()])
-
-    # Vector file extension
-
-    return cleaned_args
+    return "~" + get_filename(database_name, with_extension=False) + extension

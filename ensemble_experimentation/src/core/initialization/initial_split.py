@@ -9,6 +9,13 @@ def initial_split() -> None:
     Store the number of instances of the train and test databases into the `statistics` dictionary in the `env`
     module.
     """
+    # Count instances in initial database
+    env.statistics[gsn.instances_in_database()] = get_number_of_rows(args[gpn.database()])
+
+    cleaned_args[gpn.training_value()] = convert_row_limit(cleaned_args[gpn.training_value()],
+                                                           env.statistics[gsn.instances_in_database()])
+
+
     env.statistics[gsn.instances_in_train()], \
         env.statistics[gsn.instances_in_test()] = \
         split2(input_path=env.initial_split_input_path,
