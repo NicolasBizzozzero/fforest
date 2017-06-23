@@ -1,5 +1,6 @@
 {
     "usage": "ensemble_experimentation.py <{param_database}> [options] [{param_class_name} <name>] [{param_delimiter} <char>] [{param_trees_in_forest} <trees>]",
+    "help": "Print this help message.",
 
     "training_value": "% of values you want to extract from the database and put in the train database. The rest will be put in the test database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
     "reference_value": "% of values you want to extract from the training set and put in the reference set. The rest will be put in the subtrain database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_reference_value}]",
@@ -14,14 +15,14 @@
     "preprocessed_database_name":"The name of the preprocessed database. Its defaulting to the database name prefixed with '~'.",
     "subtrain_name": "The name of the subtrain database after the train split. [default: {default_subtrain_name}]",
     "reference_name": "The name of the reference database after the train split. [default: {default_reference_name}]",
-    "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. It must follows a %s-style rule, which will be replaced by the ID of the subsubtrain database. [default: {default_subsubtrain_name_pattern}]",
     "statistics_file_name": "The name of the statistics file, dumped at the end of the program. [default: {default_statistics_name}]",
     "header_name": "The name of the header file, extracted from the original database if it contains one. [default: {default_header_name}]",
+    "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. It must follows a %s-style rule, which will be replaced by the ID of the subsubtrain database. [default: {default_subsubtrain_name_pattern}]",
+    "difficulty_vector_prefix": "The prefix of every difficulty vector created in the subtrain directory. [default: {default_difficulty_vector_prefix}]",
+    "quality_vector_prefix": "The prefix of every quality vector created in every subsubtrain directory. [default: {default_quality_vector_prefix}]",
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
     "header_extension": "The extension of the header file, extracted from the original database if it contains one. [default: {default_header_extension}]",
-    "difficulty_vector_prefix": "The prefix of every difficulty vector created in the subtrain directory. [default: {default_difficulty_vector_prefix}]",
-    "quality_vector_prefix": "The prefix of every quality vector created in every subsubtrain directory. [default: {default_quality_vector_prefix}]",
 
     "main_directory": "The name of the main directory, where all the project will be dumped. It defaults to the name of the database.",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",
@@ -33,13 +34,17 @@
     "entropy_measure": "The measure used to calculate the entropy. Values can be `shannon`. [default: {default_entropy_measure}]",
     "number_of_tnorms": "The number of t-norms (aggregation of the classification degres) to use. Each t-norm will create a new vector file. T-norms are as follows: 0 = Classical classification, 1 = Zadeh's t-norm, 2 = Lukasiewicz's t-norm. [default: {default_number_of_tnorms}]",
 
-    "help": "Print this help message.",
     "identifier": "The class name of the examples' identifier. You can also pass an integer, which'll act as the index of the identifier column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on. If you don't pass this argument, an index column will be created in the preprocessed database. [default: {default_identifier}]",
-    "encoding": "The encoding used to read the database and write the outputs. [default: {default_encoding}]",
-    "format_db": "The format used to read the database and write the outputs. [default: {default_format_db}]",
-    "delimiter": "The symbol used to delimiting data in a CSV database. [default: {default_delimiter}]",
-    "quoting": "The usage of the quote character. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting}]",
-    "quote_char": "The symbol used to quote the required fields. [default: {default_quote_char}]",
+    "class": "The name of the class attribute. You can also pass an integer, which'll act as the index of the class column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on.",
     "have_header": "This option indicate that the initial database have a header.",
-    "class": "The name of the class attribute. You can also pass an integer, which'll act as the index of the class column. Indexes start at 0. You can pass the last index with -1, the before-last with -2, and so on."
+    "encoding_input": "The encoding used to read the database. [default: {default_encoding_input}]",
+    "encoding_output": "The encoding used to write the outputs. [default: {default_encoding_output}]",
+    "format_input": "The format used to read the database. [default: {default_format_input}]",
+    "format_output": "The format used to write the outputs. [default: {default_format_output}]",
+    "delimiter_input": "The symbol used to delimiting data in a CSV input database. [default: {default_delimiter_input}]",
+    "delimiter_output": "The symbol used to delimiting data in a CSV output database. [default: {default_delimiter_output}]",
+    "quoting_input": "The usage of the quote character for the input database in CSV format. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting_input}]",
+    "quoting_output": "The usage of the quote character for the output databases in CSV format. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting_output}]",
+    "quote_char_input": "The symbol used to quote the required fields for the input database in CSV format. [default: {default_quote_char_input}]",
+    "quote_char_output": "The symbol used to quote the required fields for the output databases in CSV format. [default: {default_quote_char_output}]"
 }

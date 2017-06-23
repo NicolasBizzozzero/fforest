@@ -128,24 +128,44 @@ def identifier() -> str:
     return _get_value_from_file("identifier")
 
 
-def encoding() -> str:
-    return _get_value_from_file("encoding")
+def encoding_input() -> str:
+    return _get_value_from_file("encoding_input")
 
 
-def format_db() -> str:
-    return _get_value_from_file("format_db")
+def encoding_output() -> str:
+    return _get_value_from_file("encoding_output")
 
 
-def delimiter() -> str:
-    return _get_value_from_file("delimiter")
+def format_input() -> str:
+    return _get_value_from_file("format_input")
 
 
-def quoting() -> str:
-    return _get_value_from_file("quoting")
+def format_output() -> str:
+    return _get_value_from_file("format_output")
 
 
-def quote_char() -> str:
-    return _get_value_from_file("quote_char")
+def delimiter_input() -> str:
+    return _get_value_from_file("delimiter_input")
+
+
+def delimiter_output() -> str:
+    return _get_value_from_file("delimiter_output")
+
+
+def quoting_input() -> str:
+    return _get_value_from_file("quoting_input")
+
+
+def quoting_output() -> str:
+    return _get_value_from_file("quoting_output")
+
+
+def quote_char_input() -> str:
+    return _get_value_from_file("quote_char_input")
+
+
+def quote_char_output() -> str:
+    return _get_value_from_file("quote_char_output")
 
 
 if __name__ == '__main__':
