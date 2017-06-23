@@ -1,8 +1,15 @@
-""" This module contains all functions related to parsing command-line arguments for all entry points of the package.
-It uses the `docopt` package (listed as a dependencie) to easily combine the tedious task of writing documentation
-and parsing arguments.
-#TODO: We can gain time by not formatting the helping message twice, but by directly formatting the documentation from
-#      the format dictionary
+""" This module contains all functions related to parsing command-line arguments for all entry points of the software.
+It uses the `docopt` package (listed as a dependency) to easily combine the tedious task of writing documentation
+and parsing arguments. Each parsing function contains a very long documentation string which will be the string
+displayed with the --help parameter. This string contains a lot of format-style parameters and has for purpose to
+organize them into the best way possible for reading the documentation. Each of these format-style parameters are
+defined inside the `_FORMAT_DICTIONARY` variable at the beginning of the module. This dictionary link theses variables
+with their respective value in the files located in the `res` directory at the root of the software.
+This complex parsing method allows to have the arguments, their documentation and default values to be defined in only
+one location (the `res` folder) for a quicker and easier maintenance.
+
+#TODO: We can (maybe) gain time by not formatting the helping message twice, but by directly formatting the
+#      documentation from the format dictionary
 """
 import docopt
 
@@ -11,9 +18,7 @@ import ensemble_experimentation.src.getters.get_default_value as gdv
 import ensemble_experimentation.src.getters.get_global_variable as ggv
 import ensemble_experimentation.src.getters.get_parameter_documentation as gpd
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
-from ensemble_experimentation.src.core.initialization.arg_cleaner import clean_args
-from ensemble_experimentation.src.vrac.file_system import get_filename
+from ensemble_experimentation.src.core.initialization.args_cleaner import clean_args
 
 _FORMAT_DICTIONARY = dict(
     # Documentation
@@ -147,23 +152,10 @@ _FORMAT_DICTIONARY = dict(
 )
 
 
-def _init_statistics(args: dict) -> None:
-    """ Initialize the `statistics` dictionary located inside the `env` module. """
-    env.statistics[gsn.database_path()] = args[gpn.database()]
-    env.statistics[gsn.database_name()] = get_filename(args[gpn.database()])
-    env.statistics[gsn.preprocessed_database_path()] = "{}/{}".format(args[gpn.main_directory()],
-                                                                      args[gpn.preprocessed_database_name()])
-    env.statistics[gsn.train_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.train_name()])
-    env.statistics[gsn.test_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.test_name()])
-    env.statistics[gsn.subtrain_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                            args[gpn.subtrain_name()])
-    env.statistics[gsn.reference_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                             args[gpn.reference_name()])
-
-
 def parse_args_main_entry_point() -> None:
     global _FORMAT_DICTIONARY
 
+    # Format the string twice because all the "doc_" variables contains default variables which need to be formated too
     documentation = """{global_name}
 
 Usage:
@@ -226,11 +218,9 @@ Options:
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     cleaned_arguments = clean_args(arguments)
-    print(arguments)
+
     env.arguments = arguments
     env.cleaned_arguments = cleaned_arguments
-
-    _init_statistics(cleaned_arguments)
 
 
 def parse_args_forest_entry_point() -> dict:

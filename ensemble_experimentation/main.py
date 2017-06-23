@@ -1,5 +1,5 @@
 from ensemble_experimentation.src.core.ending.ending import dump_statistics_dictionary
-from ensemble_experimentation.src.core.initialization.arg_parser import parse_args_main_entry_point
+from ensemble_experimentation.src.core.initialization.args_parser import parse_args_main_entry_point
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
 from ensemble_experimentation.src.core.initialization.reference_split import reference_split
@@ -8,7 +8,7 @@ from ensemble_experimentation.src.core.learning_process.forest_reduction import 
 from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
 
 
-#@failure_safe
+@failure_safe
 def main_entry_point():
     print("Hello main_entry_point")
 
@@ -16,6 +16,8 @@ def main_entry_point():
     # After calling this method, the parsed arguments and the cleaned arguments will be stored as dictionaries into the
     # `environment` module.
     parse_args_main_entry_point()
+
+    _init_statistics(cleaned_arguments)
 
     # Preprocessing of the database
     preprocessing()

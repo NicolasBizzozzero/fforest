@@ -42,8 +42,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 output_writer.writerow(row)
 
 
-def _identifier_at_beginning(path: str, identifier: str, quoting: int = 1, quote_char: str = "\"",
-                             skipinitialspace: bool = True):
+def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_char: str, skipinitialspace: bool) -> bool:
     if is_an_int(identifier):
         return int(identifier) == 0
 
@@ -56,8 +55,7 @@ def _identifier_at_beginning(path: str, identifier: str, quoting: int = 1, quote
         return header[0] == identifier
 
 
-def _class_at_end(path: str, class_name: str, quoting: int = 1, quote_char: str = "\"",
-                             skipinitialspace: bool = True):
+def _class_at_end(path: str, class_name: str, quoting: int, quote_char: str, skipinitialspace: bool) -> bool:
     if is_an_int(class_name):
         return int(class_name) == -1 or \
                int(class_name) == get_number_of_columns(path, delimiter=env.cleaned_arguments[gpn.delimiter()],
@@ -72,21 +70,26 @@ def _class_at_end(path: str, class_name: str, quoting: int = 1, quote_char: str 
         return header[-1] == class_name
 
 
-def _extract_header(input_path: str, header_path: str, encoding: str = "utf8"):
+def _extract_header(input_path: str, header_path: str, encoding: str):
     header = extract_first_line(input_path, encoding=encoding)
     dump_string(header_path, header)
 
 
 def preprocessing() -> None:
     """ Prepare the original database to be processed. """
-    print("hello preprocessing")
     env.initial_split_input_path = env.statistics[gsn.database_path()]
+    env.initial_split_encoding = env.cleaned_arguments[gpn.encoding_input()]
+    env.initial_split_format = env.cleaned_arguments[gpn.format_input()]
+    env.initial_split_delimiter = env.cleaned_arguments[gpn.delimiter_input()]
+    env.initial_split_quoting = env.cleaned_arguments[gpn.quoting_input()]
+    env.initial_split_quote_char = env.cleaned_arguments[gpn.quote_char_input()]
 
     # Create the main directory of the application
     create_dir(env.cleaned_arguments[gpn.main_directory()])
 
+    #
+
     # Check if the database contains an identifier column
-    print(env.cleaned_arguments[gpn.quoting()])
     if env.cleaned_arguments[gpn.identifier()] is None:
         _add_id(input_path=env.cleaned_arguments[gpn.database()],
                 output_path=env.statistics[gsn.preprocessed_database_path()],

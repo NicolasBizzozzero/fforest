@@ -99,26 +99,31 @@ def clean_args(args: dict) -> dict:
         # User asked for a named class, we retrieve its index then change it
         cleaned_args[gpn.class_name()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
                                                               class_name=cleaned_args[gpn.class_name()],
-                                                              encoding=cleaned_args[gpn.encoding()],
-                                                              delimiter=cleaned_args[gpn.delimiter()])
+                                                              encoding=cleaned_args[gpn.encoding_input()],
+                                                              delimiter=cleaned_args[gpn.delimiter_input()])
     else:
         # User asked for an index, we convert it to int then check if it's inbound
         cleaned_args[gpn.class_name()] = int(cleaned_args[gpn.class_name()])
         if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.class_name()],
-                               encoding=cleaned_args[gpn.encoding()], delimiter=cleaned_args[gpn.delimiter()]):
+                               encoding=cleaned_args[gpn.encoding_input()],
+                               delimiter=cleaned_args[gpn.delimiter_input()]):
             raise IndexOutOfBounds(index=cleaned_args[gpn.class_name()], column="class",
                                    length=get_number_of_columns(path=cleaned_args[gpn.database()],
-                                                                encoding=cleaned_args[gpn.encoding()],
-                                                                delimiter=cleaned_args[gpn.delimiter()]))
+                                                                encoding=cleaned_args[gpn.encoding_input()],
+                                                                delimiter=cleaned_args[gpn.delimiter_input()]))
 
-    # Delimiter
+    # Delimiter input
+
+    # Delimiter output
 
     # Difficulty vector prefix
 
     # Discretization threshold
     cleaned_args[gpn.discretization_threshold()] = int(args[gpn.discretization_threshold()])
 
-    # Encoding
+    # Encoding input
+
+    # Encoding output
 
     # Entropy measure
     cleaned_args[gpn.entropy_measure()] = str_to_entropy_measure(args[gpn.entropy_measure()])
@@ -127,10 +132,12 @@ def clean_args(args: dict) -> dict:
     if not is_a_percentage(cleaned_args[gpn.entropy_threshold()]):
         raise InvalidPercentage(cleaned_args[gpn.entropy_threshold()])
 
-    # Format
-    cleaned_args[gpn.format_db()] = str_to_format(args[gpn.format_db()])
-    extension = "." + args[gpn.format_db()].lower()
+    # Format input
+    cleaned_args[gpn.format_input()] = str_to_format(args[gpn.format_input()])
 
+    # Format output
+    cleaned_args[gpn.format_output()] = str_to_format(args[gpn.format_output()])
+    extension = "." + args[gpn.format_output()].lower()
     # Have header
 
     # Header file name
@@ -148,17 +155,18 @@ def clean_args(args: dict) -> dict:
         # User asked for a named identifier, we retrieve its index then change it
         cleaned_args[gpn.identifier()] = find_index_for_class(input_path=cleaned_args[gpn.database()],
                                                               class_name=cleaned_args[gpn.identifier()],
-                                                              encoding=cleaned_args[gpn.encoding()],
-                                                              delimiter=cleaned_args[gpn.delimiter()])
+                                                              encoding=cleaned_args[gpn.encoding_input()],
+                                                              delimiter=cleaned_args[gpn.delimiter_input()])
     else:
         # User asked for an index, we convert it to int then check if it's inbound
         cleaned_args[gpn.identifier()] = int(cleaned_args[gpn.identifier()])
         if not index_in_bounds(input_path=cleaned_args[gpn.database()], index=cleaned_args[gpn.identifier()],
-                               encoding=cleaned_args[gpn.encoding()], delimiter=cleaned_args[gpn.delimiter()]):
+                               encoding=cleaned_args[gpn.encoding_input()],
+                               delimiter=cleaned_args[gpn.delimiter_input()]):
             raise IndexOutOfBounds(index=cleaned_args[gpn.identifier()], column="identifier",
                                    length=get_number_of_columns(path=cleaned_args[gpn.database()],
-                                                                encoding=cleaned_args[gpn.encoding()],
-                                                                delimiter=cleaned_args[gpn.delimiter()]))
+                                                                encoding=cleaned_args[gpn.encoding_input()],
+                                                                delimiter=cleaned_args[gpn.delimiter_input()]))
 
     # Initial split Method
     cleaned_args[gpn.initial_split_method()] = str_to_splittingmethod(args[gpn.initial_split_method()])
@@ -184,10 +192,15 @@ def clean_args(args: dict) -> dict:
 
     # Quality vector prefix
 
-    # Quote character
+    # Quote character input
 
-    # Quoting
-    cleaned_args[gpn.quoting()] = str_to_quoting(args[gpn.quoting()])
+    # Quote character output
+
+    # Quoting input
+    cleaned_args[gpn.quoting_input()] = str_to_quoting(args[gpn.quoting_input()])
+
+    # Quoting output
+    cleaned_args[gpn.quoting_output()] = str_to_quoting(args[gpn.quoting_output()])
 
     # Reference database name
     cleaned_args[gpn.reference_name()] = get_filename(cleaned_args[gpn.reference_name()],
@@ -204,12 +217,10 @@ def clean_args(args: dict) -> dict:
     # Statistics file name
 
     # Subsubtrain directory name pattern
-    # TODO: I don't know why, but docopt can't parse the default value
     if cleaned_args[gpn.subsubtrain_directory_pattern()] is None:
         cleaned_args[gpn.subsubtrain_directory_pattern()] = gdv.subsubtrain_directory_pattern()
 
     # Subsubtrain split method
-    # TODO: I don't know why, but docopt can't parse the default value
     if args[gpn.subsubtrain_split_method()] is None:
         cleaned_args[gpn.subsubtrain_split_method()] = gdv.subsubtrain_split_method()
     cleaned_args[gpn.subsubtrain_split_method()] = str_to_splittingmethod(cleaned_args[gpn.subsubtrain_split_method()])
@@ -222,7 +233,8 @@ def clean_args(args: dict) -> dict:
     # Subtrain directory
 
     # Subtrain name
-    cleaned_args[gpn.subtrain_name()] = get_filename(cleaned_args[gpn.subtrain_name()], with_extension=False) + extension
+    cleaned_args[gpn.subtrain_name()] = get_filename(cleaned_args[gpn.subtrain_name()],
+                                                     with_extension=False) + extension
 
     # Test database name
     cleaned_args[gpn.test_name()] = get_filename(cleaned_args[gpn.test_name()], with_extension=False) + extension
