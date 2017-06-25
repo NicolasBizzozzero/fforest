@@ -13,7 +13,8 @@ def initial_split() -> None:
     Store the number of instances of the train and test databases into the `statistics` dictionary in the `env`
     module.
     """
-    # Count instances in initial database
+    # Count instances in initial database to convert the training value into a number of instances to give to the train
+    # database.
     env.instances_original_database = get_number_of_rows(env.preprocessed_database_path)
     env.training_value = convert_row_limit(env.training_value, env.instances_original_database)
 
