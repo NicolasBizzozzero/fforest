@@ -1,3 +1,7 @@
+""" Split the initial database into the train and test databases.
+Store the number of instances of the train and test databases into the `statistics` dictionary in the `env`
+module.
+"""
 import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.splitting_methods.split import split2
 from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
