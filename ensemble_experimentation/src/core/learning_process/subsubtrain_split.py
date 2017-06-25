@@ -8,20 +8,6 @@ from ensemble_experimentation.src.vrac.file_system import create_dir
 from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
 
 
-#TODO: Return the path not the name ?
-def _create_subtrain_directories(number_of_trees: int) -> List[str]:
-    """ Create all needed directories which will each serves as a workplace for a single tree.
-    Return all the names of the directories created.
-    """
-    subsubtrain_names = []
-    for dir_name in subsubtrain_dir_path(number_of_trees, env.cleaned_arguments[gpn.main_directory()],
-                                         env.cleaned_arguments[gpn.subtrain_directory()],
-                                         env.cleaned_arguments[gpn.subsubtrain_directory_pattern()]):
-        subsubtrain_names.append(dir_name)
-        create_dir(dir_name)
-    return subsubtrain_names
-
-
 def subsubtrain_split() -> None:
     """ Split the subtrain database into multiple subsubtrain databases. """
     number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
@@ -45,3 +31,17 @@ def subsubtrain_split() -> None:
 
     # Store the number of instances of each tree in the statistics file
     env.statistics[gsn.instances_in_subsubtrain()] = dict(zip(subsubtrain_names, list_instances))
+
+
+#TODO: Return the path not the name ?
+def _create_subtrain_directories(number_of_trees: int) -> List[str]:
+    """ Create all needed directories which will each serves as a workplace for a single tree.
+    Return all the names of the directories created.
+    """
+    subsubtrain_names = []
+    for dir_name in subsubtrain_dir_path(number_of_trees, env.cleaned_arguments[gpn.main_directory()],
+                                         env.cleaned_arguments[gpn.subtrain_directory()],
+                                         env.cleaned_arguments[gpn.subsubtrain_directory_pattern()]):
+        subsubtrain_names.append(dir_name)
+        create_dir(dir_name)
+    return subsubtrain_names
