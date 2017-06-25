@@ -1,7 +1,7 @@
 import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.splitting_methods.split import split2
+from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
+from ensemble_experimentation.src.vrac.maths import convert_row_limit
 
 
 def initial_split() -> None:
@@ -10,21 +10,17 @@ def initial_split() -> None:
     module.
     """
     # Count instances in initial database
-    env.statistics[gsn.instances_in_database()] = get_number_of_rows(args[gpn.database()])
+    env.instances_original_database = get_number_of_rows(env.preprocessed_database_path)
+    env.training_value = convert_row_limit(env.training_value, env.instances_original_database)
 
-    cleaned_args[gpn.training_value()] = convert_row_limit(cleaned_args[gpn.training_value()],
-                                                           env.statistics[gsn.instances_in_database()])
-
-
-    env.statistics[gsn.instances_in_train()], \
-        env.statistics[gsn.instances_in_test()] = \
-        split2(input_path=env.initial_split_input_path,
-               delimiter=env.cleaned_arguments[gpn.delimiter()],
-               row_limit=env.cleaned_arguments[gpn.training_value()],
-               have_header=env.cleaned_arguments[gpn.have_header()],
-               method=env.cleaned_arguments[gpn.initial_split_method()],
-               output_name_train=env.statistics[gsn.train_path()],
-               output_name_test=env.statistics[gsn.test_path()],
-               encoding=env.cleaned_arguments[gpn.encoding()],
-               class_name=env.cleaned_arguments[gpn.class_name()],
-               number_of_rows=env.statistics[gsn.instances_in_database()])
+    env.instances_train_database, env.instances_test_database = \
+        split2(input_path=env.preprocessed_database_path,
+               delimiter=env.delimiter_output,
+               row_limit=env.training_value,
+               have_header=env.have_header,
+               method=env.initial_split_method,
+               output_name_train=env.train_database_path,
+               output_name_test=env.test_database_path,
+               encoding=env.encoding_output,
+               class_name=env.class_name,
+               number_of_rows=env.instances_original_database)

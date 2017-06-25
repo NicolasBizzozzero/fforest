@@ -57,3 +57,8 @@ header_path = None
 
 # Names
 original_database_name = None
+
+# Number of instances
+instances_original_database = None
+instances_train_database = None
+instances_test_database = None

@@ -54,7 +54,7 @@ def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
 def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
            method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str, class_name=None,
            number_of_rows: int = None, quoting: int = 1, quotechar: str = "\"",
-           skipinitialspace: bool = True) -> Tuple[int, int]:
+           skip_initial_space: bool = True) -> Tuple[int, int]:
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
     to the asked splitting2 method.
     You must pass each argument along with its name.
@@ -64,11 +64,11 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
             open(os.path.join(output_path, output_name_test), mode='w') as output_test:
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
-                                  skipinitialspace=skipinitialspace)
+                                  skipinitialspace=skip_initial_space)
         out_writer_train = csv.writer(output_train, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
-                                      skipinitialspace=skipinitialspace)
+                                      skipinitialspace=skip_initial_space)
         out_writer_test = csv.writer(output_test, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
-                                     skipinitialspace=skipinitialspace)
+                                     skipinitialspace=skip_initial_space)
 
         if method == SplittingMethod.HALFING:
             size_train, size_test = halfing2(input_reader, row_limit, out_writer_train, out_writer_test)
@@ -83,7 +83,7 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str 
 
 def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool, method: SplittingMethod, encoding: str,
           class_name=None, number_of_rows: int = None, tree_names: list, subtrain_path: str, quoting: int = 1,
-          quote_char: str = "\"", skipinitialspace: bool = True) -> List[int]:
+          quote_char: str = "\"", skip_initial_space: bool = True) -> List[int]:
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
     to the asked splitting method.
     You must pass each argument along with its name.
@@ -95,9 +95,9 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
                           mode='w') for name in tree_names]
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                  skipinitialspace=skipinitialspace)
+                                  skipinitialspace=skip_initial_space)
         out_writers = [csv.writer(f, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                  skipinitialspace=skipinitialspace) for f in out_files]
+                                  skipinitialspace=skip_initial_space) for f in out_files]
 
         if method == SplittingMethod.HALFING:
             databases_size = halfing(input_reader, row_limit, out_writers, env.cleaned_arguments[gpn.trees_in_forest()])
