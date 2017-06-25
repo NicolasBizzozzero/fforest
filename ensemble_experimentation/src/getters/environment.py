@@ -46,5 +46,14 @@ trees_in_forest = None
 vector_file_extension = None
 verbosity = None
 
-# Special values
-initial_split_input_path = None
+# Paths
+original_database_path = None
+preprocessed_database_path = None
+train_database_path = None
+test_database_path = None
+subtrain_database_path = None
+reference_database_path = None
+header_path = None
+
+# Names
+original_database_name = None

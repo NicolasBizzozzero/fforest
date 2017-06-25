@@ -1,16 +1,16 @@
 """ Initialize the variables contained in the `environment` module. """
-from ensemble_experimentation.src.getters import environment as env, get_statistic_name as gsn, \
-    get_parameter_name as gpn
+from ensemble_experimentation.src.getters import environment as env, get_parameter_name as gpn
 from ensemble_experimentation.src.vrac.file_system import get_filename
 
 
 def init_environment(args: dict) -> None:
     _init_command_line_parameters(args)
-    _init_statistics(args)
+    _init_paths(args)
+    _init_names(args)
 
 
 def _init_command_line_parameters(args: dict) -> None:
-    """ Initialize all variables related to command-line parameters located inside the `env` module. """
+    """ Initialize all the command-line-parameters-related variables located inside the `env` module. """
     env.class_name = args[gpn.class_name().split()[-1]]
     env.delimiter_input = args[gpn.delimiter_input().split()[-1]]
     env.delimiter_output = args[gpn.delimiter_output().split()[-1]]
@@ -52,19 +52,20 @@ def _init_command_line_parameters(args: dict) -> None:
     env.verbosity = args[gpn.verbosity().split()[-1]]
 
 
-def _init_statistics(args: dict) -> None:
-    """ Initialize the `statistics` dictionary located inside the `env` module. """
-    env.statistics[gsn.database_path()] = args[gpn.database()]
-    env.statistics[gsn.database_name()] = get_filename(args[gpn.database()])
-    env.statistics[gsn.preprocessed_database_path()] = "{}/{}".format(args[gpn.main_directory()],
-                                                                      args[gpn.preprocessed_database_name()])
-    env.statistics[gsn.train_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.train_name()])
-    env.statistics[gsn.test_path()] = "{}/{}".format(args[gpn.main_directory()], args[gpn.test_name()])
-    env.statistics[gsn.subtrain_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                            args[gpn.subtrain_name()])
-    env.statistics[gsn.reference_path()] = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                             args[gpn.reference_name()])
+def _init_paths(args: dict) -> None:
+    """ Initialize all the path-related variables inside the `env` module. """
+    env.original_database_path = args[gpn.database()]
+    env.preprocessed_database_path = "{}/{}".format(args[gpn.main_directory()],
+                                                    args[gpn.preprocessed_database_name()])
+    env.train_database_path = "{}/{}".format(args[gpn.main_directory()], args[gpn.train_name()])
+    env.test_database_path = "{}/{}".format(args[gpn.main_directory()], args[gpn.test_name()])
+    env.subtrain_database_path = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
+                                                   args[gpn.subtrain_name()])
+    env.reference_database_path = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
+                                                    args[gpn.reference_name()])
+    env.header_path = "{}/{}.{}".format(env.main_directory, env.header_name, env.header_extension)
 
 
-
-
+def _init_names(args: dict) -> None:
+    """ Initialize all the names-related variables inside the `env` module. """
+    env.original_database_name = get_filename(args[gpn.database()])
