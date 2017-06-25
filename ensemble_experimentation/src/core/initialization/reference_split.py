@@ -1,19 +1,21 @@
+""" Split the train database into the subtrain and reference databases.
+Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary, inside
+the `env` module.
+"""
 import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
-import ensemble_experimentation.src.getters.get_statistic_name as gsn
 from ensemble_experimentation.src.core.splitting_methods.split import split2
 from ensemble_experimentation.src.vrac.file_system import create_dir
 from ensemble_experimentation.src.vrac.maths import convert_row_limit
 
 
-def _create_subtrain_directory():
-    create_dir("{}/{}".format(env.cleaned_arguments[gpn.main_directory()],
-                              env.cleaned_arguments[gpn.subtrain_directory()]))
+def _create_subtrain_directory(main_directory: str, subtrain_directory: str):
+    """ Construct the path to the subtrain directory then create it. """
+    create_dir("{}/{}".format(main_directory, subtrain_directory))
 
 
-def _calculate_row_limit():
-    env.cleaned_arguments[gpn.reference_value()] = convert_row_limit(env.cleaned_arguments[gpn.reference_value()],
-                                                                     env.statistics[gsn.instances_in_train()])
+def _calculate_row_limit(reference_value: str, instances_in_train_database: int):
+    """ Convert the reference value into a number of instances to give to the reference database. """
+    env.reference_value = convert_row_limit(reference_value, instances_in_train_database)
 
 
 def reference_split():
@@ -21,20 +23,20 @@ def reference_split():
     Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary, inside
     the `env` module.
     """
-    _create_subtrain_directory()
+    _create_subtrain_directory(main_directory=env.main_directory,
+                               subtrain_directory=env.subtrain_directory)
 
-    _calculate_row_limit()
+    _calculate_row_limit(reference_value=env.reference_value, instances_in_train_database=env.instances_train_database)
 
     # Split the database
-    env.statistics[gsn.instances_in_reference()], \
-        env.statistics[gsn.instances_in_subtrain()] = \
-        split2(input_path=env.statistics[gsn.train_path()],
-               delimiter=env.cleaned_arguments[gpn.delimiter()],
-               row_limit=env.cleaned_arguments[gpn.reference_value()],
-               have_header=env.cleaned_arguments[gpn.have_header()],
-               method=env.cleaned_arguments[gpn.reference_split_method()],
-               output_name_train=env.statistics[gsn.reference_path()],
-               output_name_test=env.statistics[gsn.subtrain_path()],
-               encoding=env.cleaned_arguments[gpn.encoding()],
-               class_name=env.cleaned_arguments[gpn.class_name()],
-               number_of_rows=env.statistics[gsn.instances_in_train()])
+    env.instances_reference_database, env.instances_subtrain_database = \
+        split2(input_path=env.train_database_path,
+               delimiter=env.delimiter_output,
+               row_limit=env.reference_value,
+               have_header=env.have_header,
+               method=env.reference_split_method,
+               output_name_train=env.reference_database_path,
+               output_name_test=env.subtrain_database_path,
+               encoding=env.encoding_output,
+               class_name=env.class_name,
+               number_of_rows=env.instances_train_database)
