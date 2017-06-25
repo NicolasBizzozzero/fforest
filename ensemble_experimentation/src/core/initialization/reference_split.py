@@ -33,10 +33,11 @@ def reference_split():
         split2(input_path=env.train_database_path,
                delimiter=env.delimiter_output,
                row_limit=env.reference_value,
-               have_header=env.have_header,
                method=env.reference_split_method,
                output_name_train=env.reference_database_path,
                output_name_test=env.subtrain_database_path,
                encoding=env.encoding_output,
                class_name=env.class_name,
-               number_of_rows=env.instances_train_database)
+               number_of_rows=env.instances_train_database,
+               quoting=env.quoting_output,
+               quote_char=env.quote_character_output)

@@ -7,7 +7,7 @@ to the splitting method asked.
 import csv
 import enum
 import os
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_parameter_name as gpn
@@ -51,23 +51,22 @@ def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
         return splitting_method.__str__()
 
 
-def split2(*, input_path: str, delimiter: str, row_limit: int, output_path: str = '.', have_header: bool,
-           method: SplittingMethod, output_name_train: str, output_name_test: str, encoding: str, class_name=None,
-           number_of_rows: int = None, quoting: int = 1, quotechar: str = "\"",
-           skip_initial_space: bool = True) -> Tuple[int, int]:
+def split2(*, input_path: str, delimiter: str, row_limit: int, method: SplittingMethod, output_name_train: str,
+           output_name_test: str, encoding: str, class_name: Union[str, int], number_of_rows: int = None,
+           quoting: int, quote_char: str, skip_initial_space: bool = True) -> Tuple[int, int]:
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
     to the asked splitting2 method.
     You must pass each argument along with its name.
     """
     with open(input_path, mode="r", encoding=encoding) as input_file,\
-            open(os.path.join(output_path, output_name_train), mode='w') as output_train,\
-            open(os.path.join(output_path, output_name_test), mode='w') as output_test:
+            open(output_name_train, mode='w', encoding=encoding) as output_train,\
+            open(output_name_test, mode='w', encoding=encoding) as output_test:
 
-        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space)
-        out_writer_train = csv.writer(output_train, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+        out_writer_train = csv.writer(output_train, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                       skipinitialspace=skip_initial_space)
-        out_writer_test = csv.writer(output_test, delimiter=delimiter, quoting=quoting, quotechar=quotechar,
+        out_writer_test = csv.writer(output_test, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                      skipinitialspace=skip_initial_space)
 
         if method == SplittingMethod.HALFING:
