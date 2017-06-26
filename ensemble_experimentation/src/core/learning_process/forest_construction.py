@@ -43,11 +43,19 @@ def forest_construction():
         database_name = env.subsubtrain_directory_pattern % str(tree_index).zfill(counter_size)
         database_path = "{0}/{1}/{1}.{2}".format(subtrain_dir_path, database_name, format_to_string(env.format_output))
         process = Process(target=_tree_construction,
-                          args=(database_path,
-                                env.reference_database_path,
-                                env.t_norms,
-                                chosen_options,
-                                env.vector_file_extension))
+                          kwargs={"path_to_database": database_path,
+                                  "path_to_reference_database": env.reference_database_path,
+                                  "number_of_tnorms": env.t_norms,
+                                  "chosen_options": chosen_options,
+                                  "identifier_name": env.identifier,
+                                  "delimiter": env.delimiter_output,
+                                  "quoting": env.quoting_output,
+                                  "quote_char": env.quote_character_output,
+                                  "encoding": env.encoding_output,
+                                  "quality_vector_prefix": env.quality_vector_prefix,
+                                  "class_found_vector_prefix": env.class_found_vector_prefix,
+                                  "vector_file_extension": env.vector_file_extension
+                                  })
         processes.append(process)
 
     # Start the processes
@@ -94,7 +102,9 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
 
 
 def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
-                       chosen_options: iter, vector_file_extension: str) -> None:
+                       chosen_options: iter, identifier_name: str, delimiter: str, quoting: int, quote_char: str,
+                       encoding: str, vector_file_extension: str, quality_vector_prefix: str,
+                       class_found_vector_prefix: str) -> None:
     """ Create `t-norm` number of tree inside a subsubtrain directory with the help of the Salammbô executable, located
     inside the `bin` directory, at the root of the software. Then, compute booleans and result vectors for each tree and
     save it.
@@ -109,7 +119,19 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     quality = _get_quality_dictionary(classes_found=classes_found,
                                       number_of_tnorms=number_of_tnorms)
     print(quality)
-    _save_vectors()
+    _save_vectors(quality_vector=quality,
+                  class_found_vector=classes_found,
+                  number_of_tnorms=number_of_tnorms,
+                  subsubtrain_dir_path=get_path(path_to_database),
+                  quality_vector_prefix=quality_vector_prefix,
+                  class_found_vector_prefix=class_found_vector_prefix,
+                  vector_file_extension=vector_file_extension,
+                  identifier_name=identifier_name,
+                  delimiter=delimiter,
+                  quoting=quoting,
+                  quote_char=quote_char,
+                  encoding=encoding,
+                  skip_initial_space=True)
 
 
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
@@ -172,15 +194,19 @@ def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
     return quality
 
 
-def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vector_file_extension: str) -> None:
+def _save_vectors(quality_vector: Dict[str, bool], class_found_vector: Dict, number_of_tnorms: int,
+                  subsubtrain_dir_path: str, quality_vector_prefix: str, class_found_vector_prefix: str,
+                  vector_file_extension: str, identifier_name: str, delimiter: str, quoting: int, quote_char: str,
+                  encoding: str, skip_initial_space: bool = True) -> None:
     """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a binary
     vector and a result vector.
     """
-    for tnorm_name in vectors.keys():
+    for tnorm in range(number_of_tnorms + 1):
+        tnorm_name = methodnum_to_str(tnorm)
         quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
                                                   vector_file_extension)
         class_found_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, class_found_vector_prefix, tnorm_name,
-                                                  vector_file_extension)
+                                                      vector_file_extension)
         _save_quality_vector(vector_path=quality_vector_path,
                              quality_vector=quality_vector,
                              identifier_name=identifier_name,
@@ -190,7 +216,8 @@ def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vec
                              quote_char=quote_char,
                              encoding=encoding,
                              skip_initial_space=skip_initial_space)
-        _save_class_found_vector(vector_path=quality_vector_path,
+        """
+        _save_class_found_vector(vector_path=class_found_vector_path,
                                  class_found_vector=class_found_vector,
                                  identifier_name=identifier_name,
                                  real_class_name=KEY_TRUECLASS,
@@ -201,9 +228,10 @@ def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vec
                                  quote_char=quote_char,
                                  encoding=encoding,
                                  skip_initial_space=skip_initial_space)
+        """
 
 
-def _save_quality_vector(vector_path: str, quality_vector: Dict[int, bool], identifier_name: str,
+def _save_quality_vector(vector_path: str, quality_vector: Dict[str, bool], identifier_name: str,
                          well_predicted_name: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
                          skip_initial_space: bool = True) -> True:
     with open(vector_path, "w", encoding=encoding) as file:
@@ -225,7 +253,7 @@ def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identif
                             skipinitialspace=skip_initial_space)
 
         # Write header
-        writer.writerow([identifier_name, real_class_name, *[*(cf, pcf)]])
+        writer.writerow([identifier_name, real_class_name, *[(cf, pcf) for cf, pcf in zip()]])
 
         for identifier in quality_vector.keys():
             writer.writerow([identifier, quality_vector[identifier]])
