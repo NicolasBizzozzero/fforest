@@ -1,6 +1,6 @@
 """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the
-Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute booleans and result
-vectors for each tree and save it.
+Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute quality and
+classes_found vectors for each t_norms on each tree and save it inside the tree directory.
 """
 import csv
 from multiprocessing import Process
@@ -19,15 +19,15 @@ HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "/../../../bin/Salammbo"
 MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
-# Key values
 KEY_TRUECLASS = "trueclass"
 KEY_WELL_PREDICTED = "wellpredicted"
 KEY_ID = "ID"
 
+
 def forest_construction():
     """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of
-    the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute booleans
-    and result vectors for each tree and save it.
+    the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute quality and
+    classes_found vectors for each t_norms on each tree and save it inside the tree directory.
     """
     subtrain_dir_path = get_path(env.subtrain_database_path)
     chosen_options = _parameters_to_salammbo_options(discretization_threshold=str(env.discretization_threshold),
@@ -102,9 +102,9 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
                        chosen_options: iter, delimiter: str, quoting: int, quote_char: str, encoding: str,
                        vector_file_extension: str, quality_vector_prefix: str, class_found_vector_prefix: str,
                        possible_classes: List[str]) -> None:
-    """ Create `t-norm` number of tree inside a subsubtrain directory with the help of the Salammbô executable, located
-    inside the `bin` directory, at the root of the software. Then, compute booleans and result vectors for each tree and
-    save it.
+    """ Create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the Salammbô
+    executable, located inside the `bin` directory, at the root of the software. Then, compute quality and classes_found
+    vectors for each t_norms on each tree and save it inside the tree directory.
     """
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
