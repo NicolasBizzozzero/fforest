@@ -108,6 +108,7 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     print(quality)
     _save_vectors()
 
+
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
     """ Call the Salammbô executable with the chosen options and parameters, then return the output. """
     parameters = MANDATORY_OPTIONS + chosen_options

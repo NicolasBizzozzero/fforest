@@ -78,6 +78,7 @@ def _init_names(args: dict) -> None:
 
 def _init_miscellaneous(args: dict) -> None:
     env.possible_classes = list(set(get_column(path=args[gpn.database()],
+                                               column=args[gpn.class_name()],
                                                have_header=args[gpn.have_header()],
                                                delimiter=args[gpn.delimiter_input()],
                                                quoting=args[gpn.quoting_input()],
