@@ -16,8 +16,10 @@ def forest_reduction() -> None:
                                 vector_extension=env.vector_file_extension)
 
 
-def _compute_difficulty_vectors(number_of_trees: int, vector_size: int, number_of_tnorms: int, subtrain_dir_path: str,
-                                subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str) -> None:
+def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, subtrain_dir_path: str,
+                                subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str,
+                                main_directory: str, subtrain_directory: str, delimiter: str, quoting: int,
+                                quote_char: str, encoding: str) -> None:
     """ Compute a difficulty vector for each t-norm used. A difficulty vector correspond to the sum of all quality
     vectors for a t-norm. It assign a classification difficulty to an example from the reference database.
     """
