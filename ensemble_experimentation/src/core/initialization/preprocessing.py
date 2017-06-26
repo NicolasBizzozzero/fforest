@@ -156,7 +156,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
 
         for row_index, row in enumerate(input_reader):
             if row:
-                row.insert(0, row_index)
+                row.insert(0, float(row_index))
                 content.append(row)
 
     # Prevent the input database to be erased if it's the same as the output database
