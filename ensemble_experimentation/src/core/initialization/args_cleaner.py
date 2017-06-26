@@ -12,7 +12,7 @@ from ensemble_experimentation.src.core.splitting_methods.split import str_to_spl
 from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
     get_number_of_columns
 from ensemble_experimentation.src.file_tools.csv_tools import str_to_quoting
-from ensemble_experimentation.src.file_tools.format import str_to_format
+from ensemble_experimentation.src.file_tools.format import string_to_format
 from ensemble_experimentation.src.getters.get_output_message import string_to_verbosity
 from ensemble_experimentation.src.vrac.file_system import get_filename
 from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
@@ -58,7 +58,7 @@ def clean_args(args: dict) -> None:
         elif param_name in (gpn.discretization_threshold(), gpn.number_of_tnorms(), gpn.trees_in_forest()):
             args[param_name] = int(args[param_name])
         elif param_name in (gpn.format_input(), gpn.format_output):
-            args[param_name] = str_to_format(args[param_name])
+            args[param_name] = string_to_format(args[param_name])
         elif param_name == gpn.entropy_measure():
             args[param_name] = str_to_entropy_measure(args[param_name])
         elif param_name == gpn.entropy_threshold():

@@ -12,6 +12,7 @@ discretization_threshold = None
 encoding_input = None
 encoding_output = None
 entropy_measure = None
+entropy_threshold = None
 format_input = None
 format_output = None
 have_header = None
