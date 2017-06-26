@@ -51,9 +51,9 @@ def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
         return splitting_method.__str__()
 
 
-def split2(*, input_path: str, delimiter: str, row_limit: int, method: SplittingMethod, output_name_train: str,
-           output_name_test: str, encoding: str, class_name: Union[str, int], number_of_rows: int = None,
-           quoting: int, quote_char: str, skip_initial_space: bool = True) -> Tuple[int, int]:
+def split2(*, class_name: int, delimiter: str, encoding: str, input_path: str, method: SplittingMethod,
+           number_of_rows: int, output_name_test: str, output_name_train: str, quote_char: str, quoting: int,
+           row_limit: int, skip_initial_space: bool = True) -> Tuple[int, int]:
     """ Open the initial database as input, open the two output databases as output, then give the reader and writers
     to the asked splitting2 method.
     You must pass each argument along with its name.
@@ -80,9 +80,9 @@ def split2(*, input_path: str, delimiter: str, row_limit: int, method: Splitting
         return size_train, size_test
 
 
-def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool, method: SplittingMethod, encoding: str,
-          class_name=None, number_of_rows: int = None, tree_names: list, subtrain_path: str, quoting: int = 1,
-          quote_char: str = "\"", skip_initial_space: bool = True) -> List[int]:
+def split(*, class_name: int, delimiter: str, encoding: str, input_path: str, method: SplittingMethod,
+          number_of_rows: int, quote_char: str, quoting: int, row_limit: int, skip_initial_space: bool = True,
+          tree_names: List[str]) -> List[int]:
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
     to the asked splitting method.
     You must pass each argument along with its name.
@@ -90,19 +90,20 @@ def split(*, input_path: str, delimiter: str, row_limit: int, have_header: bool,
     with open(input_path, mode='r', encoding=encoding) as input_file:
         out_files = [open("{dir_path}/{tree_name}.{extension}".format(dir_path=name,
                                                                       tree_name=get_filename(name),
-                                                                      extension=env.arguments[gpn.format_db()]),
-                          mode='w') for name in tree_names]
+                                                                      extension=env.format_output),
+                          mode='w', encoding=encoding) for name in tree_names]
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space)
         out_writers = [csv.writer(f, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space) for f in out_files]
 
+        number_of_trees = len(tree_names)
         if method == SplittingMethod.HALFING:
-            databases_size = halfing(input_reader, row_limit, out_writers, env.cleaned_arguments[gpn.trees_in_forest()])
+            databases_size = halfing(input_reader, row_limit, out_writers, number_of_trees)
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
-            databases_size = keep_distribution(input_reader, row_limit, out_writers,
-                                               env.cleaned_arguments[gpn.trees_in_forest()], class_name, number_of_rows)
+            databases_size = keep_distribution(input_reader, row_limit, out_writers, number_of_trees, class_name,
+                                               number_of_rows)
         else:
             raise UnknownSplittingMethod(splittingmethod_to_str(method))
 
