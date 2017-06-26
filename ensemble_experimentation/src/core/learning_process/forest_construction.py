@@ -22,9 +22,7 @@ MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 # Key values
 KEY_TRUECLASS = "trueclass"
 KEY_WELL_PREDICTED = "wellpredicted"
-KEY_CLASSFOUND_PATTERN = "classfound_%s"
-KEY_PERCENTAGE_CLASSFOUND_PATTERN = "%_classfound%s"
-
+KEY_ID = "ID"
 
 def forest_construction():
     """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of
@@ -47,14 +45,14 @@ def forest_construction():
                                   "path_to_reference_database": env.reference_database_path,
                                   "number_of_tnorms": env.t_norms,
                                   "chosen_options": chosen_options,
-                                  "identifier_name": env.identifier,
                                   "delimiter": env.delimiter_output,
                                   "quoting": env.quoting_output,
                                   "quote_char": env.quote_character_output,
                                   "encoding": env.encoding_output,
                                   "quality_vector_prefix": env.quality_vector_prefix,
                                   "class_found_vector_prefix": env.class_found_vector_prefix,
-                                  "vector_file_extension": env.vector_file_extension
+                                  "vector_file_extension": env.vector_file_extension,
+                                  "possible_classes": env.possible_classes
                                   })
         processes.append(process)
 
@@ -102,9 +100,9 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
 
 
 def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
-                       chosen_options: iter, identifier_name: str, delimiter: str, quoting: int, quote_char: str,
-                       encoding: str, vector_file_extension: str, quality_vector_prefix: str,
-                       class_found_vector_prefix: str) -> None:
+                       chosen_options: iter, delimiter: str, quoting: int, quote_char: str, encoding: str,
+                       vector_file_extension: str, quality_vector_prefix: str, class_found_vector_prefix: str,
+                       possible_classes: List[str]) -> None:
     """ Create `t-norm` number of tree inside a subsubtrain directory with the help of the Salammbô executable, located
     inside the `bin` directory, at the root of the software. Then, compute booleans and result vectors for each tree and
     save it.
@@ -126,11 +124,11 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
                   quality_vector_prefix=quality_vector_prefix,
                   class_found_vector_prefix=class_found_vector_prefix,
                   vector_file_extension=vector_file_extension,
-                  identifier_name=identifier_name,
                   delimiter=delimiter,
                   quoting=quoting,
                   quote_char=quote_char,
                   encoding=encoding,
+                  possible_classes=possible_classes,
                   skip_initial_space=True)
 
 
@@ -194,10 +192,10 @@ def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
     return quality
 
 
-def _save_vectors(quality_vector: Dict[str, bool], class_found_vector: Dict, number_of_tnorms: int,
+def _save_vectors(quality_vector: Dict[str, Dict[str, bool]], class_found_vector: Dict, number_of_tnorms: int,
                   subsubtrain_dir_path: str, quality_vector_prefix: str, class_found_vector_prefix: str,
-                  vector_file_extension: str, identifier_name: str, delimiter: str, quoting: int, quote_char: str,
-                  encoding: str, skip_initial_space: bool = True) -> None:
+                  vector_file_extension: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
+                  possible_classes: List[str], skip_initial_space: bool = True) -> None:
     """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a binary
     vector and a result vector.
     """
@@ -209,54 +207,55 @@ def _save_vectors(quality_vector: Dict[str, bool], class_found_vector: Dict, num
                                                       vector_file_extension)
         _save_quality_vector(vector_path=quality_vector_path,
                              quality_vector=quality_vector,
-                             identifier_name=identifier_name,
-                             well_predicted_name=KEY_WELL_PREDICTED,
+                             tnorm_name=tnorm_name,
                              delimiter=delimiter,
                              quoting=quoting,
                              quote_char=quote_char,
                              encoding=encoding,
                              skip_initial_space=skip_initial_space)
-        """
+
         _save_class_found_vector(vector_path=class_found_vector_path,
                                  class_found_vector=class_found_vector,
-                                 identifier_name=identifier_name,
+                                 possible_classes=possible_classes,
                                  real_class_name=KEY_TRUECLASS,
-                                 class_found_name_pattern=KEY_CLASSFOUND_PATTERN,
-                                 percentage_class_found_name_pattern=KEY_PERCENTAGE_CLASSFOUND_PATTERN,
                                  delimiter=delimiter,
                                  quoting=quoting,
                                  quote_char=quote_char,
                                  encoding=encoding,
-                                 skip_initial_space=skip_initial_space)
-        """
+                                 skip_initial_space=skip_initial_space,
+                                 identifier_name=KEY_ID,
+                                 tnorm_name=tnorm_name)
 
 
-def _save_quality_vector(vector_path: str, quality_vector: Dict[str, bool], identifier_name: str,
-                         well_predicted_name: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
-                         skip_initial_space: bool = True) -> True:
+def _save_quality_vector(vector_path: str, quality_vector: Dict[str, Dict[str, bool]], tnorm_name: str, delimiter: str,
+                         quoting: int, quote_char: str, encoding: str, skip_initial_space: bool = True) -> True:
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
 
-        # Write header
-        writer.writerow([identifier_name, well_predicted_name])
-
         for identifier in quality_vector.keys():
-            writer.writerow([identifier, quality_vector[identifier]])
+            writer.writerow([identifier, quality_vector[identifier][tnorm_name]])
 
 
 def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identifier_name: str, real_class_name: str,
-                             class_found_name_pattern: str, percentage_class_found_name_pattern: str, delimiter: str,
-                             quoting: int, quote_char: str, encoding: str, skip_initial_space: bool = True) -> True:
+                             delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
+                             tnorm_name: str, skip_initial_space: bool = True) -> True:
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
 
         # Write header
-        writer.writerow([identifier_name, real_class_name, *[(cf, pcf) for cf, pcf in zip()]])
+        header = [identifier_name, real_class_name, *(possible_class for possible_class in possible_classes)]
+        writer.writerow(header)
 
-        for identifier in quality_vector.keys():
-            writer.writerow([identifier, quality_vector[identifier]])
+        for identifier in class_found_vector.keys():
+            row = [identifier, class_found_vector[identifier][KEY_TRUECLASS]]
+            for possible_class in possible_classes:
+                try:
+                    row.append(class_found_vector[identifier][tnorm_name][possible_class])
+                except KeyError:
+                    row.append(0.0)
+            writer.writerow(row)
 
 
 if __name__ == "__main__":
