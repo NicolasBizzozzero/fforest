@@ -11,7 +11,6 @@ import csv
 
 import ensemble_experimentation.src.getters.environment as env
 import ensemble_experimentation.src.getters.get_default_value as gdv
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
 from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
     append_column
 from ensemble_experimentation.src.getters.get_output_message import Message, vprint
@@ -77,7 +76,7 @@ def preprocessing() -> None:
         env.identifier = 0
 
         # The class name's index must obviously be shifted to the right
-        if gpn.class_name >= 0:
+        if env.class_name >= 0:
             env.class_name += 1
 
     # Check if the identifier column is at the beginning of the database
@@ -143,23 +142,30 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
-    with open(input_path, encoding=encoding) as input_file, open(output_path, "w", encoding=encoding) as output_file:
-        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                   skipinitialspace=skip_initial_space)
+    with open(input_path, encoding=encoding) as input_file:
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space)
+        content = []
 
         if have_header:
             header = next(input_reader)
             header.insert(0, id_name)
-            output_writer.writerow(header)
+            content.append(header)
         else:
-            output_writer.writerow([id_name])
+            content.append([id_name])
 
         for row_index, row in enumerate(input_reader):
             if row:
                 row.insert(0, row_index)
-                output_writer.writerow(row)
+                content.append(row)
+
+    # Prevent the input database to be erased if it's the same as the output database
+    with  open(output_path, "w", encoding=encoding) as output_file:
+        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                                   skipinitialspace=skip_initial_space)
+        for row in content:
+            output_writer.writerow(row)
+
 
 
 def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_char: str, have_header: bool,
