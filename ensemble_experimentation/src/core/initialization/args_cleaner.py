@@ -60,7 +60,7 @@ def clean_args(args: dict) -> None:
             _clean_column_index_or_name(args=args, param_name=param_name, column_name="class")
         elif param_name in (gpn.discretization_threshold(), gpn.number_of_tnorms(), gpn.trees_in_forest()):
             args[param_name] = int(args[param_name])
-        elif param_name in (gpn.format_input(), gpn.format_output):
+        elif param_name in (gpn.format_input(), gpn.format_output()):
             args[param_name] = string_to_format(args[param_name])
         elif param_name == gpn.entropy_measure():
             args[param_name] = str_to_entropy_measure(args[param_name])

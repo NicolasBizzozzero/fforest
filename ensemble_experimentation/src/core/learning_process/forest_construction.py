@@ -9,11 +9,10 @@ from typing import List, Dict
 import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.core.learning_process.entropy_measures import EntropyMeasure
+from ensemble_experimentation.src.file_tools.format import format_to_string
 from ensemble_experimentation.src.vrac.file_system import dump_string, get_path
 from ensemble_experimentation.src.vrac.iterators import grouper
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
-from ensemble_experimentation.src.file_tools.format import format_to_string
-
 
 HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "/../../../bin/Salammbo"
@@ -29,9 +28,9 @@ def forest_construction():
     and result vectors for each tree and save it.
     """
     subtrain_dir_path = get_path(env.subtrain_database_path)
-    chosen_options = _parameters_to_salammbo_options(discretization_threshold=env.discretization_threshold,
+    chosen_options = _parameters_to_salammbo_options(discretization_threshold=str(env.discretization_threshold),
                                                      entropy_measure=env.entropy_measure,
-                                                     number_of_tnorms=env.t_norms,
+                                                     number_of_tnorms=str(env.t_norms),
                                                      entropy_threshold=env.entropy_threshold,
                                                      min_size_leaf=env.minimal_size_leaf)
     counter_size = len(str(env.trees_in_forest))
@@ -39,6 +38,7 @@ def forest_construction():
     for tree_index in range(1, env.trees_in_forest + 1):
         database_name = env.subsubtrain_directory_pattern % str(tree_index).zfill(counter_size)
         database_path = "{0}/{1}/{1}.{2}".format(subtrain_dir_path, database_name, format_to_string(env.format_output))
+        print(database_path)
         process = Process(target=_tree_construction,
                           args=(database_path,
                                 env.reference_database_path,
@@ -50,6 +50,7 @@ def forest_construction():
     # Start the processes
     for process in processes:
         process.start()
+        exit(0)
 
     # Wait for all processes to finish
     for process in processes:
@@ -98,12 +99,16 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
+    print(lines)
     result = _parse_result(lines=lines,
                            number_of_tnorms=number_of_tnorms)
+    print(result)
     _clean_result(result=result,
                   number_of_tnorms=number_of_tnorms)
+    print(result)
     vectors = _get_boolean_vectors(result=result,
                                    number_of_tnorms=number_of_tnorms)
+    print(vectors)
     _save_vectors(vectors=vectors,
                   subsubtrain_dir_path=get_path(path_to_database),
                   vector_file_extension=vector_file_extension)
@@ -114,6 +119,7 @@ def _construct_tree(path_to_database: str, path_to_reference_database: str, chos
     parameters = MANDATORY_OPTIONS + chosen_options
     parameters.append(path_to_database)
     parameters.append(path_to_reference_database)
+    print(parameters)
     return execute_and_get_stdout(PATH_TO_SALAMMBO, *parameters)
 
 
@@ -131,8 +137,13 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
     try:
         for tnorm_chunk in grouper(number_of_tnorms, lines.split("\n")):
             for instance in tnorm_chunk:
+                print(instance)
                 _, tnorm, identifier, true_class, *rest = instance.split()
                 identifier = int(identifier)
+                print(tnorm)
+                print(identifier)
+                print(true_class)
+                print(rest)
                 try:
                     result[identifier][methodnum_to_str(int(tnorm))] = {class_found: float(membership_degree)
                                                                         for class_found, membership_degree in

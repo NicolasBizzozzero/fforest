@@ -6,15 +6,14 @@ to the splitting method asked.
 """
 import csv
 import enum
-import os
-from typing import Tuple, List, Union
+from typing import Tuple, List
 
 import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing
 from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
 from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
+from ensemble_experimentation.src.file_tools.format import format_to_string
 from ensemble_experimentation.src.vrac.file_system import get_filename
 
 
@@ -90,7 +89,7 @@ def split(*, class_name: int, delimiter: str, encoding: str, input_path: str, me
     with open(input_path, mode='r', encoding=encoding) as input_file:
         out_files = [open("{dir_path}/{tree_name}.{extension}".format(dir_path=name,
                                                                       tree_name=get_filename(name),
-                                                                      extension=env.format_output),
+                                                                      extension=format_to_string(env.format_output)),
                           mode='w', encoding=encoding) for name in tree_names]
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
