@@ -38,7 +38,6 @@ def forest_construction():
     for tree_index in range(1, env.trees_in_forest + 1):
         database_name = env.subsubtrain_directory_pattern % str(tree_index).zfill(counter_size)
         database_path = "{0}/{1}/{1}.{2}".format(subtrain_dir_path, database_name, format_to_string(env.format_output))
-        print(database_path)
         process = Process(target=_tree_construction,
                           args=(database_path,
                                 env.reference_database_path,
