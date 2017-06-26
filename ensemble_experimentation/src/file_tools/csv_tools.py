@@ -87,7 +87,8 @@ def get_column(path: str, column: Union[str, int], have_header: bool = True, del
             raise NamedAttributeButNoHeader()
 
         for row in reader:
-            content.append(row[column])
+            if row != []:
+                content.append(row[column])
     if have_header and (type(column) == int):
         content.pop(0)
     return content

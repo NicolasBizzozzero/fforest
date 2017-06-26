@@ -21,6 +21,9 @@ MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
 # Key values
 KEY_TRUECLASS = "trueclass"
+KEY_WELL_PREDICTED = "wellpredicted"
+KEY_CLASSFOUND_PATTERN = "classfound_%s"
+KEY_PERCENTAGE_CLASSFOUND_PATTERN = "%_classfound%s"
 
 
 def forest_construction():
@@ -114,7 +117,6 @@ def _construct_tree(path_to_database: str, path_to_reference_database: str, chos
     parameters = MANDATORY_OPTIONS + chosen_options
     parameters.append(path_to_database)
     parameters.append(path_to_reference_database)
-    print(parameters)
     return execute_and_get_stdout(PATH_TO_SALAMMBO, *parameters)
 
 
@@ -132,21 +134,16 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
     try:
         for tnorm_chunk in grouper(number_of_tnorms, lines.split("\n")):
             for instance in tnorm_chunk:
-                print(instance)
-                _, tnorm, identifier, true_class, *rest = instance.split()
-                identifier = int(identifier)
-                print(tnorm)
-                print(identifier)
-                print(true_class)
-                print(rest)
+                _, tnorm, identifier, true_class, *rest = instance.strip("\"").split()
+                identifier = identifier.strip("\"")
                 try:
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found: float(membership_degree)
+                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip("\""): float(membership_degree)
                                                                         for class_found, membership_degree in
                                                                         grouper(2, rest)}
                 except KeyError:  # Will be triggered at the first instance for each chunk
                     result[identifier] = dict()
-                    result[identifier][KEY_TRUECLASS] = true_class
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found: float(membership_degree)
+                    result[identifier][KEY_TRUECLASS] = true_class.strip("\"")
+                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip("\""): float(membership_degree)
                                                                         for class_found,
                                                                         membership_degree in grouper(2, rest)}
     except ValueError:  # For the last empty line
@@ -162,10 +159,10 @@ def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
     for identifier in classes_found.keys():
         quality[identifier] = dict()
         real_class = classes_found[identifier][KEY_TRUECLASS]
-        for tnorm in range(number_of_tnorms):
+        for tnorm in range(number_of_tnorms + 1):
             tnorm = methodnum_to_str(tnorm)
             try:
-                classes = classes_found[identifier][tnorm].keys()
+                classes = classes_found[identifier][tnorm]
                 class_found = max(classes, key=(lambda key: classes[key]))
                 quality[identifier][tnorm] = class_found == real_class
             except KeyError:

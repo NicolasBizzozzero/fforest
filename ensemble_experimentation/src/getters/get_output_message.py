@@ -44,6 +44,8 @@ class UnknownVerbosity(Exception):
 
 
 class Message(Enum):
+    INITIAL_PREPROCESSING = "initial_preprocessing"
+    ADD_ID = "add_id"
     PREPEND_ID = "prepend_id"
     APPEND_CLASS = "append_class"
     EXTRACT_HEADER = "extract_header"

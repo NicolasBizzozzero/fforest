@@ -33,6 +33,7 @@ def preprocessing() -> None:
 
     # Change the encoding, delimiter, format, quoting behavior and quoting character of the original
     # database to initialize the preprocessed database. Once it's done, we can forget about the original database.
+    vprint(Message.INITIAL_PREPROCESSING)
     _init_preprocessed_database(original_database_path=env.original_database_path,
                                 preprocessed_database_path=env.preprocessed_database_path,
                                 input_encoding=env.encoding_input,
@@ -48,6 +49,7 @@ def preprocessing() -> None:
 
     # Check if the database contains an identifier column
     if env.identifier is None:
+        vprint(Message.ADD_ID)
         _add_id(input_path=env.preprocessed_database_path,
                 output_path=env.preprocessed_database_path,
                 id_name=gdv.identifier(),
@@ -121,7 +123,6 @@ def _init_preprocessed_database(original_database_path, preprocessed_database_pa
                                   quotechar=input_quote_char, skipinitialspace=True)
         output_writer = csv.writer(output_file, delimiter=output_delimiter, quoting=output_quoting,
                                    quotechar=output_quote_char, skipinitialspace=True)
-
         for row in input_reader:
             output_writer.writerow(row)
 
@@ -145,16 +146,15 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
 
         for row_index, row in enumerate(input_reader):
             if row:
-                row.insert(0, float(row_index))
+                row.insert(0, str(row_index))
                 content.append(row)
 
     # Prevent the input database to be erased if it's the same as the output database
-    with  open(output_path, "w", encoding=encoding) as output_file:
+    with open(output_path, "w", encoding=encoding) as output_file:
         output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                    skipinitialspace=skip_initial_space)
         for row in content:
             output_writer.writerow(row)
-
 
 
 def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_char: str, have_header: bool,

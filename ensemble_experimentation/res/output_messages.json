@@ -1,5 +1,7 @@
 {
-    "prepend_id": "The ID column is not first, we preprend it to the database",
-    "append_class": "The Class column is not last, we append it to the database",
-    "extract_header": "The file contains a header, we extract it"
+    "initial_preprocessing": "Change the encoding, delimiter, format, quoting behavior and quoting character of the original database.\n",
+    "prepend_id": "The ID column is not first, we preprend it to the database.\n",
+    "append_class": "The Class column is not last, we append it to the database.\n",
+    "extract_header": "The database contains a header, we extract it.\n",
+    "add_id": "The database doesn't contains an identifier column, we add it.\n"
 }
