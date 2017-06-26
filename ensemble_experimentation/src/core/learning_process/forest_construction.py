@@ -59,7 +59,6 @@ def forest_construction():
     # Start the processes
     for process in processes:
         process.start()
-        exit(0)
 
     # Wait for all processes to finish
     for process in processes:
@@ -110,13 +109,10 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
-    print(lines)
     classes_found = _parse_result(lines=lines,
                                   number_of_tnorms=number_of_tnorms)
-    print(classes_found)
     quality = _get_quality_dictionary(classes_found=classes_found,
                                       number_of_tnorms=number_of_tnorms)
-    print(quality)
     _save_vectors(quality_vector=quality,
                   class_found_vector=classes_found,
                   number_of_tnorms=number_of_tnorms,
