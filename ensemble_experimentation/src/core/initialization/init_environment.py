@@ -36,6 +36,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.quoting_input = args[gpn.quoting_input().split()[-1]]
     env.quoting_output = args[gpn.quoting_output().split()[-1]]
     env.reference_database_name = args[gpn.reference_name().split()[-1]]
+    env.reference_split_method = args[gpn.reference_split_method().split()[-1]]
     env.reference_value = args[gpn.reference_value().split()[-1]]
     env.statistics_file_name = args[gpn.statistics_file_name().split()[-1]]
     env.subsubtrain_directory_pattern = args[gpn.subsubtrain_directory_pattern().split()[-1]]
