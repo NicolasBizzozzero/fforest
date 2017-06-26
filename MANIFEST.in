@@ -4,4 +4,5 @@ include ensemble_experimentation/res/parameters_names.json
 include ensemble_experimentation/res/global_variables.json
 include ensemble_experimentation/res/statistics_names.json
 include ensemble_experimentation/res/parameters_documentation.json
+include ensemble_experimentation/res/output_messages.json
 include ensemble_experimentation/bin/Salammbo
