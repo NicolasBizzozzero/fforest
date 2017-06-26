@@ -124,13 +124,17 @@ def append_column(input_path: str, output_path: str, column: str, encoding: str 
                 output_writer.writerow(line)
 
 
-def find_index_for_class(input_path: str, class_name: str, encoding: str = "utf8", delimiter: str = ",") -> int:
+def find_index_for_class(input_path: str, class_name: str, delimiter: str, quoting: str, quote_char: str,
+                         encoding: str = "utf8", skip_initial_space: bool = True) -> int:
     """ Return the column index given a class name for a CSV file containing a header. """
     with open(input_path, encoding=encoding) as file:
-        header = file.readline()
+        reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+        for row in reader:
+            header = row
+            break
 
-    list_header = [s.strip().strip("'\"") for s in header.split(delimiter)]
-    return list_header.index(class_name)
+    return header.index(class_name)
 
 
 def index_in_bounds(input_path: str, index: int, encoding: str = "utf8", delimiter: str = ",") -> bool:

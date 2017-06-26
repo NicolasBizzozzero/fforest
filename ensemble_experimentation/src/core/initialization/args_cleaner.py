@@ -49,7 +49,10 @@ def clean_args(args: dict) -> None:
     args[gpn.database()] = args["<" + gpn.database() + ">"]
     del args["<" + gpn.database() + ">"]
 
-    extension = "." + args[gpn.format_output()].lower()
+    # Clean important args used by other functions
+    args[gpn.quoting_input()] = str_to_quoting(args[gpn.quoting_input()])
+
+    extension = args[gpn.format_output()].lower()
 
     for param_name in args.keys():
         if param_name == gpn.class_name():
@@ -65,7 +68,7 @@ def clean_args(args: dict) -> None:
             if not is_a_percentage(args[param_name]):
                 raise InvalidPercentage(args[param_name])
         elif param_name == gpn.identifier():
-            if _check_default_value_id(param_name, gdv.identifier()):
+            if _check_default_value_id(args[param_name], gdv.identifier()):
                 # We must add a column as an identifier. It will be done in the preprocessing function
                 args[param_name] = None
             else:
@@ -74,6 +77,8 @@ def clean_args(args: dict) -> None:
             args[param_name] = str_to_splittingmethod(args[param_name])
             if args[param_name] == SplittingMethod.KEEP_DISTRIBUTION and args[gpn.class_name()] is None:
                 raise MissingClassificationAttribute()
+        elif param_name == gpn.quoting_output():
+            args[param_name] = str_to_quoting(args[param_name])
         elif param_name == gpn.main_directory():
             if args[param_name] is None:
                 args[param_name] = get_filename(args[gpn.database()])
@@ -82,10 +87,8 @@ def clean_args(args: dict) -> None:
                 args[param_name] = _get_preprocessed_db_name(database_name=args[gpn.database()], extension=extension)
             else:
                 args[param_name] = get_filename(args[param_name], with_extension=True)
-        elif param_name in (gpn.quoting_input(), gpn.quoting_output()):
-            args[param_name] = str_to_quoting(args[param_name])
         elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
-            args[param_name] = get_filename(args[param_name], with_extension=False) + extension
+            args[param_name] = "{}.{}".format(get_filename(args[param_name], with_extension=False), extension)
         elif param_name == gpn.verbosity():
             args[param_name] = string_to_verbosity(args[param_name])
 
@@ -108,9 +111,12 @@ def _clean_column_index_or_name(args: dict, param_name: str, column_name: str) -
     if (not is_an_int(args[param_name])) and (type(args[param_name]) == str):
         # User asked for a named class, we retrieve its index then change it
         args[param_name] = find_index_for_class(input_path=args[gpn.database()],
-                                                class_name=args[gpn.class_name()],
+                                                class_name=args[param_name],
                                                 encoding=args[gpn.encoding_input()],
-                                                delimiter=args[gpn.delimiter_input()])
+                                                delimiter=args[gpn.delimiter_input()],
+                                                quoting=args[gpn.quoting_input()],
+                                                quote_char=args[gpn.quote_char_input()],
+                                                skip_initial_space=True)
     else:
         # User asked for an index, we convert it to int then check if it's inbound
         args[param_name] = int(args[param_name])
@@ -144,4 +150,4 @@ def _get_preprocessed_db_name(database_name: str, extension: str = "") -> str:
         >>> _get_preprocessed_db_name("database", "csv")
         '~database.csv'
     """
-    return "~" + get_filename(database_name, with_extension=False) + extension
+    return "~{}.{}".format(get_filename(database_name, with_extension=False), extension)
