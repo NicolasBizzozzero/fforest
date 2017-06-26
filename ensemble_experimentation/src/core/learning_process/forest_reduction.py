@@ -8,12 +8,17 @@ import csv
 
 def forest_reduction() -> None:
     _compute_difficulty_vectors(number_of_trees=env.trees_in_forest,
-                                vector_size=env.instances_reference_database,
                                 number_of_tnorms=env.t_norms,
                                 subtrain_dir_path="{}/{}".format(env.original_database_name, env.subtrain_directory),
                                 subsubtrain_directory_pattern=env.subsubtrain_directory_pattern,
                                 vector_prefix=env.difficulty_vector_prefix,
-                                vector_extension=env.vector_file_extension)
+                                vector_extension=env.vector_file_extension,
+                                main_directory=env.main_directory,
+                                subtrain_directory=env.subtrain_directory,
+                                delimiter=env.delimiter_output,
+                                quoting=env.quoting_output,
+                                quote_char=env.quote_character_output,
+                                encoding=env.encoding_output)
 
 
 def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, subtrain_dir_path: str,
