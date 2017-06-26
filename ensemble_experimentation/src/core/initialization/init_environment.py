@@ -26,6 +26,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.header_name = args[gpn.header_name().split()[-1]]
     env.identifier = args[gpn.identifier().split()[-1]]
     env.initial_database_name = args[gpn.database().split()[-1]]
+    env.initial_split_method = args[gpn.initial_split_method().split()[-1]]
     env.main_directory = args[gpn.main_directory().split()[-1]]
     env.minimal_size_leaf = args[gpn.min_size_leaf().split()[-1]]
     env.preprocessed_database_name = args[gpn.preprocessed_database_name().split()[-1]]
