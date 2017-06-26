@@ -11,7 +11,7 @@ import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.core.learning_process.entropy_measures import EntropyMeasure
 from ensemble_experimentation.src.file_tools.format import format_to_string
-from ensemble_experimentation.src.vrac.file_system import dump_string, get_path
+from ensemble_experimentation.src.vrac.file_system import get_path
 from ensemble_experimentation.src.vrac.iterators import grouper
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
@@ -106,9 +106,7 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     quality = _get_quality_dictionary(classes_found=classes_found,
                                       number_of_tnorms=number_of_tnorms)
     print(quality)
-    _save_quality_vector()
-    _save_class_found_vector()
-
+    _save_vectors()
 
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
     """ Call the Salammbô executable with the chosen options and parameters, then return the output. """
@@ -176,6 +174,37 @@ def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
     return quality
 
 
+def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vector_file_extension: str) -> None:
+    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a binary
+    vector and a result vector.
+    """
+    for tnorm_name in vectors.keys():
+        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
+                                                  vector_file_extension)
+        class_found_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, class_found_vector_prefix, tnorm_name,
+                                                  vector_file_extension)
+        _save_quality_vector(vector_path=quality_vector_path,
+                             quality_vector=quality_vector,
+                             identifier_name=identifier_name,
+                             well_predicted_name=KEY_WELL_PREDICTED,
+                             delimiter=delimiter,
+                             quoting=quoting,
+                             quote_char=quote_char,
+                             encoding=encoding,
+                             skip_initial_space=skip_initial_space)
+        _save_class_found_vector(vector_path=quality_vector_path,
+                                 class_found_vector=class_found_vector,
+                                 identifier_name=identifier_name,
+                                 real_class_name=KEY_TRUECLASS,
+                                 class_found_name_pattern=KEY_CLASSFOUND_PATTERN,
+                                 percentage_class_found_name_pattern=KEY_PERCENTAGE_CLASSFOUND_PATTERN,
+                                 delimiter=delimiter,
+                                 quoting=quoting,
+                                 quote_char=quote_char,
+                                 encoding=encoding,
+                                 skip_initial_space=skip_initial_space)
+
+
 def _save_quality_vector(vector_path: str, quality_vector: Dict[int, bool], identifier_name: str,
                          well_predicted_name: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
                          skip_initial_space: bool = True) -> True:
@@ -202,22 +231,6 @@ def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identif
 
         for identifier in quality_vector.keys():
             writer.writerow([identifier, quality_vector[identifier]])
-
-
-def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vector_file_extension: str) -> None:
-    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a binary
-    vector and a result vector.
-    """
-    for tnorm_name in vectors.keys():
-        vector_path = "{}/{}.{}".format(subsubtrain_dir_path, tnorm_name, vector_file_extension)
-        vector_content = vectors[tnorm_name]
-        _save_boolean_vector(vector_path, vector_content)
-
-
-def _save_boolean_vector(vector_content: str, vector: List[bool]) -> None:
-    """ Dump the content of one boolean vector inside the subsubtrain directory. """
-    content = "".join("1" if result else "0" for result in vector)
-    dump_string(vector_content, content)
 
 
 if __name__ == "__main__":
