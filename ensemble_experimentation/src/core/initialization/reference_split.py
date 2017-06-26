@@ -1,6 +1,6 @@
 """ Split the train database into the subtrain and reference databases.
-Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary, inside
-the `env` module.
+Store the number of instances of the reference and subtrain databases into the `instances_reference_database` and
+`instances_subtrain_database` variables in the `env` module.
 """
 import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.splitting_methods.split import split2
@@ -10,8 +10,8 @@ from ensemble_experimentation.src.vrac.maths import convert_row_limit
 
 def reference_split():
     """ Split the train database into the subtrain and reference databases.
-    Store the number of instances of the `subtrain` and `reference` databases into the `statistics` dictionary, inside
-    the `env` module.
+    Store the number of instances of the reference and subtrain databases into the `instances_reference_database` and
+    `instances_subtrain_database` variables in the `env` module.
     """
     _create_subtrain_directory(main_directory=env.main_directory,
                                subtrain_directory=env.subtrain_directory)

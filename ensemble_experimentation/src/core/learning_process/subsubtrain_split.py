@@ -1,3 +1,7 @@
+""" Split the subtrain database into multiple subsubtrain databases.
+Store the number of instances of the databases into the `instances_subsubtrain_databases` variable in the `env`
+module.
+"""
 from typing import List
 
 import ensemble_experimentation.src.getters.environment as env
@@ -9,14 +13,15 @@ from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
 
 
 def subsubtrain_split() -> None:
-    """ Split the subtrain database into multiple subsubtrain databases. """
-    number_of_trees = env.cleaned_arguments[gpn.trees_in_forest()]
-
+    """ Split the subtrain database into multiple subsubtrain databases.
+    Store the number of instances of the databases into the `instances_subsubtrain_databases` variable in the `env`
+    module.
+    """
     # Create the subsubtrain directories
-    subsubtrain_names = _create_subtrain_directories(number_of_trees)
+    subsubtrain_names = _create_subtrain_directories(env.trees_in_forest)
 
     # Split the database
-    row_limit = env.statistics[gsn.instances_in_subtrain()] // number_of_trees
+    row_limit = env.instances_subtrain_database // env.trees_in_forest
     list_instances = \
         split(input_path=env.statistics[gsn.subtrain_path()],
               delimiter=env.cleaned_arguments[gpn.delimiter()],
@@ -26,14 +31,13 @@ def subsubtrain_split() -> None:
               class_name=env.cleaned_arguments[gpn.class_name()],
               number_of_rows=env.statistics[gsn.instances_in_subtrain()],
               tree_names=subsubtrain_names,
-              subtrain_path= env.cleaned_arguments[gpn.main_directory()] + "/" + env.cleaned_arguments[gpn.subtrain_directory()],
+              subtrain_path=env.cleaned_arguments[gpn.main_directory()] + "/" + env.cleaned_arguments[gpn.subtrain_directory()],
               row_limit=row_limit)
 
-    # Store the number of instances of each tree in the statistics file
-    env.statistics[gsn.instances_in_subsubtrain()] = dict(zip(subsubtrain_names, list_instances))
+    # Store the number of instances of each tree along with its name in the `env` module
+    env.instances_subsubtrain_databases = dict(zip(subsubtrain_names, list_instances))
 
 
-#TODO: Return the path not the name ?
 def _create_subtrain_directories(number_of_trees: int) -> List[str]:
     """ Create all needed directories which will each serves as a workplace for a single tree.
     Return all the names of the directories created.

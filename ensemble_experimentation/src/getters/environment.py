@@ -64,3 +64,4 @@ instances_train_database = None
 instances_test_database = None
 instances_reference_database = None
 instances_subtrain_database = None
+instances_subsubtrain_databases = None
