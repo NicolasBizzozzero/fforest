@@ -20,6 +20,7 @@
     "subsubtrain_name_pattern": "The name of the subsubtrain databases after the subtrain split. It must follows a %s-style rule, which will be replaced by the ID of the subsubtrain database. [default: {default_subsubtrain_name_pattern}]",
     "difficulty_vector_prefix": "The prefix of every difficulty vector created in the subtrain directory. [default: {default_difficulty_vector_prefix}]",
     "quality_vector_prefix": "The prefix of every quality vector created in every subsubtrain directory. [default: {default_quality_vector_prefix}]",
+    "class_found_vector_prefix": "The prefix of every `class_found` vector created in every subsubtrain directory. [default: {default_class_found_vector_prefix}]",
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
     "header_extension": "The extension of the header file, extracted from the original database if it contains one. [default: {default_header_extension}]",

@@ -5,6 +5,7 @@ statistics = dict()
 
 # Command-line parameters
 class_name = None
+class_found_vector_prefix = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
@@ -66,3 +67,6 @@ instances_test_database = None
 instances_reference_database = None
 instances_subtrain_database = None
 instances_subsubtrain_databases = None
+
+# Miscellaneous
+possible_classes = None

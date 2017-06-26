@@ -104,6 +104,10 @@ def quality_vector_prefix() -> str:
     return _get_name_from_file("quality_vector_prefix")
 
 
+def class_found_vector_prefix() -> str:
+    return _get_name_from_file("class_found_vector_prefix")
+
+
 def main_directory() -> str:
     return _get_name_from_file("main_directory")
 

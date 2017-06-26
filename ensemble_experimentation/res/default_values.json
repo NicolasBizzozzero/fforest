@@ -19,6 +19,7 @@
     "header_extension": "att",
     "difficulty_vector_prefix": "difficulty_",
     "quality_vector_prefix": "quality_",
+    "class_found_vector_prefix": "classfound_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",

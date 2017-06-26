@@ -20,6 +20,7 @@
     "subsubtrain_name_pattern": "--subsubtrain-name-pattern",
     "difficulty_vector_prefix": "--difficulty-vector-prefix",
     "quality_vector_prefix": "--quality-vector-prefix",
+    "class_found_vector_prefix": "--class-found-vector-prefix",
     "tree_file_extension": "--tree-file-extension",
     "vector_file_extension": "--vector-file-extension",
     "header_extension": "--header-extension",

@@ -2,6 +2,7 @@
 Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute booleans and result
 vectors for each tree and save it.
 """
+import csv
 from multiprocessing import Process
 from os import path
 from typing import List, Dict
@@ -99,18 +100,14 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
     print(lines)
-    result = _parse_result(lines=lines,
-                           number_of_tnorms=number_of_tnorms)
-    print(result)
-    _clean_result(result=result,
-                  number_of_tnorms=number_of_tnorms)
-    print(result)
-    vectors = _get_boolean_vectors(result=result,
-                                   number_of_tnorms=number_of_tnorms)
-    print(vectors)
-    _save_vectors(vectors=vectors,
-                  subsubtrain_dir_path=get_path(path_to_database),
-                  vector_file_extension=vector_file_extension)
+    classes_found = _parse_result(lines=lines,
+                                  number_of_tnorms=number_of_tnorms)
+    print(classes_found)
+    quality = _get_quality_dictionary(classes_found=classes_found,
+                                      number_of_tnorms=number_of_tnorms)
+    print(quality)
+    _save_quality_vector()
+    _save_class_found_vector()
 
 
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
@@ -158,32 +155,53 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
     return result
 
 
-def _clean_result(result: dict, number_of_tnorms: int) -> None:
-    """ Map to every t-norm for each identifier of the result dictionary, True if this t-norm has correctly predicted
-    the real class, or False otherwise.
+def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
+    """ Map to every t-norm for each identifier of the `classes_found` dictionary, True if this t-norm has correctly
+    predicted the real class, or False otherwise.
     """
-    for identifier in result.keys():
-        real_class = result[identifier][KEY_TRUECLASS]
+    quality = dict()
+    for identifier in classes_found.keys():
+        quality[identifier] = dict()
+        real_class = classes_found[identifier][KEY_TRUECLASS]
         for tnorm in range(number_of_tnorms):
+            tnorm = methodnum_to_str(tnorm)
             try:
-                classes_found = result[identifier][methodnum_to_str(tnorm)]
-                class_found = max(classes_found.keys(), key=(lambda key: classes_found[key]))
-                result[identifier][methodnum_to_str(tnorm)] = class_found == real_class
+                classes = classes_found[identifier][tnorm].keys()
+                class_found = max(classes, key=(lambda key: classes[key]))
+                quality[identifier][tnorm] = class_found == real_class
             except KeyError:
-                result[identifier][methodnum_to_str(tnorm)] = False
+                quality[identifier][tnorm] = False
             except ValueError:
-                result[identifier][methodnum_to_str(tnorm)] = False
+                quality[identifier][tnorm] = False
+    return quality
 
 
-def _get_boolean_vectors(result: dict, number_of_tnorms: int) -> Dict[str, List[bool]]:
-    """ Construct a boolean vector for each t-norm with the result dictionary, parsed from the output of the Salammbô
-    executable.
-    """
-    vectors = dict()
-    for tnorm_number in range(number_of_tnorms + 1):
-        tnorm_key = methodnum_to_str(tnorm_number)
-        vectors[tnorm_key] = [result[identifier][tnorm_key] for identifier in result]
-    return vectors
+def _save_quality_vector(vector_path: str, quality_vector: Dict[int, bool], identifier_name: str,
+                         well_predicted_name: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
+                         skip_initial_space: bool = True) -> True:
+    with open(vector_path, "w", encoding=encoding) as file:
+        writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+
+        # Write header
+        writer.writerow([identifier_name, well_predicted_name])
+
+        for identifier in quality_vector.keys():
+            writer.writerow([identifier, quality_vector[identifier]])
+
+
+def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identifier_name: str, real_class_name: str,
+                             class_found_name_pattern: str, percentage_class_found_name_pattern: str, delimiter: str,
+                             quoting: int, quote_char: str, encoding: str, skip_initial_space: bool = True) -> True:
+    with open(vector_path, "w", encoding=encoding) as file:
+        writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+
+        # Write header
+        writer.writerow([identifier_name, real_class_name, *[*(cf, pcf)]])
+
+        for identifier in quality_vector.keys():
+            writer.writerow([identifier, quality_vector[identifier]])
 
 
 def _save_vectors(vectors: Dict[str, List[bool]], subsubtrain_dir_path: str, vector_file_extension: str) -> None:

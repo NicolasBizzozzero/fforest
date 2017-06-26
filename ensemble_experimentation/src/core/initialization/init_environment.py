@@ -1,4 +1,5 @@
 """ Initialize the variables contained in the `environment` module. """
+from ensemble_experimentation.src.file_tools.csv_tools import get_column
 from ensemble_experimentation.src.getters import environment as env, get_parameter_name as gpn
 from ensemble_experimentation.src.vrac.file_system import get_filename
 
@@ -7,11 +8,13 @@ def init_environment(args: dict) -> None:
     _init_command_line_parameters(args)
     _init_paths(args)
     _init_names(args)
+    _init_miscellaneous(args)
 
 
 def _init_command_line_parameters(args: dict) -> None:
     """ Initialize all the command-line-parameters-related variables located inside the `env` module. """
     env.class_name = args[gpn.class_name().split()[-1]]
+    env.class_found_vector_prefix = args[gpn.class_found_vector_prefix().split()[-1]]
     env.delimiter_input = args[gpn.delimiter_input().split()[-1]]
     env.delimiter_output = args[gpn.delimiter_output().split()[-1]]
     env.difficulty_vector_prefix = args[gpn.difficulty_vector_prefix().split()[-1]]
@@ -71,3 +74,12 @@ def _init_paths(args: dict) -> None:
 def _init_names(args: dict) -> None:
     """ Initialize all the names-related variables inside the `env` module. """
     env.original_database_name = get_filename(args[gpn.database()])
+
+
+def _init_miscellaneous(args: dict) -> None:
+    env.possible_classes = list(set(get_column(path=args[gpn.database()],
+                                               have_header=args[gpn.have_header()],
+                                               delimiter=args[gpn.delimiter_input()],
+                                               quoting=args[gpn.quoting_input()],
+                                               quote_character=args[gpn.quote_char_input()],
+                                               encoding=args[gpn.encoding_input()])))

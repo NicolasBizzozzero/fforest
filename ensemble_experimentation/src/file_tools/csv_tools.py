@@ -1,7 +1,18 @@
 import csv
-from typing import Union
+from typing import Union, List
 
 from ensemble_experimentation.src.vrac.maths import is_an_int
+
+
+class NamedAttributeButNoHeader(Exception):
+    def __init__(self):
+        Exception.__init__(self, "Impossible to access a named attribute with no header.")
+
+
+class EmptyHeader(Exception):
+    def __init__(self, database_path):
+        Exception.__init__(self, "The header of the database located at \"{path}\" is "
+                                 "empty.".format(path=database_path))
 
 
 class UndefinedQuoting(Exception):
@@ -60,8 +71,30 @@ def get_row(path: str, row_number: int, encoding: str = "utf8") -> Union[list, N
             return row
 
 
-# TODO: add parameter delimiter
-def select_all_rows_where(path: str, predicate: callable, encoding: str = "utf8") -> list:
+def get_column(path: str, column: Union[str, int], have_header: bool = True, delimiter: str = ";",
+               quoting: int = csv.QUOTE_NONNUMERIC, quote_character: str = "\"", encoding: str = "utf8",
+               skip_initial_space: bool = True) -> List:
+    """ Get a column from the CSV database with its index or its name. """
+    content = list()
+    with open(path, "r", encoding=encoding) as file:
+        if type(column) == int:
+            reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
+                                skipinitialspace=skip_initial_space)
+        elif (type(column) == str) and have_header:
+            reader = csv.DictReader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
+                                    skipinitialspace=skip_initial_space)
+        else:
+            raise NamedAttributeButNoHeader()
+
+        for row in reader:
+            content.append(row[column])
+    if have_header and (type(column) == int):
+        content.pop(0)
+    return content
+
+
+def select_all_rows_where(path: str, predicate: callable, delimiter: str = ";", quoting: int = csv.QUOTE_NONNUMERIC,
+                          quote_character: str = "\"", encoding: str = "utf8", skip_initial_space: bool = True) -> list:
     """ Return all rows from the CSV file at `path` with which the `predicate` return True.
     The rows are casted as a dictionary.
 
@@ -73,12 +106,13 @@ def select_all_rows_where(path: str, predicate: callable, encoding: str = "utf8"
             >>> select_all_rows_where(path, lambda r: r["money"] < 1000 and r["city"] == "Paris")
     """
     with open(path, encoding=encoding) as csv_file:
-        return [row for row in csv.DictReader(csv_file) if predicate(row)]
+        return [row for row in csv.DictReader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
+                                              skipinitialspace=skip_initial_space) if predicate(row)]
 
 
-# TODO: IndexError will probably happen, embed this function into a 'try except' and return None.
-# TODO: add parameter delimiter
-def get_identified_row(path: str, identifier_name: str, row_id: int, encoding: str = "utf8"):
+def get_identified_row(path: str, identifier_name: str, row_id: int, delimiter: str = ";",
+                       quoting: int = csv.QUOTE_NONNUMERIC, quote_character: str = "\"", encoding: str = "utf8",
+                       skip_initial_space: bool = True) -> Union[List, None]:
     """ A wrapper for `select_all_rows_where`.
     Select the row identified at the column `identifier_name` with the value `row_id`.
 
@@ -86,7 +120,12 @@ def get_identified_row(path: str, identifier_name: str, row_id: int, encoding: s
         >>> # SELECT row WHERE ID == 77
         >>> get_identified_row(path, "ID", 77)
     """
-    return select_all_rows_where(path, lambda r: r[identifier_name] == row_id, encoding=encoding)[0]
+    try:
+        return select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, encoding=encoding,
+                                     delimiter=delimiter, quoting=quoting, quote_character=quote_character,
+                                     skip_initial_space=skip_initial_space)[0]
+    except IndexError:  # Row was not found
+        return None
 
 
 def write_header(input_reader, *out_writers, replace_fieldnames: bool = False):
