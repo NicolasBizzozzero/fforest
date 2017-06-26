@@ -17,7 +17,7 @@ def forest_reduction() -> None:
 
 
 def _compute_difficulty_vectors(number_of_trees: int, vector_size: int, number_of_tnorms: int, subtrain_dir_path: str,
-                                subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str):
+                                subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str) -> None:
     """ Compute a difficulty vector for each t-norm used. A difficulty vector correspond to the sum of all quality
     vectors for a t-norm. It assign a classification difficulty to an example from the reference database.
     """
@@ -27,27 +27,44 @@ def _compute_difficulty_vectors(number_of_trees: int, vector_size: int, number_o
 
         _compute_difficulty_vector(vector_name=tnorm_name + "." + vector_extension,
                                    vector_path=vector_path,
-                                   vector_size=vector_size,
                                    number_of_trees=number_of_trees,
-                                   subsubtrain_directory_pattern=subsubtrain_directory_pattern)
+                                   subsubtrain_directory_pattern=subsubtrain_directory_pattern,
+                                   main_directory=main_directory,
+                                   subtrain_directory=subtrain_directory,
+                                   delimiter=delimiter,
+                                   quoting=quoting,
+                                   quote_char=quote_char,
+                                   encoding=encoding)
 
 
 def _compute_difficulty_vector(vector_name: str, vector_path: str, number_of_trees: int,
-                               subsubtrain_directory_pattern: str, main_directory: str, subtrain_directory: str):
+                               subsubtrain_directory_pattern: str, main_directory: str, subtrain_directory: str,
+                               delimiter: str, quoting: int, quote_char: str, encoding: str) -> None:
     """ Compute a difficulty vector for one t-norm. A difficulty vector correspond to the sum of all quality vectors for
     a t-norm. It assign a classification difficulty to an example from the reference database.
     """
     difficulty_vector = dict()
     for subsubtrain_dir in subsubtrain_dir_path(number_of_trees, main_directory, subtrain_directory,
                                                 subsubtrain_directory_pattern):
-        efficiency_vector = _get_efficiency_vector(subsubtrain_dir + "/" + vector_name)
+        efficiency_vector = _get_efficiency_vector(vector_path=subsubtrain_dir + "/" + vector_name,
+                                                   delimiter=delimiter,
+                                                   quoting=quoting,
+                                                   quote_char=quote_char,
+                                                   encoding=encoding,
+                                                   skip_initial_space=True)
         try:
             difficulty_vector = {instance: difficulty_vector[instance] + efficiency_vector[instance] for
                                  instance in efficiency_vector.keys()}
         except KeyError:
             difficulty_vector = {instance: efficiency_vector[instance] for instance in difficulty_vector.keys()}
 
-    _dump_difficulty_vector(vector_path, difficulty_vector)
+    _dump_difficulty_vector(vector_path=vector_path,
+                            difficulty_vector=difficulty_vector,
+                            delimiter=delimiter,
+                            quoting=quoting,
+                            quote_char=quote_char,
+                            encoding=encoding,
+                            skip_initial_space=True)
 
 
 def _get_efficiency_vector(vector_path: str, delimiter: str, quoting: int, quote_char: str, encoding: str = "utf8",
