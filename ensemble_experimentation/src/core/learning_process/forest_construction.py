@@ -143,9 +143,9 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
     the "realclass" key, redirecting to the real class of an instance. They also contains a keys for each t-norm used to
     find a classification result. These keys redirect to a last dictionary containing the class found by this t-norm
     associated with a degree of membership.
+    Each lines format is as follows :
+    Null T-NORM IDENTIFIER TRUECLASS [(FOUNDCLASSX MEMBERSHIPDEGREEX) (FOUNDCLASSY MEMBERSHIPDEGREEY) ...]
     """
-    # Each lines format is as follows :
-    # Null T-NORM IDENTIFIER TRUECLASS [(FOUNDCLASSX MEMBERSHIPDEGREEX) (FOUNDCLASSY MEMBERSHIPDEGREEY) ...]
     result = dict()
     try:
         for tnorm_chunk in grouper(number_of_tnorms, lines.split("\n")):
@@ -168,15 +168,15 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
 
 
 def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
-    """ Map to every t-norm for each identifier of the `classes_found` dictionary, True if this t-norm has correctly
-    predicted the real class, or False otherwise.
+    """ Return a quality dictionary, mapping to every t-norm for each identifier of the `classes_found` dictionary,
+    True if this t-norm has correctly predicted the real class, or False otherwise.
     """
+    tnorms = (methodnum_to_str(tnorm) for tnorm in range(number_of_tnorms + 1))
     quality = dict()
     for identifier in classes_found.keys():
         quality[identifier] = dict()
         real_class = classes_found[identifier][KEY_TRUECLASS]
-        for tnorm in range(number_of_tnorms + 1):
-            tnorm = methodnum_to_str(tnorm)
+        for tnorm in tnorms:
             try:
                 classes = classes_found[identifier][tnorm]
                 class_found = max(classes, key=(lambda key: classes[key]))
@@ -192,8 +192,8 @@ def _save_vectors(quality_vector: Dict[str, Dict[str, bool]], class_found_vector
                   subsubtrain_dir_path: str, quality_vector_prefix: str, class_found_vector_prefix: str,
                   vector_file_extension: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
                   possible_classes: List[str], skip_initial_space: bool = True) -> None:
-    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a binary
-    vector and a result vector.
+    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a quality
+    vector and a classes_found vector.
     """
     for tnorm in range(number_of_tnorms + 1):
         tnorm_name = methodnum_to_str(tnorm)
@@ -225,6 +225,7 @@ def _save_vectors(quality_vector: Dict[str, Dict[str, bool]], class_found_vector
 
 def _save_quality_vector(vector_path: str, quality_vector: Dict[str, Dict[str, bool]], tnorm_name: str, delimiter: str,
                          quoting: int, quote_char: str, encoding: str, skip_initial_space: bool = True) -> True:
+    """ Dump the quality vector inside the subsubtrain directory for one t-norm. """
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
@@ -236,6 +237,7 @@ def _save_quality_vector(vector_path: str, quality_vector: Dict[str, Dict[str, b
 def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identifier_name: str, real_class_name: str,
                              delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
                              tnorm_name: str, skip_initial_space: bool = True) -> True:
+    """ Dump the classes_found vector inside the subsubtrain directory for one t-norm. """
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)

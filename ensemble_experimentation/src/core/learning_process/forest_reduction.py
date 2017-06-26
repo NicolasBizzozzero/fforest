@@ -1,7 +1,9 @@
+from typing import Dict
+
 import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
 from ensemble_experimentation.src.core.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
+import csv
 
 
 def forest_reduction() -> None:
@@ -16,6 +18,9 @@ def forest_reduction() -> None:
 
 def _compute_difficulty_vectors(number_of_trees: int, vector_size: int, number_of_tnorms: int, subtrain_dir_path: str,
                                 subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str):
+    """ Compute a difficulty vector for each t-norm used. A difficulty vector correspond to the sum of all quality
+    vectors for a t-norm. It assign a classification difficulty to an example from the reference database.
+    """
     for tnorm_num in range(number_of_tnorms + 1):
         tnorm_name = methodnum_to_str(tnorm_num)
         vector_path = "{}/{}{}.{}".format(subtrain_dir_path, vector_prefix, tnorm_name, vector_extension)
@@ -27,32 +32,51 @@ def _compute_difficulty_vectors(number_of_trees: int, vector_size: int, number_o
                                    subsubtrain_directory_pattern=subsubtrain_directory_pattern)
 
 
-def _compute_difficulty_vector(vector_name: str, vector_path: str, vector_size: int, number_of_trees: int,
-                               subsubtrain_directory_pattern: str):
-    difficulty_vector = [0] * vector_size
-
-    for subsubtrain_dir in subsubtrain_dir_path(number_of_trees,
-                                                env.cleaned_arguments[gpn.main_directory()],
-                                                env.cleaned_arguments[gpn.subtrain_directory()],
+def _compute_difficulty_vector(vector_name: str, vector_path: str, number_of_trees: int,
+                               subsubtrain_directory_pattern: str, main_directory: str, subtrain_directory: str):
+    """ Compute a difficulty vector for one t-norm. A difficulty vector correspond to the sum of all quality vectors for
+    a t-norm. It assign a classification difficulty to an example from the reference database.
+    """
+    difficulty_vector = dict()
+    for subsubtrain_dir in subsubtrain_dir_path(number_of_trees, main_directory, subtrain_directory,
                                                 subsubtrain_directory_pattern):
-        efficiency_vector = get_efficiency_vector(subsubtrain_dir + "/" + vector_name)
-        difficulty_vector = [x + y for x, y in zip(difficulty_vector, efficiency_vector)]
+        efficiency_vector = _get_efficiency_vector(subsubtrain_dir + "/" + vector_name)
+        try:
+            difficulty_vector = {instance: difficulty_vector[instance] + efficiency_vector[instance] for
+                                 instance in efficiency_vector.keys()}
+        except KeyError:
+            difficulty_vector = {instance: efficiency_vector[instance] for instance in difficulty_vector.keys()}
 
-    dump_difficulty_vector(vector_path, difficulty_vector)
+    _dump_difficulty_vector(vector_path, difficulty_vector)
 
 
-def get_efficiency_vector(vector_path: str, encoding: str = "utf8") -> list:
+def _get_efficiency_vector(vector_path: str, delimiter: str, quoting: int, quote_char: str, encoding: str = "utf8",
+                           skip_initial_space: bool = True) -> Dict[str, int]:
+    """ Compute an efficiency vector for one t-norm. An efficiency vector correspond to dictionary mapping one instance
+    to a boolean. True if this instance as been correctly classified by the t-norm, False otherwise.
+    """
+    efficiency_vector = dict()
     with open(vector_path, encoding=encoding) as file:
-        vector = list(file.readline())
-    if vector[-1] == "\n":
-        vector.pop()
-    return [int(v) for v in vector]
+        reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+        for row in reader:
+            identifier, correctly_classified = row
+            efficiency_vector[identifier] = 1 if correctly_classified else 0
+
+    return efficiency_vector
 
 
-def dump_difficulty_vector(vector_path: str, vector: list, encoding: str = "utf8"):
-    vector = "".join([str(v) for v in vector])
+def _dump_difficulty_vector(vector_path: str, difficulty_vector: Dict[str, int], delimiter: str, quoting: int,
+                            quote_char: str, encoding: str = "utf8", skip_initial_space: bool = True) -> None:
+    """ Dump the content of a difficulty vector for one t-norm. A difficulty vector correspond to the sum of all quality
+    vectors for a t-norm. It assign a classification difficulty to an example from the reference database.
+    """
     with open(vector_path, "w", encoding=encoding) as file:
-        file.write(vector)
+        writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+        for identifier in difficulty_vector.keys():
+            row = [identifier, difficulty_vector[identifier]]
+            writer.writerow(row)
 
 
 if __name__ == "__main__":
