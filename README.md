@@ -1,7 +1,8 @@
 # ensemble_experimentation
 ## TODO
 * Find an english name for the package
-* Implement the 'guess' option for the parameter --keep-header with the help of this code snippet : https://docs.python.org/3/library/csv.html#csv.Sniffer.has_header
+* Implement the `guess` option for the parameter --have-header with the help of this code snippet : https://docs.python.org/3/library/csv.html#csv.Sniffer.has_header
+* Implement the `guess` option for the parameters --delimiter, --quoting, --quote-character and --encoding.
 * Add more messages related to the verbosity
 * Add some progress bars with the package : https://pypi.python.org/pypi/progressbar2
 * Rewrite all path processing code with the package : https://pypi.python.org/pypi/path.py
