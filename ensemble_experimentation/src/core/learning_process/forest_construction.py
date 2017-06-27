@@ -59,6 +59,7 @@ def forest_construction():
     # Start the processes
     for process in processes:
         process.start()
+        exit(0)
 
     # Wait for all processes to finish
     for process in processes:
@@ -106,13 +107,18 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     executable, located inside the `bin` directory, at the root of the software. Then, compute quality and classes_found
     vectors for each t_norms on each tree and save it inside the tree directory.
     """
+    import pprint
+
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
+    pprint.pprint(lines)
     classes_found = _parse_result(lines=lines,
                                   number_of_tnorms=number_of_tnorms)
+    pprint.pprint(classes_found)
     quality = _get_quality_dictionary(classes_found=classes_found,
                                       number_of_tnorms=number_of_tnorms)
+    pprint.pprint(quality)
     _save_vectors(quality_vector=quality,
                   class_found_vector=classes_found,
                   number_of_tnorms=number_of_tnorms,
@@ -171,7 +177,7 @@ def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
     """ Return a quality dictionary, mapping to every t-norm for each identifier of the `classes_found` dictionary,
     True if this t-norm has correctly predicted the real class, or False otherwise.
     """
-    tnorms = (methodnum_to_str(tnorm) for tnorm in range(number_of_tnorms + 1))
+    tnorms = [methodnum_to_str(tnorm) for tnorm in range(number_of_tnorms + 1)]
     quality = dict()
     for identifier in classes_found.keys():
         quality[identifier] = dict()
