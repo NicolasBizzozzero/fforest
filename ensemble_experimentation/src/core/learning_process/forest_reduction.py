@@ -1,9 +1,9 @@
+import csv
 from typing import Dict
 
 import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
-import csv
 
 
 def forest_reduction() -> None:
@@ -18,13 +18,14 @@ def forest_reduction() -> None:
                                 delimiter=env.delimiter_output,
                                 quoting=env.quoting_output,
                                 quote_char=env.quote_character_output,
-                                encoding=env.encoding_output)
+                                encoding=env.encoding_output,
+                                quality_vector_prefix=env.quality_vector_prefix)
 
 
 def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, subtrain_dir_path: str,
                                 subsubtrain_directory_pattern: str, vector_prefix: str, vector_extension: str,
                                 main_directory: str, subtrain_directory: str, delimiter: str, quoting: int,
-                                quote_char: str, encoding: str) -> None:
+                                quote_char: str, encoding: str, quality_vector_prefix: str) -> None:
     """ Compute a difficulty vector for each t-norm used. A difficulty vector correspond to the sum of all quality
     vectors for a t-norm. It assign a classification difficulty to an example from the reference database.
     """
@@ -32,7 +33,7 @@ def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, sub
         tnorm_name = methodnum_to_str(tnorm_num)
         vector_path = "{}/{}{}.{}".format(subtrain_dir_path, vector_prefix, tnorm_name, vector_extension)
 
-        _compute_difficulty_vector(vector_name=tnorm_name + "." + vector_extension,
+        _compute_difficulty_vector(vector_name=quality_vector_prefix + tnorm_name + "." + vector_extension,
                                    vector_path=vector_path,
                                    number_of_trees=number_of_trees,
                                    subsubtrain_directory_pattern=subsubtrain_directory_pattern,
@@ -59,11 +60,12 @@ def _compute_difficulty_vector(vector_name: str, vector_path: str, number_of_tre
                                                    quote_char=quote_char,
                                                    encoding=encoding,
                                                    skip_initial_space=True)
+
         try:
             difficulty_vector = {instance: difficulty_vector[instance] + efficiency_vector[instance] for
                                  instance in efficiency_vector.keys()}
         except KeyError:
-            difficulty_vector = {instance: efficiency_vector[instance] for instance in difficulty_vector.keys()}
+            difficulty_vector = {instance: efficiency_vector[instance] for instance in efficiency_vector.keys()}
 
     _dump_difficulty_vector(vector_path=vector_path,
                             difficulty_vector=difficulty_vector,

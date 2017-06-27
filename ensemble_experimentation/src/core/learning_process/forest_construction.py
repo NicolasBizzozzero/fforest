@@ -231,7 +231,7 @@ def _save_quality_vector(vector_path: str, quality_vector: Dict[str, Dict[str, b
                             skipinitialspace=skip_initial_space)
 
         for identifier in quality_vector.keys():
-            writer.writerow([identifier, quality_vector[identifier][tnorm_name]])
+            writer.writerow([identifier, 1.0 if quality_vector[identifier][tnorm_name] else 0.0])
 
 
 def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identifier_name: str, real_class_name: str,
