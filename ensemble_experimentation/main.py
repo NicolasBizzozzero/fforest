@@ -1,4 +1,4 @@
-#from ensemble_experimentation.src.core.ending.ending import failure_safe
+from ensemble_experimentation.src.core.ending.ending import failure_safe
 from ensemble_experimentation.src.core.initialization.args_parser import parse_args_main_entry_point
 from ensemble_experimentation.src.core.initialization.initial_split import initial_split
 from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
@@ -8,10 +8,8 @@ from ensemble_experimentation.src.core.learning_process.forest_reduction import 
 from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
 
 
-#@failure_safe
+@failure_safe
 def main_entry_point():
-    print("Hello main_entry_point")
-
     # Parsing and cleaning command-line arguments.
     # After calling this method, all variables defined in the `environment` module will be initialized
     parse_args_main_entry_point()
@@ -32,16 +30,12 @@ def main_entry_point():
     forest_construction()
     forest_reduction()
 
-    #dump_statistics_dictionary()
-
 
 def forest_entry_point():
-    print("Hello forest_entry_point")
     pass
 
 
 def forest_reduction_entry_point():
-    print("Hello forest_reduction_entry_point")
     pass
 
 
