@@ -7,17 +7,16 @@ from multiprocessing import Process
 from os import path
 from typing import List, Dict
 
-from ensemble_experimentation.src.core.learning_process.entropy_measures import EntropyMeasure
-
 import ensemble_experimentation.src.getters.environment as env
 from ensemble_experimentation.src.core.phase.learning_process.classification_methods import methodnum_to_str
+from ensemble_experimentation.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from ensemble_experimentation.src.file_tools.format import format_to_string
 from ensemble_experimentation.src.vrac.file_system import get_path
 from ensemble_experimentation.src.vrac.iterators import grouper
 from ensemble_experimentation.src.vrac.process import execute_and_get_stdout
 
 HERE = path.abspath(path.dirname(__file__))
-PATH_TO_SALAMMBO = HERE + "/../../../bin/Salammbo"
+PATH_TO_SALAMMBO = HERE + "/../../../../bin/Salammbo"
 MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
 KEY_TRUECLASS = "trueclass"
@@ -154,13 +153,13 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
                 _, tnorm, identifier, true_class, *rest = instance.strip("\"").split()
                 identifier = identifier.strip("\"")
                 try:
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip("\""): float(membership_degree)
+                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
                                                                         for class_found, membership_degree in
                                                                         grouper(2, rest)}
                 except KeyError:  # Will be triggered at the first instance for each chunk
                     result[identifier] = dict()
                     result[identifier][KEY_TRUECLASS] = true_class.strip("\"")
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip("\""): float(membership_degree)
+                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
                                                                         for class_found,
                                                                         membership_degree in grouper(2, rest)}
     except ValueError:  # For the last empty line

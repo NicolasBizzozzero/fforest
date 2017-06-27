@@ -61,7 +61,7 @@ def is_a_percentage(s: str) -> bool:
         >>> is_a_percentage("abcd")
         False
     """
-    return is_a_float(s) and 0.0 <= float(s) <= 1.0
+    return is_a_float(s) and 0.0 <= float(s) <= 1
 
 
 def convert_row_limit(row_limit: str, number_of_rows: int) -> int:

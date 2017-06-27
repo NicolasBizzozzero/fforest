@@ -28,7 +28,7 @@ def critical_failure_safe(func: Callable) -> Callable:
 
 @critical_failure_safe
 def dump_statistics_dictionary():
-    dump_dict(env.statistics, env.cleaned_arguments[gpn.main_directory()] + "/" + \
+    dump_dict(env.statistics, env.cleaned_arguments[gpn.main_directory()] + "/" +
               env.cleaned_arguments[gpn.statistics_file_name()])
 
 

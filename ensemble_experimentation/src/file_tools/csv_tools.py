@@ -87,7 +87,7 @@ def get_column(path: str, column: Union[str, int], have_header: bool = True, del
             raise NamedAttributeButNoHeader()
 
         for row in reader:
-            if row != []:
+            if row:
                 content.append(row[column])
     if have_header and (type(column) == int):
         content.pop(0)
@@ -129,7 +129,7 @@ def get_identified_row(path: str, identifier_name: str, row_id: int, delimiter: 
         return None
 
 
-def write_header(input_reader, *out_writers, replace_fieldnames: bool = False):
+def write_header(input_reader, *out_writers):
     header = next(input_reader)
 
     for writer in out_writers:
