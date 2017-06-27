@@ -9,3 +9,4 @@
 * Save each database path in the `env` module
 * Implement other format for the input database (each format must be changed to the CSV format during the preprocessing phase)
 * The identifier is not a number, it must be quoted during the preprocessing phase
+* Find and rename entry points, I propose : `fforest`, `fforest_preprocessing <DIR>`, `fforest_initialization <DIR> (without preprocessing)`, `fforest_learning <DIR>`
