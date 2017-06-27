@@ -59,7 +59,6 @@ def forest_construction():
     # Start the processes
     for process in processes:
         process.start()
-        exit(0)
 
     # Wait for all processes to finish
     for process in processes:
