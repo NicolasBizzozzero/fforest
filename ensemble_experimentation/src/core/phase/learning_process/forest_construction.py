@@ -7,9 +7,10 @@ from multiprocessing import Process
 from os import path
 from typing import List, Dict
 
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.core.learning_process.entropy_measures import EntropyMeasure
+
+import ensemble_experimentation.src.getters.environment as env
+from ensemble_experimentation.src.core.phase.learning_process.classification_methods import methodnum_to_str
 from ensemble_experimentation.src.file_tools.format import format_to_string
 from ensemble_experimentation.src.vrac.file_system import get_path
 from ensemble_experimentation.src.vrac.iterators import grouper

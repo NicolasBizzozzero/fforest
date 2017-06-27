@@ -1,11 +1,11 @@
-from ensemble_experimentation.src.core.ending.ending import failure_safe
-from ensemble_experimentation.src.core.initialization.args_parser import parse_args_main_entry_point
-from ensemble_experimentation.src.core.initialization.initial_split import initial_split
-from ensemble_experimentation.src.core.initialization.preprocessing import preprocessing
-from ensemble_experimentation.src.core.initialization.reference_split import reference_split
-from ensemble_experimentation.src.core.learning_process.forest_construction import forest_construction
-from ensemble_experimentation.src.core.learning_process.forest_reduction import forest_reduction
-from ensemble_experimentation.src.core.learning_process.subsubtrain_split import subsubtrain_split
+from ensemble_experimentation.src.core.phase.ending.ending import failure_safe
+from ensemble_experimentation.src.core.phase.initialization.initial_split import initial_split
+from ensemble_experimentation.src.core.phase.initialization.reference_split import reference_split
+from ensemble_experimentation.src.core.phase.learning_process.forest_construction import forest_construction
+from ensemble_experimentation.src.core.phase.learning_process.forest_reduction import forest_reduction
+from ensemble_experimentation.src.core.phase.learning_process.subsubtrain_split import subsubtrain_split
+from ensemble_experimentation.src.core.phase.preprocessing.args_parser import parse_args_main_entry_point
+from ensemble_experimentation.src.core.phase.preprocessing.preprocessing import preprocessing
 
 
 @failure_safe
