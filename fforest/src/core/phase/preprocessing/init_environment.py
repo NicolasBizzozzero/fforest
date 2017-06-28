@@ -5,7 +5,6 @@ from fforest.src.vrac.file_system import get_filename
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.file_tools.format import format_to_string
 from fforest.src.vrac.iterators import repeat_cycle
-import itertools
 
 
 def init_environment(args: dict) -> None:
