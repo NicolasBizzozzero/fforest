@@ -13,7 +13,7 @@ import json
 import os
 from enum import IntEnum, Enum
 
-import ensemble_experimentation.src.getters.environment as env
+import fforest.src.getters.environment as env
 
 _PATH_OUTPUT_MESSAGES = "../../res/output_messages.json"
 VERBOSE_KEY_PREFIX = "verbose_"

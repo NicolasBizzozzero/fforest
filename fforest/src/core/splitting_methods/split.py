@@ -8,13 +8,13 @@ import csv
 import enum
 from typing import Tuple, List
 
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.splitting_methods.halfing import halfing
-from ensemble_experimentation.src.core.splitting_methods.halfing import halfing2
-from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution
-from ensemble_experimentation.src.core.splitting_methods.keep_distribution import keep_distribution2
-from ensemble_experimentation.src.file_tools.format import format_to_string
-from ensemble_experimentation.src.vrac.file_system import get_filename
+import fforest.src.getters.environment as env
+from fforest.src.core.splitting_methods.halfing import halfing
+from fforest.src.core.splitting_methods.halfing import halfing2
+from fforest.src.core.splitting_methods.keep_distribution import keep_distribution
+from fforest.src.core.splitting_methods.keep_distribution import keep_distribution2
+from fforest.src.file_tools.format import format_to_string
+from fforest.src.vrac.file_system import get_filename
 
 
 class SplittingMethod(enum.IntEnum):

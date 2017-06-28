@@ -1,6 +1,6 @@
 from typing import Tuple, List, Union
 
-from ensemble_experimentation.src.vrac.maths import is_an_int
+from fforest.src.vrac.maths import is_an_int
 
 
 class TooManyTreesToSplit(Exception):

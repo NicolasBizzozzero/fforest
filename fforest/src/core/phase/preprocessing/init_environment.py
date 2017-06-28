@@ -1,7 +1,7 @@
 """ Initialize the variables contained in the `environment` module. """
-from ensemble_experimentation.src.file_tools.csv_tools import get_column
-from ensemble_experimentation.src.getters import environment as env, get_parameter_name as gpn
-from ensemble_experimentation.src.vrac.file_system import get_filename
+from fforest.src.file_tools.csv_tools import get_column
+from fforest.src.getters import environment as env, get_parameter_name as gpn
+from fforest.src.vrac.file_system import get_filename
 
 
 def init_environment(args: dict) -> None:

@@ -1,6 +1,5 @@
-# ensemble_experimentation
+# fforest
 ## TODO
-* Find an english name for the package
 * Implement the `guess` option for the parameter --have-header with the help of this code snippet : https://docs.python.org/3/library/csv.html#csv.Sniffer.has_header
 * Implement the `guess` option for the parameters --delimiter, --quoting, --quote-character and --encoding.
 * Add more messages related to the verbosity

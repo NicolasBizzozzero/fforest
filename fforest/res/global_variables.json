@@ -1,5 +1,5 @@
 {
-  "name": "ensemble_experimentation",
+  "name": "fforest",
   "description": "Command-line tools to split and play with Fuzzy Forests.",
   "keywords": "",
   "main_homepage": "",
@@ -27,7 +27,9 @@
     "docopt >= 0.6.2"
   ],
 
-  "main_entry_point": "ensemble_experimentation",
-  "forest_entry_point": "ensemble_foret_classique",
-  "forest_reduction_entry_point": "ensemble_foret_reduction"
+  "main_entry_point": "fforest",
+  "preprocessing_entry_point": "fforest_preprocessing",
+  "initialization_entry_point": "fforest_initialization",
+  "learning_entry_point": "fforest_learning",
+  "reduction_entry_point": "fforest_reduction"
 }

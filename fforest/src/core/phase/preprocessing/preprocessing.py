@@ -9,13 +9,13 @@ applying a set of operations on it. Theses operations consist of :
 """
 import csv
 
-import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_default_value as gdv
-from ensemble_experimentation.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
+import fforest.src.getters.environment as env
+import fforest.src.getters.get_default_value as gdv
+from fforest.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
     append_column, NamedAttributeButNoHeader, EmptyHeader
-from ensemble_experimentation.src.getters.get_output_message import Message, vprint
-from ensemble_experimentation.src.vrac.file_system import create_dir, extract_first_line, dump_string
-from ensemble_experimentation.src.vrac.maths import is_an_int
+from fforest.src.getters.get_output_message import Message, vprint
+from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
+from fforest.src.vrac.maths import is_an_int
 
 
 def preprocessing() -> None:

@@ -1,5 +1,5 @@
 {
-    "usage": "ensemble_experimentation.py <{param_database}> [options] [{param_class_name} <name>] [{param_trees_in_forest} <trees>]",
+    "usage": "fforest <{param_database}> [options] [{param_class_name} <name>] [{param_trees_in_forest} <trees>]",
     "help": "Print this help message.",
 
     "training_value": "% of values you want to extract from the database and put in the train database. The rest will be put in the test database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",

@@ -2,10 +2,10 @@
 Store the number of instances of the original, train and test databases into the `instances_original_database`,
 `instances_train_database` and `instances_test_database` variables in the `env` module.
 """
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.splitting_methods.split import split2
-from ensemble_experimentation.src.file_tools.csv_tools import get_number_of_rows
-from ensemble_experimentation.src.vrac.maths import convert_row_limit
+import fforest.src.getters.environment as env
+from fforest.src.core.splitting_methods.split import split2
+from fforest.src.file_tools.csv_tools import get_number_of_rows
+from fforest.src.vrac.maths import convert_row_limit
 
 
 def initial_split() -> None:

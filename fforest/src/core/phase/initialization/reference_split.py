@@ -2,10 +2,10 @@
 Store the number of instances of the reference and subtrain databases into the `instances_reference_database` and
 `instances_subtrain_database` variables in the `env` module.
 """
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.splitting_methods.split import split2
-from ensemble_experimentation.src.vrac.file_system import create_dir
-from ensemble_experimentation.src.vrac.maths import convert_row_limit
+import fforest.src.getters.environment as env
+from fforest.src.core.splitting_methods.split import split2
+from fforest.src.vrac.file_system import create_dir
+from fforest.src.vrac.maths import convert_row_limit
 
 
 def reference_split():

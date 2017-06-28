@@ -1,8 +1,8 @@
 include README.md
-include ensemble_experimentation/res/default_values.json
-include ensemble_experimentation/res/parameters_names.json
-include ensemble_experimentation/res/global_variables.json
-include ensemble_experimentation/res/statistics_names.json
-include ensemble_experimentation/res/parameters_documentation.json
-include ensemble_experimentation/res/output_messages.json
-include ensemble_experimentation/bin/Salammbo
+include fforest/res/default_values.json
+include fforest/res/parameters_names.json
+include fforest/res/global_variables.json
+include fforest/res/statistics_names.json
+include fforest/res/parameters_documentation.json
+include fforest/res/output_messages.json
+include fforest/bin/Salammbo

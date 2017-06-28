@@ -1,7 +1,7 @@
 import csv
 from typing import Union, List
 
-from ensemble_experimentation.src.vrac.maths import is_an_int
+from fforest.src.vrac.maths import is_an_int
 
 
 class NamedAttributeButNoHeader(Exception):

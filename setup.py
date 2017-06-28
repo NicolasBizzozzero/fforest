@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
-import ensemble_experimentation.src.getters.get_global_variable as ggv
+import fforest.src.getters.get_global_variable as ggv
 
 here = path.abspath(path.dirname(__file__))
 
@@ -78,9 +78,9 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            ggv.main_entry_point() + ' = ensemble_experimentation.main:main_entry_point',
-            ggv.forest_entry_point() + ' = ensemble_experimentation.main:forest_entry_point',
-            ggv.forest_reduction_entry_point() + ' = ensemble_experimentation.main:forest_reduction_entry_point',
+            ggv.main_entry_point() + ' = fforest.main:main_entry_point',
+            ggv.forest_entry_point() + ' = fforest.main:forest_entry_point',
+            ggv.forest_reduction_entry_point() + ' = fforest.main:forest_reduction_entry_point',
         ],
     },
 )

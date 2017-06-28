@@ -1,7 +1,7 @@
 # Project files
 build/
 dist/
-ensemble_experimentation.egg-info/
+fforest.egg-info/
 .idea/
 
 # Byte-compiled / optimized / DLL files

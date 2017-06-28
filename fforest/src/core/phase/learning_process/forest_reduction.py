@@ -1,9 +1,9 @@
 import csv
 from typing import Dict
 
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.phase.learning_process.classification_methods import methodnum_to_str
-from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
+import fforest.src.getters.environment as env
+from fforest.src.core.phase.learning_process.classification_methods import methodnum_to_str
+from fforest.src.vrac.iterators import subsubtrain_dir_path
 
 
 def forest_reduction() -> None:

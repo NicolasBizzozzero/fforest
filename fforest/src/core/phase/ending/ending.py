@@ -1,10 +1,10 @@
 import traceback
 from typing import Callable
 
-import ensemble_experimentation.src.getters.environment as env
-import ensemble_experimentation.src.getters.get_default_value as gdv
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
-from ensemble_experimentation.src.vrac.file_system import dump_dict
+import fforest.src.getters.environment as env
+import fforest.src.getters.get_default_value as gdv
+import fforest.src.getters.get_parameter_name as gpn
+from fforest.src.vrac.file_system import dump_dict
 
 
 def critical_dump_statistics_dictionary():

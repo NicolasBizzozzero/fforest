@@ -5,17 +5,17 @@ checks if some of the parameters are invalids and raises exceptions accordingly.
 """
 import sys
 
-import ensemble_experimentation.src.getters.get_default_value as gdv
-import ensemble_experimentation.src.getters.get_parameter_name as gpn
-from ensemble_experimentation.src.core.phase.learning_process.entropy_measures import str_to_entropy_measure
-from ensemble_experimentation.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
-from ensemble_experimentation.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
+import fforest.src.getters.get_default_value as gdv
+import fforest.src.getters.get_parameter_name as gpn
+from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropy_measure
+from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
+from fforest.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
     get_number_of_columns
-from ensemble_experimentation.src.file_tools.csv_tools import str_to_quoting
-from ensemble_experimentation.src.file_tools.format import string_to_format
-from ensemble_experimentation.src.getters.get_output_message import string_to_verbosity
-from ensemble_experimentation.src.vrac.file_system import get_filename
-from ensemble_experimentation.src.vrac.maths import is_a_percentage, is_an_int
+from fforest.src.file_tools.csv_tools import str_to_quoting
+from fforest.src.file_tools.format import string_to_format
+from fforest.src.getters.get_output_message import string_to_verbosity
+from fforest.src.vrac.file_system import get_filename
+from fforest.src.vrac.maths import is_a_percentage, is_an_int
 
 
 class MissingClassificationAttribute(Exception):

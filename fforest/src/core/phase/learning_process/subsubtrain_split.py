@@ -4,10 +4,10 @@ module.
 """
 from typing import List
 
-import ensemble_experimentation.src.getters.environment as env
-from ensemble_experimentation.src.core.splitting_methods.split import split
-from ensemble_experimentation.src.vrac.file_system import create_dir
-from ensemble_experimentation.src.vrac.iterators import subsubtrain_dir_path
+import fforest.src.getters.environment as env
+from fforest.src.core.splitting_methods.split import split
+from fforest.src.vrac.file_system import create_dir
+from fforest.src.vrac.iterators import subsubtrain_dir_path
 
 
 def subsubtrain_split() -> None:
