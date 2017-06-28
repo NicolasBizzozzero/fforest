@@ -88,12 +88,20 @@ def main_entry_point() -> str:
     return _get_value_from_file("main_entry_point")
 
 
-def forest_entry_point() -> str:
-    return _get_value_from_file("forest_entry_point")
+def preprocessing_entry_point() -> str:
+    return _get_value_from_file("preprocessing_entry_point")
 
 
-def forest_reduction_entry_point() -> str:
-    return _get_value_from_file("forest_reduction_entry_point")
+def initialization_entry_point() -> str:
+    return _get_value_from_file("initialization_entry_point")
+
+
+def learning_entry_point() -> str:
+    return _get_value_from_file("learning_entry_point")
+
+
+def reduction_entry_point() -> str:
+    return _get_value_from_file("reduction_entry_point")
 
 
 if __name__ == '__main__':
