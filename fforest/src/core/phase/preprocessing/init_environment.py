@@ -107,8 +107,8 @@ def _init_paths(args: dict) -> None:
                                                     env.vector_file_extension) for
                                 tree_index, tnorm_index in zip(repeat_cycle(range(1, env.trees_in_forest + 1),
                                                                             env.t_norms + 1),
-                                                                   [tnorm for tnorm in range(env.t_norms + 1)] *
-                                                                   env.trees_in_forest)]
+                                                               [tnorm for tnorm in range(env.t_norms + 1)] *
+                                                               env.trees_in_forest)]
 
 
 def _init_names(args: dict) -> None:
