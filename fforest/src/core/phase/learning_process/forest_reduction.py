@@ -96,7 +96,7 @@ def _get_quality_vector(vector_path: str, delimiter: str, quoting: int, quote_ch
 
         for row in reader:
             identifier, true_class, *rest = row
-            membership = rest[classes.find(true_class)]
+            membership = rest[classes.index(true_class)]
             quality_vector[identifier] = membership
 
     return quality_vector
