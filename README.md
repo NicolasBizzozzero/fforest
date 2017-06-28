@@ -48,3 +48,9 @@ $ fforest_reduction
 
 ## Acknowledgments
 I would like to thanks the LFI team from the LIP6 laboratory, and specifically Mr. Marsala Christophe, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
+
+<p align="center">
+    <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc"/>
+    <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_lip6.png?raw=true" alt="logo_lip6"/>
+    <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_lfi.png?raw=true" alt="logo_lfi"/>
+</p>
