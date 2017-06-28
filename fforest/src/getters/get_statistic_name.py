@@ -25,38 +25,6 @@ def _get_stat_from_file(value):
         return json.load(file)[value]
 
 
-def database_name() -> str:
-    return _get_stat_from_file("database_name")
-
-
-def database_path() -> str:
-    return _get_stat_from_file("database_path")
-
-
-def preprocessed_database_path() -> str:
-    return _get_stat_from_file("preprocessed_database_path")
-
-
-def train_path() -> str:
-    return _get_stat_from_file("train_path")
-
-
-def test_path() -> str:
-    return _get_stat_from_file("test_path")
-
-
-def reference_path() -> str:
-    return _get_stat_from_file("reference_path")
-
-
-def subtrain_path() -> str:
-    return _get_stat_from_file("subtrain_path")
-
-
-def header_path() -> str:
-    return _get_stat_from_file("header_path")
-
-
 def instances_in_database() -> str:
     return _get_stat_from_file("instances_in_database")
 

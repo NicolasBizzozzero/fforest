@@ -16,10 +16,10 @@ def reference_split():
     _create_subtrain_directory(main_directory=env.main_directory,
                                subtrain_directory=env.subtrain_directory)
 
-    _calculate_row_limit(reference_value=env.reference_value, instances_in_train_database=env.instances_train_database)
+    _calculate_row_limit(reference_value=env.reference_value, instances_in_train_database=env.train_database_instances)
 
     # Split the database
-    env.instances_reference_database, env.instances_subtrain_database = \
+    env.reference_database_instances, env.subtrain_database_instances = \
         split2(input_path=env.train_database_path,
                delimiter=env.delimiter_output,
                row_limit=env.reference_value,
@@ -28,7 +28,7 @@ def reference_split():
                output_name_test=env.subtrain_database_path,
                encoding=env.encoding_output,
                class_name=env.class_name,
-               number_of_rows=env.instances_train_database,
+               number_of_rows=env.train_database_instances,
                quoting=env.quoting_output,
                quote_char=env.quote_character_output)
 

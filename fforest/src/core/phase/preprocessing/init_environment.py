@@ -75,6 +75,7 @@ def _init_dir_paths(args: dict) -> None:
 
 def _init_paths(args: dict) -> None:
     """ Initialize all the path-related variables inside the `env` module. """
+    env.statistics_file_path = "{}/{}".format(env.main_directory_path, env.statistics_file_name)
     env.original_database_path = args[gpn.database()]
     env.preprocessed_database_path = "{}/{}".format(env.main_directory_path, args[gpn.preprocessed_database_name()])
     env.header_path = "{}/{}".format(env.main_directory_path, env.header_name)

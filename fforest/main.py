@@ -6,6 +6,7 @@ from fforest.src.core.phase.learning_process.forest_reduction import forest_redu
 from fforest.src.core.phase.learning_process.subsubtrain_split import subsubtrain_split
 from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_entry_point
 from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
+from fforest.src.core.phase.ending.ending import dump_statistics_dictionary
 
 
 @failure_safe
@@ -29,6 +30,8 @@ def main_entry_point() -> None:
     # Construct forest and compute efficiency vectors
     forest_construction()
     forest_reduction()
+
+    dump_statistics_dictionary()
 
 
 def preprocessing_entry_point() -> None:

@@ -22,7 +22,7 @@ def subsubtrain_split() -> None:
                                                      subsubtrain_directory_pattern=env.subsubtrain_directory_pattern)
 
     # Split the database
-    row_limit = env.instances_subtrain_database // env.trees_in_forest
+    row_limit = env.subtrain_database_instances // env.trees_in_forest
     list_instances = \
         split(input_path=env.subtrain_database_path,
               delimiter=env.delimiter_output,
@@ -30,13 +30,13 @@ def subsubtrain_split() -> None:
               method=env.subsubtrain_split_method,
               encoding=env.encoding_output,
               class_name=env.class_name,
-              number_of_rows=env.instances_subtrain_database,
+              number_of_rows=env.subtrain_database_instances,
               tree_names=subsubtrain_names,
               quote_char=env.quote_character_output,
               quoting=env.quoting_output)
 
     # Store the number of instances of each tree along with its name in the `env` module
-    env.instances_subsubtrain_databases = dict(zip(subsubtrain_names, list_instances))
+    env.subsubtrain_databases_instances = dict(zip(subsubtrain_names, list_instances))
 
 
 def _create_subtrain_directories(number_of_trees: int, main_directory: str, subtrain_directory: str,

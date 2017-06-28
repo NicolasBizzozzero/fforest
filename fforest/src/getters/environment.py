@@ -1,8 +1,5 @@
 """ This module defines environment variables which'll be used globally by all the modules and packages of the program.
 """
-# Contains useful statistics for the user
-statistics = dict()
-
 # Command-line parameters
 cclassified_vector_prefix = None
 class_name = None
@@ -55,6 +52,7 @@ subtrain_directory_path = None
 subsubtrain_directories_path = None
 
 # Paths
+statistics_file_path = None
 original_database_path = None
 preprocessed_database_path = None
 header_path = None
@@ -71,12 +69,12 @@ quality_vectors_path = None
 original_database_name = None
 
 # Number of instances
-instances_original_database = None
-instances_train_database = None
-instances_test_database = None
-instances_reference_database = None
-instances_subtrain_database = None
-instances_subsubtrain_databases = None
+original_database_instances = None
+train_database_instances = None
+test_database_instances = None
+reference_database_instances = None
+subtrain_database_instances = None
+subsubtrain_databases_instances = None
 
 # Miscellaneous
 possible_classes = None
