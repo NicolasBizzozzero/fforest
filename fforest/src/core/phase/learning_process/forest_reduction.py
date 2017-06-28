@@ -2,7 +2,7 @@ import csv
 from typing import Dict
 
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.learning_process.classification_methods import methodnum_to_str
+from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.vrac.iterators import subsubtrain_dir_path
 from fforest.src.vrac.maths import round_float
 
@@ -42,7 +42,7 @@ def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, sub
     """
     difficulty_vectors = dict()
     for tnorm_num in range(number_of_tnorms + 1):
-        tnorm_name = methodnum_to_str(tnorm_num)
+        tnorm_name = tnorm_to_str(tnorm_num)
 
         difficulty_vectors[tnorm_name] =\
             _compute_difficulty_vector(vector_name=quality_vector_prefix + tnorm_name + "." + vector_extension,

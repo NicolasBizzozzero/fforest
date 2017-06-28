@@ -8,7 +8,7 @@ from os import path
 from typing import List, Dict
 
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.learning_process.classification_methods import methodnum_to_str
+from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from fforest.src.file_tools.format import format_to_string
 from fforest.src.vrac.file_system import get_path
@@ -152,14 +152,14 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
                 _, tnorm, identifier, true_class, *rest = instance.strip("\"").split()
                 identifier = identifier.strip("\"")
                 try:
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
-                                                                        for class_found, membership_degree in
-                                                                        grouper(2, rest)}
+                    result[identifier][tnorm_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
+                                                                    for class_found, membership_degree in
+                                                                    grouper(2, rest)}
                 except KeyError:  # Will be triggered at the first instance for each chunk
                     result[identifier] = dict()
                     result[identifier][KEY_TRUECLASS] = true_class.strip("\"")
-                    result[identifier][methodnum_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
-                                                                        for class_found,
+                    result[identifier][tnorm_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
+                                                                    for class_found,
                                                                         membership_degree in grouper(2, rest)}
     except ValueError:  # For the last empty line
         pass
@@ -170,7 +170,7 @@ def _get_cclassified_dictionary(quality: dict, number_of_tnorms: int) -> dict:
     """ Return a cclassified dictionary, mapping to every t-norm for each identifier of the `quality` dictionary,
     True if this t-norm has correctly predicted the real class, or False otherwise.
     """
-    tnorms = [methodnum_to_str(tnorm) for tnorm in range(number_of_tnorms + 1)]
+    tnorms = [tnorm_to_str(tnorm) for tnorm in range(number_of_tnorms + 1)]
     cclassified = dict()
     for identifier in quality.keys():
         cclassified[identifier] = dict()
@@ -195,7 +195,7 @@ def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector
     cclassified vector and a quality vector.
     """
     for tnorm in range(number_of_tnorms + 1):
-        tnorm_name = methodnum_to_str(tnorm)
+        tnorm_name = tnorm_to_str(tnorm)
         cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
                                                       vector_file_extension)
         quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,

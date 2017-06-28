@@ -49,14 +49,23 @@ trees_in_forest = None
 vector_file_extension = None
 verbosity = None
 
+# Directories paths
+main_directory_path = None
+subtrain_directory_path = None
+subsubtrain_directories_path = None
+
 # Paths
 original_database_path = None
 preprocessed_database_path = None
-train_database_path = None
-test_database_path = None
-subtrain_database_path = None
-reference_database_path = None
 header_path = None
+test_database_path = None
+train_database_path = None
+reference_database_path = None
+subtrain_database_path = None
+subsubtrain_databases_path = None
+difficulty_vectors_path = None
+cclassified_vectors_path = None
+quality_vectors_path = None
 
 # Names
 original_database_name = None

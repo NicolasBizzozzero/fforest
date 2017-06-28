@@ -89,6 +89,9 @@ def clean_args(args: dict) -> None:
                 args[param_name] = get_filename(args[param_name], with_extension=True)
         elif param_name in (gpn.reference_name(), gpn.subtrain_name(), gpn.test_name(), gpn.train_name()):
             args[param_name] = "{}.{}".format(get_filename(args[param_name], with_extension=False), extension)
+        elif param_name == gpn.header_name():
+            args[param_name] = "{}.{}".format(get_filename(args[param_name], with_extension=False),
+                                              args[gpn.header_extension()])
         elif param_name == gpn.verbosity():
             args[param_name] = string_to_verbosity(args[param_name])
 

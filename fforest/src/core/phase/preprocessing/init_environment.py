@@ -2,10 +2,15 @@
 from fforest.src.file_tools.csv_tools import get_column
 from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
+from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
+from fforest.src.file_tools.format import format_to_string
+from fforest.src.vrac.iterators import repeat_cycle
+import itertools
 
 
 def init_environment(args: dict) -> None:
     _init_command_line_parameters(args)
+    _init_dir_paths(args)
     _init_paths(args)
     _init_names(args)
     _init_miscellaneous(args)
@@ -59,18 +64,51 @@ def _init_command_line_parameters(args: dict) -> None:
     env.verbosity = args[gpn.verbosity().split()[-1]]
 
 
+def _init_dir_paths(args: dict) -> None:
+    """ Initialize all the path-related directories variables inside the `env` module. """
+    env.main_directory_path = env.main_directory
+    env.subtrain_directory_path = "{}/{}".format(env.main_directory_path, env.subtrain_directory)
+    env.subsubtrain_directories_path = ["{}/{}".format(env.subtrain_directory_path,
+                                                       env.subsubtrain_directory_pattern %
+                                                       str(tree_index).zfill(len(str(env.trees_in_forest))))
+                                        for tree_index in range(1, env.trees_in_forest + 1)]
+
+
 def _init_paths(args: dict) -> None:
     """ Initialize all the path-related variables inside the `env` module. """
     env.original_database_path = args[gpn.database()]
-    env.preprocessed_database_path = "{}/{}".format(args[gpn.main_directory()],
-                                                    args[gpn.preprocessed_database_name()])
-    env.train_database_path = "{}/{}".format(args[gpn.main_directory()], args[gpn.train_name()])
-    env.test_database_path = "{}/{}".format(args[gpn.main_directory()], args[gpn.test_name()])
-    env.subtrain_database_path = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                   args[gpn.subtrain_name()])
-    env.reference_database_path = "{}/{}/{}".format(args[gpn.main_directory()], args[gpn.subtrain_directory()],
-                                                    args[gpn.reference_name()])
-    env.header_path = "{}/{}.{}".format(env.main_directory, env.header_name, env.header_extension)
+    env.preprocessed_database_path = "{}/{}".format(env.main_directory_path, args[gpn.preprocessed_database_name()])
+    env.header_path = "{}/{}".format(env.main_directory_path, env.header_name)
+    env.test_database_path = "{}/{}".format(env.main_directory_path, args[gpn.test_name()])
+    env.train_database_path = "{}/{}".format(env.main_directory_path, args[gpn.train_name()])
+    env.reference_database_path = "{}/{}".format(env.subtrain_directory_path, args[gpn.reference_name()])
+    env.subtrain_database_path = "{}/{}".format(env.subtrain_directory_path, args[gpn.subtrain_name()])
+    env.subsubtrain_databases_path = ["{}/{}.{}".format(env.subsubtrain_directories_path[tree_index],
+                                                        env.subsubtrain_directory_pattern %
+                                                        str(tree_index + 1).zfill(len(str(env.trees_in_forest))),
+                                                        format_to_string(args[gpn.format_output()]).lower()) for
+                                      tree_index in range(env.trees_in_forest)]
+    env.difficulty_vectors_path = ["{}/{}{}.{}".format(env.subtrain_directory_path,
+                                                       env.difficulty_vector_prefix,
+                                                       tnorm_to_str(tnorm_index),
+                                                       env.vector_file_extension) for
+                                   tnorm_index in range(env.t_norms + 1)]
+    env.cclassified_vectors_path = ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
+                                                        env.cclassified_vector_prefix,
+                                                        tnorm_to_str(tnorm_index),
+                                                        env.vector_file_extension) for
+                                    tree_index, tnorm_index in zip(repeat_cycle(range(1, env.trees_in_forest + 1),
+                                                                                env.t_norms + 1),
+                                                                   [tnorm for tnorm in range(env.t_norms + 1)] *
+                                                                   env.trees_in_forest)]
+    env.quality_vectors_path = ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
+                                                    env.quality_vector_prefix,
+                                                    tnorm_to_str(tnorm_index),
+                                                    env.vector_file_extension) for
+                                tree_index, tnorm_index in zip(repeat_cycle(range(1, env.trees_in_forest + 1),
+                                                                            env.t_norms + 1),
+                                                                   [tnorm for tnorm in range(env.t_norms + 1)] *
+                                                                   env.trees_in_forest)]
 
 
 def _init_names(args: dict) -> None:
