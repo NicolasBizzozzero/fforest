@@ -30,4 +30,5 @@ def initial_split() -> None:
                number_of_rows=env.original_database_instances,
                quoting=env.quoting_output,
                quote_char=env.quote_character_output,
-               line_delimiter=env.line_delimiter_output)
+               line_delimiter=env.line_delimiter_output,
+               skip_initial_space=True)
