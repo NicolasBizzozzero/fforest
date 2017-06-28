@@ -1,4 +1,5 @@
 include README.md
+include LICENSE.txt
 include fforest/res/default_values.json
 include fforest/res/parameters_names.json
 include fforest/res/global_variables.json

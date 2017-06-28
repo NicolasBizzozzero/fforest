@@ -1,7 +1,7 @@
 # fforest
 A set of tools useful for doing experiments with fuzzy forests.
 
-PICTURE
+[[https://github.com/NicolasBi/fforest/fforest/res/pictures/diagram_fforest.png|alt=diagram_fforest]]
 
 ## Installation
 `fforest` is available on PyPi, just run
