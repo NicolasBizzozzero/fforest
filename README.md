@@ -6,7 +6,7 @@ A set of tools useful for doing experiments with **fuzzy forests**.
 </p>
 
 ## Installation
-`fforest` is available on **PyPI**, just run
+`fforest` is available on <a href="https://pypi.python.org/pypi/fforest">PyPI</a>, just run
 ```shell
 $ pip install fforest
 ```
@@ -48,6 +48,9 @@ $ fforest_reduction
 
 ## Acknowledgments
 I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from the <a href="https://www.lip6.fr/">LIP6 laboratory</a>, and specifically <a href="http://webia.lip6.fr/~marsala/christophe/Accueil.html">Mr. Marsala Christophe</a>, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
+
+## License
+This project is licensed under the !!! License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc" height="110" width="250" align="middle"/>
