@@ -1,9 +1,10 @@
 import csv
-from typing import Dict, List
+from typing import Dict
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.classification_methods import methodnum_to_str
 from fforest.src.vrac.iterators import subsubtrain_dir_path
+from fforest.src.vrac.maths import round_float
 
 
 def forest_reduction() -> None:
@@ -66,6 +67,7 @@ def _compute_difficulty_vector(vector_name: str, number_of_trees: int, subsubtra
     for subsubtrain_dir in subsubtrain_dir_path(number_of_trees, main_directory, subtrain_directory,
                                                 subsubtrain_directory_pattern):
         quality_vector = _get_quality_vector(vector_path=subsubtrain_dir + "/" + vector_name,
+                                             number_of_trees=number_of_trees,
                                              delimiter=delimiter,
                                              quoting=quoting,
                                              quote_char=quote_char,
@@ -77,11 +79,15 @@ def _compute_difficulty_vector(vector_name: str, number_of_trees: int, subsubtra
                                  instance in quality_vector.keys()}
         except KeyError:
             difficulty_vector = {instance: quality_vector[instance] for instance in quality_vector.keys()}
+
+    # Round wrong floating values
+    for instance in difficulty_vector.keys():
+        difficulty_vector[instance] = round_float(difficulty_vector[instance])
     return difficulty_vector
 
 
-def _get_quality_vector(vector_path: str, delimiter: str, quoting: int, quote_char: str, encoding: str = "utf8",
-                        skip_initial_space: bool = True) -> Dict[str, int]:
+def _get_quality_vector(vector_path: str, number_of_trees: int, delimiter: str, quoting: int, quote_char: str,
+                        encoding: str = "utf8", skip_initial_space: bool = True) -> Dict[str, int]:
     """ Construct an quality vector for one t-norm. An quality vector correspond to a dictionary mapping one instance
     to its true class and all classes found by a tree, along with their % of membership.
     """
@@ -96,7 +102,7 @@ def _get_quality_vector(vector_path: str, delimiter: str, quoting: int, quote_ch
         for row in reader:
             identifier, true_class, *rest = row
             membership = rest[classes.index(true_class)]
-            quality_vector[identifier] = membership
+            quality_vector[identifier] = membership / number_of_trees
 
     return quality_vector
 

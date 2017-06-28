@@ -1,3 +1,33 @@
+from typing import Union
+
+Number = Union[int, float, complex]
+
+
+def delta(n1: Number, n2: Number) -> Number:
+    """ Return the difference between two numbers.
+
+        Example :
+        >>> delta(1, 2)
+        1
+        >>> delta(2, 1)
+        1
+    """
+    return abs(n2 - n1)
+
+
+def round_float(f: float, epsilon: float = 0.0000000000000002) -> Union[float, int]:
+    """ Round a float if it's very close to an integer. Else, do nothing and return it.
+        Example :
+        >>> round_float(0.9999999999999999)
+        1
+        >>> round_float(0.9999999999999998)
+        0.9999999999999998
+    """
+    if delta(round(f), f) < epsilon:
+        return int(round(f))
+    return f
+
+
 def is_a_float(s: str) -> bool:
     """ Check if a parsed string is a float.
 
@@ -89,3 +119,7 @@ class InvalidValue(Exception):
     def __init__(self, row_limit: str):
         Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
                                  " a number of rows.".format(row_limit=row_limit))
+
+
+if __name__ == "__main__":
+    pass
