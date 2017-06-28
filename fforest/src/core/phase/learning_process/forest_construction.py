@@ -196,9 +196,9 @@ def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector
     """
     for tnorm in range(number_of_tnorms + 1):
         tnorm_name = methodnum_to_str(tnorm)
-        cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
+        cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
                                                       vector_file_extension)
-        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
+        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
                                                   vector_file_extension)
         _save_cclassified_vector(vector_path=cclassified_vector_path,
                                  cclassified_vector=cclassified_vector,
