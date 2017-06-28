@@ -21,7 +21,7 @@ PATH_TO_SALAMMBO = HERE + "/../../../../bin/Salammbo"
 MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
 KEY_TRUECLASS = "trueclass"
-KEY_WELL_PREDICTED = "wellpredicted"
+KEY_CCLASSIFIED = "cclassified"
 KEY_ID = "ID"
 
 
