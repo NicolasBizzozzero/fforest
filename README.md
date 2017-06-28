@@ -47,7 +47,7 @@ $ fforest_reduction
 * Add the file `environment.json` at the root of the main directory, which will contains infos about the database, and must be created right after the preprocessing phase. This file'll then be loaded by each entry point thereafter.
 
 ## Acknowledgments
-I would like to thanks the LFI team from the LIP6 laboratory, and specifically Mr. Marsala Christophe, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
+I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from the <a href="https://www.lip6.fr/">LIP6 laboratory</a>, and specifically <a href="http://webia.lip6.fr/~marsala/christophe/Accueil.html">Mr. Marsala Christophe</a>, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
 
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc" height="110" width="250" align="middle"/>
