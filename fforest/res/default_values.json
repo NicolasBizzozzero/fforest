@@ -26,7 +26,7 @@
 
     "discretization_threshold": 2,
     "entropy_threshold": 0.00,
-    "min_size_leaf": 0.00,
+    "min_size_leaf": 0,
     "entropy_measure": "shannon",
     "number_of_tnorms": 2,
 

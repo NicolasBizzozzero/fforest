@@ -22,6 +22,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.encoding_input = args[gpn.encoding_input().split()[-1]]
     env.encoding_output = args[gpn.encoding_output().split()[-1]]
     env.entropy_measure = args[gpn.entropy_measure().split()[-1]]
+    env.entropy_threshold = args[gpn.entropy_threshold().split()[-1]]
     env.format_input = args[gpn.format_input().split()[-1]]
     env.format_output = args[gpn.format_output().split()[-1]]
     env.have_header = args[gpn.have_header().split()[-1]]

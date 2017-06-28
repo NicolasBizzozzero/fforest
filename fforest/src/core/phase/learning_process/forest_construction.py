@@ -15,6 +15,7 @@ from fforest.src.vrac.file_system import get_path
 from fforest.src.vrac.iterators import grouper
 from fforest.src.vrac.process import execute_and_get_stdout
 
+
 HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "/../../../../bin/Salammbo"
 MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
@@ -84,16 +85,14 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
     options.append("-f")
     options.append(number_of_tnorms)
 
-#    # Entropy threshold
-#    options.append("-e")
-#    options.append(entropy_threshold)
+    # Entropy threshold
+    options.append("-e")
+    options.append(entropy_threshold)
 
     # Min size leaf
-#    if is_a_percentage(min_size_leaf):
-#        options.append("-i")
-#    else:
-#        options.append("-I")
-#    options.append(min_size_leaf)
+    # The `-i` option is deprecated by Salammbo, we ignore it
+    options.append("-I")
+    options.append(min_size_leaf)
 
     return options
 
