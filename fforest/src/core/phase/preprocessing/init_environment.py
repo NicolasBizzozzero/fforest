@@ -37,6 +37,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.initial_split_method = args[gpn.initial_split_method().split()[-1]]
     env.main_directory = args[gpn.main_directory().split()[-1]]
     env.minimal_size_leaf = args[gpn.min_size_leaf().split()[-1]]
+    env.parent_dir = args[gpn.parent_dir()]
     env.preprocessed_database_name = args[gpn.preprocessed_database_name().split()[-1]]
     env.quality_threshold = args[gpn.quality_threshold().split()[-1]]
     env.quality_vector_prefix = args[gpn.quality_vector_prefix().split()[-1]]
@@ -65,7 +66,7 @@ def _init_command_line_parameters(args: dict) -> None:
 
 def _init_dir_paths(args: dict) -> None:
     """ Initialize all the path-related directories variables inside the `env` module. """
-    env.main_directory_path = env.main_directory
+    env.main_directory_path = "{}/{}".format(env.parent_dir, env.main_directory)
     env.subtrain_directory_path = "{}/{}".format(env.main_directory_path, env.subtrain_directory)
     env.subsubtrain_directories_path = ["{}/{}".format(env.subtrain_directory_path,
                                                        env.subsubtrain_directory_pattern %

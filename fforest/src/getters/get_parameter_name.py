@@ -28,6 +28,10 @@ def database() -> str:
     return _get_name_from_file("database")
 
 
+def parent_dir() -> str:
+    return _get_name_from_file("parent_dir")
+
+
 def training_value() -> str:
     return _get_name_from_file("training_value")
 

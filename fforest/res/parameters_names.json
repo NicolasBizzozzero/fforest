@@ -1,6 +1,7 @@
 {
     "help": "-h -? --help",
     "database": "database",
+    "parent_dir": "parent_dir",
 
     "training_value": "--training-value",
     "reference_value": "--reference-value",

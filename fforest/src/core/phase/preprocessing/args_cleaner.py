@@ -14,7 +14,7 @@ from fforest.src.file_tools.csv_tools import find_index_for_class, index_in_boun
 from fforest.src.file_tools.csv_tools import str_to_quoting
 from fforest.src.file_tools.format import string_to_format
 from fforest.src.getters.get_output_message import string_to_verbosity
-from fforest.src.vrac.file_system import get_filename
+from fforest.src.vrac.file_system import get_filename, get_path
 from fforest.src.vrac.maths import is_a_percentage, is_an_int
 
 
@@ -49,12 +49,21 @@ def clean_args(args: dict) -> None:
     args[gpn.database()] = args["<" + gpn.database() + ">"]
     del args["<" + gpn.database() + ">"]
 
+    # Rename parameter parent_dir
+    args[gpn.parent_dir()] = args["<" + gpn.parent_dir() + ">"]
+    del args["<" + gpn.parent_dir() + ">"]
+
     # Clean important args used by other functions
     args[gpn.quoting_input()] = str_to_quoting(args[gpn.quoting_input()])
 
     extension = args[gpn.format_output()].lower()
 
     for param_name in args.keys():
+        if param_name == gpn.parent_dir():
+            if not args[param_name]:
+                args[param_name] = "."
+            else:
+                args[param_name] = get_path(args[param_name])
         if param_name == gpn.class_name():
             _check_key_exists(args, param_name, custom_exception=MissingClassificationAttribute)
             _clean_column_index_or_name(args=args, param_name=param_name, column_name="class")

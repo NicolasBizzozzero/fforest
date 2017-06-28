@@ -67,6 +67,7 @@ _FORMAT_DICTIONARY = dict(
 
     # Parameters
     param_database=gpn.database(),
+    param_parent_dir=gpn.parent_dir(),
     param_training_value=gpn.training_value(),
     param_reference_value=gpn.reference_value(),
     param_trees_in_forest=gpn.trees_in_forest(),

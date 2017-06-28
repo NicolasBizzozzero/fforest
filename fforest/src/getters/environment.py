@@ -21,6 +21,7 @@ initial_database_name = None
 initial_split_method = None
 main_directory = None
 minimal_size_leaf = None
+parent_dir = None
 preprocessed_database_name = None
 quality_threshold = None
 quality_vector_prefix = None

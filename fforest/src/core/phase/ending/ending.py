@@ -16,7 +16,12 @@ def dump_statistics_dictionary():
         gsn.instances_in_subtrain(): env.subtrain_database_instances,
         gsn.instances_in_subsubtrain(): env.subsubtrain_databases_instances
     }
-    dump_dict(instances_dictionary, env.statistics_file_path)
+
+    if not env.statistics_file_path:
+        filepath = "."
+    else:
+        filepath = env.statistics_file_path
+    dump_dict(instances_dictionary, filepath)
 
 
 def _function_post_failure():

@@ -49,6 +49,8 @@ def get_path(path: str) -> str:
         ''
         >>> get_path("file.txt")
         ''
+        >>> get_path("directory")
+        'directory'
         >>> get_path("dir/file.txt")
         'dir'
         >>> get_path("dir/subdir/file.txt")
@@ -68,6 +70,8 @@ def get_path(path: str) -> str:
         return ""
     if path[-1] == "/":
         path = path[:-1]
+    if ("/" not in path) and ("." not in path):
+        return path
     result = path[:-len(get_filename(path, with_extension=True))]
     if result and result[-1] == "/":
         result = result[:-1]
