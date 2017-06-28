@@ -4,8 +4,8 @@
 statistics = dict()
 
 # Command-line parameters
+cclassified_vector_prefix = None
 class_name = None
-class_found_vector_prefix = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None

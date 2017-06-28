@@ -100,16 +100,16 @@ def header_extension() -> str:
     return _get_name_from_file("header_extension")
 
 
-def difficulty_vector_prefix() -> str:
-    return _get_name_from_file("difficulty_vector_prefix")
+def cclassified_vector_prefix() -> str:
+    return _get_name_from_file("cclassified_vector_prefix")
 
 
 def quality_vector_prefix() -> str:
     return _get_name_from_file("quality_vector_prefix")
 
 
-def class_found_vector_prefix() -> str:
-    return _get_name_from_file("class_found_vector_prefix")
+def difficulty_vector_prefix() -> str:
+    return _get_name_from_file("difficulty_vector_prefix")
 
 
 def main_directory() -> str:

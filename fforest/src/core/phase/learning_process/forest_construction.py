@@ -1,6 +1,6 @@
 """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the
-Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute quality and
-classes_found vectors for each t_norms on each tree and save it inside the tree directory.
+Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and
+quality vectors for each t_norms on each tree and save it inside the tree directory.
 """
 import csv
 from multiprocessing import Process
@@ -27,8 +27,8 @@ KEY_ID = "ID"
 
 def forest_construction():
     """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of
-    the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute quality and
-    classes_found vectors for each t_norms on each tree and save it inside the tree directory.
+    the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified
+    and quality vectors for each t_norms on each tree and save it inside the tree directory.
     """
     subtrain_dir_path = get_path(env.subtrain_database_path)
     chosen_options = _parameters_to_salammbo_options(discretization_threshold=str(env.discretization_threshold),
@@ -51,7 +51,7 @@ def forest_construction():
                                   "quote_char": env.quote_character_output,
                                   "encoding": env.encoding_output,
                                   "quality_vector_prefix": env.quality_vector_prefix,
-                                  "class_found_vector_prefix": env.class_found_vector_prefix,
+                                  "cclassified_vector_prefix": env.cclassified_vector_prefix,
                                   "vector_file_extension": env.vector_file_extension,
                                   "possible_classes": env.possible_classes
                                   })
@@ -99,25 +99,25 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
 
 def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
                        chosen_options: iter, delimiter: str, quoting: int, quote_char: str, encoding: str,
-                       vector_file_extension: str, quality_vector_prefix: str, class_found_vector_prefix: str,
+                       vector_file_extension: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
                        possible_classes: List[str]) -> None:
     """ Create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the Salammbô
-    executable, located inside the `bin` directory, at the root of the software. Then, compute quality and classes_found
+    executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and quality
     vectors for each t_norms on each tree and save it inside the tree directory.
     """
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
-    classes_found = _parse_result(lines=lines,
-                                  number_of_tnorms=number_of_tnorms)
-    quality = _get_quality_dictionary(classes_found=classes_found,
-                                      number_of_tnorms=number_of_tnorms)
+    quality = _parse_result(lines=lines,
+                            number_of_tnorms=number_of_tnorms)
+    cclassified = _get_cclassified_dictionary(quality=quality,
+                                              number_of_tnorms=number_of_tnorms)
     _save_vectors(quality_vector=quality,
-                  class_found_vector=classes_found,
+                  cclassified_vector=cclassified,
                   number_of_tnorms=number_of_tnorms,
                   subsubtrain_dir_path=get_path(path_to_database),
                   quality_vector_prefix=quality_vector_prefix,
-                  class_found_vector_prefix=class_found_vector_prefix,
+                  cclassified_vector_prefix=cclassified_vector_prefix,
                   vector_file_extension=vector_file_extension,
                   delimiter=delimiter,
                   quoting=quoting,
@@ -166,77 +166,78 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
     return result
 
 
-def _get_quality_dictionary(classes_found: dict, number_of_tnorms: int) -> dict:
-    """ Return a quality dictionary, mapping to every t-norm for each identifier of the `classes_found` dictionary,
+def _get_cclassified_dictionary(quality: dict, number_of_tnorms: int) -> dict:
+    """ Return a cclassified dictionary, mapping to every t-norm for each identifier of the `quality` dictionary,
     True if this t-norm has correctly predicted the real class, or False otherwise.
     """
     tnorms = [methodnum_to_str(tnorm) for tnorm in range(number_of_tnorms + 1)]
-    quality = dict()
-    for identifier in classes_found.keys():
-        quality[identifier] = dict()
-        real_class = classes_found[identifier][KEY_TRUECLASS]
+    cclassified = dict()
+    for identifier in quality.keys():
+        cclassified[identifier] = dict()
+        real_class = quality[identifier][KEY_TRUECLASS]
         for tnorm in tnorms:
             try:
-                classes = classes_found[identifier][tnorm]
+                classes = quality[identifier][tnorm]
                 class_found = max(classes, key=(lambda key: classes[key]))
-                quality[identifier][tnorm] = class_found == real_class
+                cclassified[identifier][tnorm] = class_found == real_class
             except KeyError:
-                quality[identifier][tnorm] = False
+                cclassified[identifier][tnorm] = False
             except ValueError:
-                quality[identifier][tnorm] = False
-    return quality
+                cclassified[identifier][tnorm] = False
+    return cclassified
 
 
-def _save_vectors(quality_vector: Dict[str, Dict[str, bool]], class_found_vector: Dict, number_of_tnorms: int,
-                  subsubtrain_dir_path: str, quality_vector_prefix: str, class_found_vector_prefix: str,
+def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector: Dict, number_of_tnorms: int,
+                  subsubtrain_dir_path: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
                   vector_file_extension: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
                   possible_classes: List[str], skip_initial_space: bool = True) -> None:
-    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a quality
-    vector and a classes_found vector.
+    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a
+    cclassified vector and a quality vector.
     """
     for tnorm in range(number_of_tnorms + 1):
         tnorm_name = methodnum_to_str(tnorm)
-        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
-                                                  vector_file_extension)
-        class_found_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, class_found_vector_prefix, tnorm_name,
+        cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
                                                       vector_file_extension)
-        _save_quality_vector(vector_path=quality_vector_path,
-                             quality_vector=quality_vector,
-                             tnorm_name=tnorm_name,
-                             delimiter=delimiter,
-                             quoting=quoting,
-                             quote_char=quote_char,
-                             encoding=encoding,
-                             skip_initial_space=skip_initial_space)
-
-        _save_class_found_vector(vector_path=class_found_vector_path,
-                                 class_found_vector=class_found_vector,
-                                 possible_classes=possible_classes,
-                                 real_class_name=KEY_TRUECLASS,
+        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
+                                                  vector_file_extension)
+        _save_cclassified_vector(vector_path=cclassified_vector_path,
+                                 cclassified_vector=cclassified_vector,
+                                 tnorm_name=tnorm_name,
                                  delimiter=delimiter,
                                  quoting=quoting,
                                  quote_char=quote_char,
                                  encoding=encoding,
-                                 skip_initial_space=skip_initial_space,
-                                 identifier_name=KEY_ID,
-                                 tnorm_name=tnorm_name)
+                                 skip_initial_space=skip_initial_space)
+
+        _save_quality_vector(vector_path=quality_vector_path,
+                             quality_vector=quality_vector,
+                             possible_classes=possible_classes,
+                             real_class_name=KEY_TRUECLASS,
+                             delimiter=delimiter,
+                             quoting=quoting,
+                             quote_char=quote_char,
+                             encoding=encoding,
+                             skip_initial_space=skip_initial_space,
+                             identifier_name=KEY_ID,
+                             tnorm_name=tnorm_name)
 
 
-def _save_quality_vector(vector_path: str, quality_vector: Dict[str, Dict[str, bool]], tnorm_name: str, delimiter: str,
-                         quoting: int, quote_char: str, encoding: str, skip_initial_space: bool = True) -> True:
-    """ Dump the quality vector inside the subsubtrain directory for one t-norm. """
+def _save_cclassified_vector(vector_path: str, cclassified_vector: Dict[str, Dict[str, bool]], tnorm_name: str,
+                             delimiter: str, quoting: int, quote_char: str, encoding: str,
+                             skip_initial_space: bool = True) -> True:
+    """ Dump the cclassified vector inside the subsubtrain directory for one t-norm. """
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
 
-        for identifier in quality_vector.keys():
-            writer.writerow([identifier, 1.0 if quality_vector[identifier][tnorm_name] else 0.0])
+        for identifier in cclassified_vector.keys():
+            writer.writerow([identifier, 1.0 if cclassified_vector[identifier][tnorm_name] else 0.0])
 
 
-def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identifier_name: str, real_class_name: str,
-                             delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
-                             tnorm_name: str, skip_initial_space: bool = True) -> True:
-    """ Dump the classes_found vector inside the subsubtrain directory for one t-norm. """
+def _save_quality_vector(vector_path: str, quality_vector: Dict, identifier_name: str, real_class_name: str,
+                         delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
+                         tnorm_name: str, skip_initial_space: bool = True) -> True:
+    """ Dump the quality vector inside the subsubtrain directory for one t-norm. """
     with open(vector_path, "w", encoding=encoding) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
@@ -245,11 +246,11 @@ def _save_class_found_vector(vector_path: str, class_found_vector: Dict, identif
         header = [identifier_name, real_class_name, *(possible_class for possible_class in possible_classes)]
         writer.writerow(header)
 
-        for identifier in class_found_vector.keys():
-            row = [identifier, class_found_vector[identifier][KEY_TRUECLASS]]
+        for identifier in quality_vector.keys():
+            row = [identifier, quality_vector[identifier][KEY_TRUECLASS]]
             for possible_class in possible_classes:
                 try:
-                    row.append(class_found_vector[identifier][tnorm_name][possible_class])
+                    row.append(quality_vector[identifier][tnorm_name][possible_class])
                 except KeyError:
                     row.append(0.0)
             writer.writerow(row)

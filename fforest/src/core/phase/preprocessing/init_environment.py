@@ -13,8 +13,8 @@ def init_environment(args: dict) -> None:
 
 def _init_command_line_parameters(args: dict) -> None:
     """ Initialize all the command-line-parameters-related variables located inside the `env` module. """
+    env.cclassified_vector_prefix = args[gpn.cclassified_vector_prefix().split()[-1]]
     env.class_name = args[gpn.class_name().split()[-1]]
-    env.class_found_vector_prefix = args[gpn.class_found_vector_prefix().split()[-1]]
     env.delimiter_input = args[gpn.delimiter_input().split()[-1]]
     env.delimiter_output = args[gpn.delimiter_output().split()[-1]]
     env.difficulty_vector_prefix = args[gpn.difficulty_vector_prefix().split()[-1]]

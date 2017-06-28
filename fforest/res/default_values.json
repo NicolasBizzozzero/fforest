@@ -18,9 +18,9 @@
     "tree_file_extension": "tree",
     "vector_file_extension": "vector",
     "header_extension": "att",
-    "difficulty_vector_prefix": "difficulty_",
+    "cclassified_vector_prefix": "cclassified_",
     "quality_vector_prefix": "quality_",
-    "class_found_vector_prefix": "classfound_",
+    "difficulty_vector_prefix": "difficulty_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",
