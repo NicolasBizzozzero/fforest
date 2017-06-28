@@ -5,6 +5,7 @@
     "training_value": "--training-value",
     "reference_value": "--reference-value",
     "trees_in_forest": "--trees-in-forest",
+    "quality_threshold": "-κ --quality-threshold",
 
     "initial_split_method": "--init-split-method",
     "reference_split_method": "--refer-split-method",

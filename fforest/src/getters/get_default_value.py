@@ -36,6 +36,10 @@ def trees_in_forest() -> int:
     return _get_value_from_file("trees_in_forest")
 
 
+def quality_threshold() -> str:
+    return _get_value_from_file("quality_threshold")
+
+
 def initial_split_method() -> str:
     return _get_value_from_file("initial_split_method")
 

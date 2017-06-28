@@ -2,6 +2,7 @@
     "training_value": 0.75,
     "reference_value": 0.10,
     "trees_in_forest": 10,
+    "quality_threshold": 0.5,
 
     "initial_split_method": "keepdistribution",
     "reference_split_method": "keepdistribution",
