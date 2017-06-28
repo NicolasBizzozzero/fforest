@@ -81,23 +81,20 @@ def split2(*, class_name: int, delimiter: str, encoding: str, input_path: str, m
 
 def split(*, class_name: int, delimiter: str, encoding: str, input_path: str, method: SplittingMethod,
           number_of_rows: int, quote_char: str, quoting: int, row_limit: int, skip_initial_space: bool = True,
-          tree_names: List[str]) -> List[int]:
+          output_pathes: List[str]) -> List[int]:
     """ Open the initial database as input, open all the other databases as output, then give the reader and writers
     to the asked splitting method.
     You must pass each argument along with its name.
     """
     with open(input_path, mode='r', encoding=encoding) as input_file:
-        out_files = [open("{dir_path}/{tree_name}.{extension}".format(dir_path=name,
-                                                                      tree_name=get_filename(name),
-                                                                      extension=format_to_string(env.format_output)),
-                          mode='w', encoding=encoding) for name in tree_names]
+        out_files = [open(name, mode='w', encoding=encoding) for name in output_pathes]
 
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space)
         out_writers = [csv.writer(f, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space) for f in out_files]
 
-        number_of_trees = len(tree_names)
+        number_of_trees = len(output_pathes)
         if method == SplittingMethod.HALFING:
             databases_size = halfing(input_reader, row_limit, out_writers, number_of_trees)
         elif method == SplittingMethod.KEEP_DISTRIBUTION:
