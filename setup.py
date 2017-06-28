@@ -79,8 +79,10 @@ setup(
     entry_points={
         'console_scripts': [
             ggv.main_entry_point() + ' = fforest.main:main_entry_point',
-            ggv.forest_entry_point() + ' = fforest.main:forest_entry_point',
-            ggv.forest_reduction_entry_point() + ' = fforest.main:forest_reduction_entry_point',
+            ggv.preprocessing_entry_point() + ' = fforest.main:preprocessing_entry_point',
+            ggv.initialization_entry_point() + ' = fforest.main:initialization_entry_point',
+            ggv.learning_entry_point() + ' = fforest.main:learning_entry_point',
+            ggv.reduction_entry_point() + ' = fforest.main:reduction_entry_point',
         ],
     },
 )
