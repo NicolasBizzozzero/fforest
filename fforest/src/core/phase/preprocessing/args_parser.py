@@ -63,6 +63,8 @@ _FORMAT_DICTIONARY = dict(
     doc_quoting_output=gpd.quoting_output(),
     doc_quote_char_input=gpd.quote_char_input(),
     doc_quote_char_output=gpd.quote_char_output(),
+    doc_line_delimiter_input=gpd.line_delimiter_input(),
+    doc_line_delimiter_output=gpd.line_delimiter_output(),
     doc_verbosity=gpd.verbosity(),
 
     # Parameters
@@ -111,6 +113,8 @@ _FORMAT_DICTIONARY = dict(
     param_quoting_output=gpn.quoting_output(),
     param_quote_char_input=gpn.quote_char_input(),
     param_quote_char_output=gpn.quote_char_output(),
+    param_line_delimiter_input=gpn.line_delimiter_input(),
+    param_line_delimiter_output=gpn.line_delimiter_output(),
     param_verbosity=gpn.verbosity(),
 
     # Default values
@@ -152,6 +156,8 @@ _FORMAT_DICTIONARY = dict(
     default_quoting_output=gdv.quoting_output(),
     default_quote_char_input=gdv.quote_char_input(),
     default_quote_char_output=gdv.quote_char_output(),
+    default_line_delimiter_input=gdv.line_delimiter_input(),
+    default_line_delimiter_output=gdv.line_delimiter_output(),
     default_verbosity=gdv.verbosity(),
 
     # Miscellaneous
@@ -235,6 +241,8 @@ Options:
   {param_quoting_output}=QUOTING              {doc_quoting_output}
   {param_quote_char_input}=CHAR          {doc_quote_char_input}
   {param_quote_char_output}=CHAR         {doc_quote_char_output}
+  {param_line_delimiter_input}=CHAR          {doc_line_delimiter_input}
+  {param_line_delimiter_output}=CHAR         {doc_line_delimiter_output}
   {param_verbosity}=LEVEL                     {doc_verbosity}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 

@@ -204,6 +204,14 @@ def quote_char_output() -> str:
     return _get_name_from_file("quote_char_output")
 
 
+def line_delimiter_input() -> str:
+    return _get_name_from_file("line_delimiter_input")
+
+
+def line_delimiter_output() -> str:
+    return _get_name_from_file("line_delimiter_output")
+
+
 def verbosity() -> str:
     return _get_name_from_file("verbosity")
 

@@ -29,7 +29,8 @@ def reference_split():
                class_name=env.class_name,
                number_of_rows=env.train_database_instances,
                quoting=env.quoting_output,
-               quote_char=env.quote_character_output)
+               quote_char=env.quote_character_output,
+               line_delimiter=env.line_delimiter_output)
 
 
 def _create_subtrain_directory(main_directory: str, subtrain_directory: str):

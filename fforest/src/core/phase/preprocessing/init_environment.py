@@ -35,6 +35,8 @@ def _init_command_line_parameters(args: dict) -> None:
     env.identifier = args[gpn.identifier().split()[-1]]
     env.initial_database_name = args[gpn.database().split()[-1]]
     env.initial_split_method = args[gpn.initial_split_method().split()[-1]]
+    env.line_delimiter_input = args[gpn.line_delimiter_input().split()[-1]]
+    env.line_delimiter_output = args[gpn.line_delimiter_output().split()[-1]]
     env.main_directory = args[gpn.main_directory().split()[-1]]
     env.minimal_size_leaf = args[gpn.min_size_leaf().split()[-1]]
     env.parent_dir = args[gpn.parent_dir()]

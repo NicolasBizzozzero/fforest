@@ -30,7 +30,8 @@ def subsubtrain_split() -> None:
               number_of_rows=env.subtrain_database_instances,
               output_pathes=env.subsubtrain_directories_path,
               quote_char=env.quote_character_output,
-              quoting=env.quoting_output)
+              quoting=env.quoting_output,
+              line_delimiter=env.line_delimiter_output)
 
     # Store the number of instances of each tree along with its name in the `env` module
     env.subsubtrain_databases_instances = dict(zip(env.subsubtrain_directories_path, list_instances))

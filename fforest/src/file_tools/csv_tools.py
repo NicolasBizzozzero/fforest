@@ -35,25 +35,29 @@ def str_to_quoting(string: str) -> int:
         raise UndefinedQuoting(string)
 
 
-def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = 1,
-              quote_char: str = "\"", skipinitialspace: bool = True) -> iter:
+def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
+              quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> iter:
     """ Iterate trough the rows of the file located at `path`. """
-    with open(path, encoding=encoding) as csv_file:
+    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
         content = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                             skipinitialspace=skipinitialspace)
+                             skipinitialspace=skip_initial_space)
         for line in content:
             yield line
 
 
-def get_number_of_rows(path: str, encoding: str = "utf8", delimiter: str = ",") -> int:
+def get_number_of_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
+                       quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
     """ Return the number of rows of the file located at `path`. """
-    with open(path, encoding=encoding) as csv_file:
-        return len(list(csv.reader(csv_file, delimiter=delimiter))) - 1
+    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
+        return len(list(csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                                   skipinitialspace=skip_initial_space))) - 1
 
 
-def get_number_of_columns(path: str, encoding: str = "utf8", delimiter: str = ",") -> int:
+def get_number_of_columns(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
+                          quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
     """ Return the number of columns of the file located at `path`. """
-    return len(next(iter_rows(path, encoding=encoding, delimiter=delimiter)))
+    return len(next(iter_rows(path, encoding=encoding, delimiter=delimiter, quoting=quoting, quote_char=quote_char,
+                              skip_initial_space=skip_initial_space, line_delimiter=line_delimiter)))
 
 
 def get_row(path: str, row_number: int, encoding: str = "utf8") -> Union[list, None]:
@@ -136,28 +140,32 @@ def write_header(input_reader, *out_writers):
         writer.writerow(header)
 
 
-def preprend_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ","):
+def preprend_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ",",
+                    line_delimiter: str = None):
     if not is_an_int(column):
         header = next(iter_rows(input_path, encoding=encoding, delimiter=delimiter))
         index_column = header.index(column)
-        preprend_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter)
+        preprend_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter,
+                        line_delimiter=line_delimiter)
     else:
         content = [line for line in iter_rows(input_path, encoding=encoding, delimiter=delimiter)]
-        with open(output_path, "w", encoding=encoding) as output_file:
+        with open(output_path, "w", encoding=encoding, newline=line_delimiter) as output_file:
             output_writer = csv.writer(output_file, delimiter=delimiter)
             for line in content:
                 line.insert(0, (line.pop(column)))
                 output_writer.writerow(line)
 
 
-def append_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ","):
+def append_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ",",
+                  line_delimiter: str = None):
     if not is_an_int(column):
         header = next(iter_rows(input_path, encoding=encoding, delimiter=delimiter))
         index_column = header.index(column)
-        append_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter)
+        append_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter,
+                      line_delimiter=line_delimiter)
     else:
         content = [line for line in iter_rows(input_path, encoding=encoding, delimiter=delimiter)]
-        with open(output_path, "w", encoding=encoding) as output_file:
+        with open(output_path, "w", encoding=encoding, newline=line_delimiter) as output_file:
             output_writer = csv.writer(output_file, delimiter=delimiter)
             for line in content:
                 line.append(line.pop(column))
@@ -170,9 +178,7 @@ def find_index_for_class(input_path: str, class_name: str, delimiter: str, quoti
     with open(input_path, encoding=encoding) as file:
         reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
-        for row in reader:
-            header = row
-            break
+        header = next(reader)
 
     return header.index(class_name)
 

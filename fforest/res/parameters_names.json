@@ -50,5 +50,7 @@
     "quoting_output": "--quoting-output",
     "quote_char_input": "--quote-character-input",
     "quote_char_output": "--quote-character-output",
+    "line_delimiter_input": "--line-delimiter-input",
+    "line_delimiter_output": "--line-delimiter-output",
     "verbosity": "--verbosity"
 }
