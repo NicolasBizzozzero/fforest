@@ -25,6 +25,7 @@ initial_split_method = None
 main_directory = None
 minimal_size_leaf = None
 preprocessed_database_name = None
+quality_threshold = Nonequality_threshold
 quality_vector_prefix = None
 quote_character_input = None
 quote_character_output = None

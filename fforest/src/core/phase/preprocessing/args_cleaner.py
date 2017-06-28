@@ -64,7 +64,7 @@ def clean_args(args: dict) -> None:
             args[param_name] = string_to_format(args[param_name])
         elif param_name == gpn.entropy_measure():
             args[param_name] = str_to_entropy_measure(args[param_name])
-        elif param_name == gpn.entropy_threshold():
+        elif param_name in (gpn.entropy_threshold(), gpn.quality_threshold()):
             if not is_a_percentage(args[param_name]):
                 raise InvalidPercentage(args[param_name])
         elif param_name == gpn.identifier():

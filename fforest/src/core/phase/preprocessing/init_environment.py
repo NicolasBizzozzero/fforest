@@ -34,6 +34,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.main_directory = args[gpn.main_directory().split()[-1]]
     env.minimal_size_leaf = args[gpn.min_size_leaf().split()[-1]]
     env.preprocessed_database_name = args[gpn.preprocessed_database_name().split()[-1]]
+    env.quality_threshold = args[gpn.quality_threshold().split()[-1]]
     env.quality_vector_prefix = args[gpn.quality_vector_prefix().split()[-1]]
     env.quote_character_input = args[gpn.quote_char_input().split()[-1]]
     env.quote_character_output = args[gpn.quote_char_output().split()[-1]]

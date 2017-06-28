@@ -23,6 +23,7 @@ _FORMAT_DICTIONARY = dict(
     doc_training_value=gpd.training_value(),
     doc_reference_value=gpd.reference_value(),
     doc_trees_in_forest=gpd.trees_in_forest(),
+    doc_quality_threshold=gpd.quality_threshold(),
     doc_initial_split_method=gpd.initial_split_method(),
     doc_reference_split_method=gpd.reference_split_method(),
     doc_subsubtrain_split_method=gpd.subsubtrain_split_method(),
@@ -69,6 +70,7 @@ _FORMAT_DICTIONARY = dict(
     param_training_value=gpn.training_value(),
     param_reference_value=gpn.reference_value(),
     param_trees_in_forest=gpn.trees_in_forest(),
+    param_quality_threshold=gpn.quality_threshold(),
     param_initial_split_method=gpn.initial_split_method(),
     param_reference_split_method=gpn.reference_split_method(),
     param_subsubtrain_split_method=gpn.subsubtrain_split_method(),
@@ -114,6 +116,7 @@ _FORMAT_DICTIONARY = dict(
     default_training_value=gdv.training_value(),
     default_reference_value=gdv.reference_value(),
     default_trees_in_forest=gdv.trees_in_forest(),
+    default_quality_threshold=gdv.quality_threshold(),
     default_initial_split_method=gdv.initial_split_method(),
     default_reference_split_method=gdv.reference_split_method(),
     default_subsubtrain_split_method=gdv.subsubtrain_split_method(),
@@ -181,6 +184,7 @@ Options:
   {param_training_value}=VALUE                {doc_training_value}
   {param_reference_value}=VALUE               {doc_reference_value}
   {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
+  {param_quality_threshold}=VALUE               {doc_quality_threshold}
 
   # Splitting methods
   {param_initial_split_method}=METHOD            {doc_initial_split_method}
