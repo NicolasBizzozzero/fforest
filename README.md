@@ -1,15 +1,17 @@
 # fforest
-A set of tools useful for doing experiments with fuzzy forests.
+A set of tools useful for doing experiments with **fuzzy forests**.
 
-[[https://github.com/NicolasBi/fforest/fforest/res/pictures/diagram_fforest.png|alt=diagram_fforest]]
+<p align="center">
+    <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/diagram_fforest.png?raw=true" alt="diagram_fforest"/>
+</p>
 
 ## Installation
-`fforest` is available on PyPi, just run
+`fforest` is available on **PyPI**, just run
 ```shell
 $ pip install fforest
 ```
 in a shell to install the software.
-The package creates 5 new commands :
+The package creates **5** new commands :
 ```shell
 $ fforest
 $ fforest_preprocessing
@@ -21,11 +23,11 @@ $ fforest_reduction
 ## Usage
 
 ## Requirements
-* This software doesn't work with Windows OSes, this is due to the fact that reading CSV files with a Windows system does not operate correctly.
-* This software can be run with Python 3.5 and above. I do not have tested it with other Python 3 versions, but due to type hints, I suppose that it can't works with Python 2.
+* This software **doesn't work with Windows OSes**, this is due to the fact that reading CSV files with a Windows system does not operate correctly.
+* This software can be run with **Python 3.5** and above. I do not have tested it with other Python 3 versions, but due to type hints, I suppose that it can't works with Python 2.
 
 ## Dependencies
-* docopt >= 
+* docopt >= 0.6.2
 
 ## Contributing
 1. Fork the project.
@@ -40,11 +42,9 @@ $ fforest_reduction
 * Add more messages related to the verbosity
 * Add some progress bars with the package : https://pypi.python.org/pypi/progressbar2
 * Rewrite all path processing code with the package : https://pypi.python.org/pypi/path.py
-* Save each directory path in the `env` module
-* Save each database path in the `env` module
 * Implement other format for the input database (each format must be changed to the CSV format during the preprocessing phase)
 * Add a variable `completed_phase` in the `env` module.
-* Add the file `environment.json` at the root of the main directory, which will contains infos about the database, and must be created right after the preprocessing phase. This file'll could then be loaded by each entry point thereafter.
+* Add the file `environment.json` at the root of the main directory, which will contains infos about the database, and must be created right after the preprocessing phase. This file'll then be loaded by each entry point thereafter.
 
 ## Acknowledgments
 I would like to thanks the LFI team from the LIP6 laboratory, and specifically Mr. Marsala Christophe, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
