@@ -92,7 +92,6 @@ def _get_quality_vector(vector_path: str, delimiter: str, quoting: int, quote_ch
 
         # Extract classes from the header
         classes = next(reader)[2:]
-        print(classes)
 
         for row in reader:
             identifier, true_class, *rest = row
