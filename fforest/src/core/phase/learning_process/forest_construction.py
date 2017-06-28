@@ -108,12 +108,12 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
-    quality = _parse_result(lines=lines,
-                            number_of_tnorms=number_of_tnorms)
-    cclassified = _get_cclassified_dictionary(quality=quality,
-                                              number_of_tnorms=number_of_tnorms)
-    _save_vectors(quality_vector=quality,
-                  cclassified_vector=cclassified,
+    quality_vectors = _parse_result(lines=lines,
+                                    number_of_tnorms=number_of_tnorms)
+    cclassified_vectors = _get_cclassified_dictionary(quality=quality_vectors,
+                                                      number_of_tnorms=number_of_tnorms)
+    _save_vectors(quality_vector=quality_vectors,
+                  cclassified_vector=cclassified_vectors,
                   number_of_tnorms=number_of_tnorms,
                   subsubtrain_dir_path=get_path(path_to_database),
                   quality_vector_prefix=quality_vector_prefix,
