@@ -184,7 +184,7 @@ Options:
   {param_training_value}=VALUE                {doc_training_value}
   {param_reference_value}=VALUE               {doc_reference_value}
   {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
-  {param_quality_threshold}=VALUE               {doc_quality_threshold}
+  {param_quality_threshold}=VALUE          {doc_quality_threshold}
 
   # Splitting methods
   {param_initial_split_method}=METHOD            {doc_initial_split_method}
@@ -234,7 +234,7 @@ Options:
   {param_quoting_output}=QUOTING              {doc_quoting_output}
   {param_quote_char_input}=CHAR          {doc_quote_char_input}
   {param_quote_char_output}=CHAR         {doc_quote_char_output}
-  {param_verbosity}=LEVEL         {doc_verbosity}
+  {param_verbosity}=LEVEL                     {doc_verbosity}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

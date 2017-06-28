@@ -5,7 +5,7 @@
     "training_value": "% of values you want to extract from the database and put in the train database. The rest will be put in the test database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
     "reference_value": "% of values you want to extract from the training set and put in the reference set. The rest will be put in the subtrain database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_reference_value}]",
     "trees_in_forest": "Number of trees to create in the forest. [default: {default_trees_in_forest}]",
-    "quality_threshold": "All trees with a quality strictly inferior than this threshold is Low Quality Tree, else it's a High Quality Tree. [default: default_quality_threshold]",
+    "quality_threshold": "All trees with a quality strictly inferior than this threshold is a Low Quality Tree, else it's an High Quality Tree. [default: {default_quality_threshold}]",
 
     "initial_split_method": "The method to use with the initial split of the database into the train and test databases. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]",
     "reference_split_method": "The method to use with the split of the train database into the reference and subtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_reference_split_method}]",
