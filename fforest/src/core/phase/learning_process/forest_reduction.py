@@ -34,7 +34,7 @@ def forest_reduction() -> None:
 def _compute_difficulty_vectors(number_of_trees: int, number_of_tnorms: int, subsubtrain_directory_pattern: str,
                                 vector_extension: str, main_directory: str, subtrain_directory: str, delimiter: str,
                                 quoting: int, quote_char: str, encoding: str,
-                                quality_vector_prefix: str) -> Dict[str, [Dict[str, float]]]:
+                                quality_vector_prefix: str) -> Dict[str, Dict[str, float]]:
     """ Compute a difficulty vector for each t-norm used. A difficulty vector correspond to the sum of all true class's
     % of membership for all quality vectors. It assign a classification difficulty to an example from the reference
     database.
@@ -102,7 +102,7 @@ def _get_quality_vector(vector_path: str, delimiter: str, quoting: int, quote_ch
     return quality_vector
 
 
-def _dump_difficulty_vectors(difficulty_vectors: Dict[str, [Dict[str, float]]], subtrain_dir_path: str,
+def _dump_difficulty_vectors(difficulty_vectors: Dict[str, Dict[str, float]], subtrain_dir_path: str,
                              vector_prefix: str, vector_extension: str, delimiter: str, quoting: int, quote_char: str,
                              encoding: str, skip_initial_space: bool = True) -> True:
     """ Dump all the difficulty vectors into their proper directory. """
