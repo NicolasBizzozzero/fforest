@@ -12,6 +12,7 @@ from fforest.src.core.splitting_methods.split import str_to_splittingmethod, Spl
 from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bounds, \
     get_number_of_columns
 from fforest.src.file_tools.csv_tools import str_to_quoting
+from fforest.src.file_tools.dialect import Dialect
 from fforest.src.file_tools.format import string_to_format
 from fforest.src.getters.get_output_message import string_to_verbosity
 from fforest.src.vrac.file_system import get_filename, get_absolute_path
@@ -122,25 +123,30 @@ def _clean_column_index_or_name(args: dict, param_name: str, column_name: str) -
     """
     if (not is_an_int(args[param_name])) and (type(args[param_name]) == str):
         # User asked for a named class, we retrieve its index then change it
-        args[param_name] = find_index_with_class(input_path=args[gpn.database()],
-                                                 class_name=args[param_name],
-                                                 encoding=args[gpn.encoding_input()],
-                                                 delimiter=args[gpn.delimiter_input()],
-                                                 quoting=args[gpn.quoting_input()],
-                                                 quote_char=args[gpn.quote_char_input()],
-                                                 skip_initial_space=True)
+        args[param_name] = find_index_with_class(path=args[gpn.database()], class_name=args[param_name],
+                                                 dialect=Dialect(encoding=args[gpn.encoding_input()],
+                                                                 delimiter=args[gpn.delimiter_input()],
+                                                                 quoting=args[gpn.quoting_input()],
+                                                                 quote_char=args[gpn.quote_char_input()],
+                                                                 skip_initial_space=True))
     else:
         # User asked for an index, we convert it to int then check if it's inbound
         args[param_name] = int(args[param_name])
         if not index_in_bounds(input_path=args[gpn.database()],
                                index=args[param_name],
-                               encoding=args[gpn.encoding_input()],
-                               delimiter=args[gpn.delimiter_input()]):
+                               dialect=Dialect(encoding=args[gpn.encoding_input()],
+                                               delimiter=args[gpn.delimiter_input()],
+                                               quoting=args[gpn.quoting_input()],
+                                               quote_char=args[gpn.quote_char_input()],
+                                               skip_initial_space=True)):
             raise IndexOutOfBounds(index=args[param_name],
                                    column=column_name,
                                    length=get_number_of_columns(path=args[gpn.database()],
-                                                                encoding=args[gpn.encoding_input()],
-                                                                delimiter=args[gpn.delimiter_input()]))
+                                                                dialect=Dialect(encoding=args[gpn.encoding_input()],
+                                                                                delimiter=args[gpn.delimiter_input()],
+                                                                                quoting=args[gpn.quoting_input()],
+                                                                                quote_char=args[gpn.quote_char_input()],
+                                                                                skip_initial_space=True)))
 
 
 def _check_default_value_id(id_name: str, default_value: str) -> bool:
