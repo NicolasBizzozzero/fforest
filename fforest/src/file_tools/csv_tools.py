@@ -1,7 +1,8 @@
 import csv
-from typing import Union, List
+from typing import Union, List, Iterable, Dict
 
 from fforest.src.vrac.maths import is_an_int
+from fforest.src.file_tools.dialect import Dialect
 
 
 class NamedAttributeButNoHeader(Exception):
@@ -35,13 +36,11 @@ def str_to_quoting(string: str) -> int:
         raise UndefinedQuoting(string)
 
 
-def iter_rows(path: str, skip_header: bool = False, encoding: str = "utf8", delimiter: str = ",",
-              quoting: int = csv.QUOTE_NONNUMERIC, quote_char: str = "\"", line_delimiter: str = None,
-              skip_initial_space: bool = True) -> iter:
+def iter_rows(path: str, skip_header: bool = False, dialect: Dialect = None) -> iter:
     """ Iterate trough the rows of the file located at `path`. """
-    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
-        reader = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                            skipinitialspace=skip_initial_space)
+    with open(path, encoding=dialect.encoding, newline=dialect.line_delimiter) as csv_file:
+        reader = csv.reader(csv_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                            quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
 
         if skip_header:
             next(reader)
@@ -51,102 +50,92 @@ def iter_rows(path: str, skip_header: bool = False, encoding: str = "utf8", deli
                 yield row
 
 
-def get_header(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
-               quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> List[str]:
+def iter_rows_dict(path: str, dialect: Dialect) -> Dict:
+    """ Iterate trough the rows of the file located at `path` with a csv.DictReader. """
+    with open(path, encoding=dialect.encoding, newline=dialect.line_delimiter) as csv_file:
+        reader = csv.DictReader(csv_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                                quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
+        for row in reader:
+            if row:
+                yield row
+
+
+def dump_content(path: str, content: Iterable[List], dialect: Dialect) -> None:
+    """ Dump rows into a CSV file. """
+    with open(path, "w", encoding=dialect.encoding, newline=dialect.line_delimiter) as output_file:
+        output_writer = csv.writer(output_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                                   quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
+        for row in content:
+            output_writer.writerow(row)
+
+
+def get_header(path: str, dialect: Dialect) -> List[str]:
     """ Return the header located in `path`.
 
         Example :
-        >>> get_header("../../test/data/bank.csv", delimiter=";")[:11]
+        >>> get_header("../../test/data/bank.csv", Dialect(delimiter=";"))[:11]
         ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month']
      """
-    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
-        return next(csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                               skipinitialspace=skip_initial_space))
+    return next(iter_rows(path=path, skip_header=False, dialect=dialect))
 
 
-def get_number_of_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
-                       quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
+def get_number_of_rows(path: str, dialect: Dialect) -> int:
     """ Return the number of rows, header included, newline at the end excluded, of the file located at `path`.
 
         Example :
-        >>> get_number_of_rows("../../test/data/bank.csv", delimiter=";")
+        >>> get_number_of_rows("../../test/data/bank.csv", Dialect(delimiter=";"))
         4522
     """
     number_of_rows = 0
-    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
-        reader = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                            skipinitialspace=skip_initial_space)
-
-        for row in reader:
-            if row:
-                number_of_rows += 1
+    for row in iter_rows(path=path, skip_header=False, dialect=dialect):
+        if row:
+            number_of_rows += 1
     return number_of_rows
 
 
-def get_number_of_columns(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
-                          quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
+def get_number_of_columns(path: str, dialect: Dialect) -> int:
     """ Return the number of columns of the file located at `path`.
 
         Example :
-        >>> get_number_of_columns("../../test/data/bank.csv", delimiter=";")
+        >>> get_number_of_columns("../../test/data/bank.csv", Dialect(delimiter=";"))
         17
     """
-    return len(next(iter_rows(path, encoding=encoding, delimiter=delimiter, quoting=quoting, quote_char=quote_char,
-                              skip_initial_space=skip_initial_space, line_delimiter=line_delimiter)))
+    return len(get_header(path=path, dialect=dialect))
 
 
-def get_row(path: str, row_number: int, skip_header: bool = False, encoding: str = "utf8", delimiter: str = ",",
-            quoting: int = csv.QUOTE_NONNUMERIC, quote_char: str = "\"", line_delimiter: str = None,
-            skip_initial_space: bool = True) -> Union[list, None]:
+def get_row(path: str, row_number: int, skip_header: bool = False, dialect: Dialect = None) -> Union[list, None]:
     """ Return the `row_number`-th row as a list from the file located at `path`.
     The rows are indexed from 1 to len(`path`).
     If a `row_number` is out-of-bound, this function return the `None` value.
 
         Example :
-        >>> get_row("../../test/data/bank.csv", -1, delimiter=";") is None
+        >>> get_row("../../test/data/bank.csv", -1, dialect=Dialect(delimiter=";")) is None
         True
-        >>> get_row("../../test/data/bank.csv", get_number_of_rows("../../test/data/bank.csv", delimiter=";") + 1,
-        ...                                     delimiter=";") is None
+        >>> get_row("../../test/data/bank.csv", get_number_of_rows("../../test/data/bank.csv",
+        ...                                                        Dialect(delimiter=";")) + 1,
+        ...                                     dialect=Dialect(delimiter=";")) is None
         True
-        >>> get_row("../../test/data/bank.csv", 77, delimiter=";")[:14]
+        >>> get_row("../../test/data/bank.csv", 77, dialect=Dialect(delimiter=";"))[:14]
         [54.0, 'management', 'divorced', 'tertiary', 'no', 3222.0, 'no', 'no', 'cellular', 14.0, 'aug', 67.0, 2.0, -1.0]
     """
     if row_number <= 0:
         return None
 
     current_row = 0
-    for row in iter_rows(path=path, skip_header=skip_header, encoding=encoding, delimiter=delimiter, quoting=quoting,
-                         quote_char=quote_char, line_delimiter=line_delimiter, skip_initial_space=skip_initial_space):
+    for row in iter_rows(path=path, skip_header=skip_header, dialect=dialect):
         current_row += 1
         if current_row == row_number:
             return row
 
 
-def get_column(path: str, column: Union[str, int], have_header: bool = True, delimiter: str = ";",
-               quoting: int = csv.QUOTE_NONNUMERIC, quote_character: str = "\"", encoding: str = "utf8",
-               skip_initial_space: bool = True) -> List:
-    """ Get a column from the CSV database with its index or its name. """
-    content = list()
-    with open(path, "r", encoding=encoding) as file:
-        if type(column) == int:
-            reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
-                                skipinitialspace=skip_initial_space)
-        elif (type(column) == str) and have_header:
-            reader = csv.DictReader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
-                                    skipinitialspace=skip_initial_space)
-        else:
-            raise NamedAttributeButNoHeader()
-
-        for row in reader:
-            if row:
-                content.append(row[column])
-    if have_header and (type(column) == int):
-        content.pop(0)
-    return content
+def get_column(path: str, column: Union[str, int], have_header: bool = True, dialect: Dialect = None) -> List:
+    """ Get a column from the CSV database with its index or its name. Remove the header if it's present. """
+    if not ((type(column) == int) or ((type(column) == str) and have_header)):
+        raise NamedAttributeButNoHeader()
+    return [row[column] for row in iter_rows(path=path, skip_header=have_header, dialect=dialect) if row]
 
 
-def select_all_rows_where(path: str, predicate: callable, delimiter: str = ";", quoting: int = csv.QUOTE_NONNUMERIC,
-                          quote_character: str = "\"", encoding: str = "utf8", skip_initial_space: bool = True) -> list:
+def select_all_rows_where(path: str, predicate: callable, dialect: Dialect) -> list:
     """ Return all rows from the CSV file at `path` with which the `predicate` return True.
     The rows are casted as a dictionary.
 
@@ -157,14 +146,13 @@ def select_all_rows_where(path: str, predicate: callable, delimiter: str = ";", 
             >>> # SELECT all rows WHERE money < 1000 AND city == 'Paris'
             >>> select_all_rows_where(path, lambda r: r["money"] < 1000 and r["city"] == "Paris")
     """
-    with open(path, encoding=encoding) as csv_file:
-        return [row for row in csv.DictReader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_character,
-                                              skipinitialspace=skip_initial_space) if predicate(row)]
+    with open(path, encoding=dialect.encoding, newline=dialect.line_delimiter) as file:
+        return [row for row in csv.DictReader(file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                                              quotechar=dialect.quote_char,
+                                              skipinitialspace=dialect.skip_initial_space) if predicate(row)]
 
 
-def get_identified_row(path: str, identifier_name: str, row_id: str, delimiter: str = ";",
-                       quoting: int = csv.QUOTE_NONNUMERIC, quote_character: str = "\"", encoding: str = "utf8",
-                       skip_initial_space: bool = True) -> Union[List, None]:
+def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[List, None]:
     """ A wrapper for `select_all_rows_where`.
     Select the row identified at the column `identifier_name` with the value `row_id`.
 
@@ -173,9 +161,7 @@ def get_identified_row(path: str, identifier_name: str, row_id: str, delimiter: 
         >>> get_identified_row(path, "ID", "77")
     """
     try:
-        return select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, encoding=encoding,
-                                     delimiter=delimiter, quoting=quoting, quote_character=quote_character,
-                                     skip_initial_space=skip_initial_space)[0]
+        return select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, dialect=dialect)[0]
     except IndexError:  # Row was not found
         return None
 

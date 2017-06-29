@@ -16,6 +16,7 @@ from fforest.src.file_tools.csv_tools import iter_rows, get_number_of_columns, p
 from fforest.src.getters.get_output_message import Message, vprint
 from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from fforest.src.vrac.maths import is_an_int
+from fforest.src.file_tools.dialect import Dialect
 
 
 def preprocessing() -> None:
@@ -56,12 +57,7 @@ def preprocessing() -> None:
                 output_path=env.preprocessed_database_path,
                 id_name=gdv.identifier(),
                 have_header=env.have_header,
-                delimiter=env.delimiter_output,
-                quoting=env.quoting_output,
-                quote_char=env.quote_character_output,
-                encoding=env.encoding_output,
-                line_delimiter=env.line_delimiter_output,
-                skip_initial_space=True)
+                dialect=env.dialect)
 
         # An header as been added
         env.have_header = True
@@ -74,45 +70,37 @@ def preprocessing() -> None:
             env.class_name += 1
 
     # Check if the identifier column is at the beginning of the database
-    if not _identifier_at_beginning(path=env.preprocessed_database_path, identifier=env.identifier,
-                                    have_header=env.have_header, quoting=env.quoting_output,
-                                    quote_char=env.quote_character_output, delimiter=env.delimiter_output,
-                                    encoding=env.encoding_output, line_delimiter=env.line_delimiter_output):
+    if not _identifier_at_beginning(path=env.preprocessed_database_path,
+                                    have_header=env.have_header,
+                                    identifier=env.identifier,
+                                    dialect=env.dialect):
         vprint(Message.PREPEND_ID)
         preprend_column(input_path=env.preprocessed_database_path,
                         output_path=env.preprocessed_database_path,
                         column=env.identifier,
-                        encoding=env.encoding_output,
-                        delimiter=env.delimiter_output,
-                        line_delimiter=env.line_delimiter_output)
+                        dialect=env.dialect)
 
         # The identifier is now a the beginning of the database, we change it to the index 0
         env.identifier = 0
 
     # Check if the class column is at the end of the database
     if not _class_at_end(path=env.preprocessed_database_path, class_name=env.class_name, have_header=env.have_header,
-                         quoting=env.quoting_output, quote_char=env.quote_character_output,
-                         delimiter=env.delimiter_output, encoding=env.encoding_output,
-                         line_delimiter=env.line_delimiter_output,):
+                         dialect=env.dialect):
         vprint(Message.APPEND_CLASS)
         append_column(input_path=env.preprocessed_database_path,
                       output_path=env.preprocessed_database_path,
                       column=env.class_name,
-                      encoding=env.encoding_output,
-                      delimiter=env.delimiter_output,
-                      line_delimiter=env.line_delimiter_output)
+                      dialect=env.dialect)
 
         # The class column is now a the end of the database, we change it to the last index
-        env.class_name = get_number_of_columns(env.preprocessed_database_path,
-                                               delimiter=env.delimiter_output,
-                                               encoding=env.encoding_output) - 1
+        env.class_name = get_number_of_columns(env.preprocessed_database_path, dialect=env.dialect) - 1
 
     # Check if the database have a header
     if env.have_header:
         vprint(Message.EXTRACT_HEADER)
         _extract_header(input_path=env.preprocessed_database_path,
                         header_path=env.header_path,
-                        encoding=env.encoding_output)
+                        dialect=env.dialect)
 
         # The header have been extracted, we remove the boolean value attesting for its presence
         env.have_header = False
@@ -135,15 +123,13 @@ def _init_preprocessed_database(original_database_path, preprocessed_database_pa
             output_writer.writerow(row)
 
 
-def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str,
-            quoting: int, quote_char: str, line_delimiter: str, encoding: str = "utf8",
-            skip_initial_space: bool = True) -> None:
+def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, dialect: Dialect) -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
-    with open(input_path, encoding=encoding, newline=line_delimiter) as input_file:
-        input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                  skipinitialspace=skip_initial_space)
+    with open(input_path, encoding=dialect.encoding, newline=dialect.line_delimiter) as input_file:
+        input_reader = csv.reader(input_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                                  quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
         content = []
 
         if have_header:
@@ -159,16 +145,14 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 content.append(row)
 
     # Prevent the input database to be erased if it's the same as the output database
-    with open(output_path, "w", encoding=encoding) as output_file:
-        output_writer = csv.writer(output_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                   skipinitialspace=skip_initial_space)
+    with open(output_path, "w", encoding=dialect.encoding, newline=dialect.line_delimiter) as output_file:
+        output_writer = csv.writer(output_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
+                                   quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
         for row in content:
             output_writer.writerow(row)
 
 
-def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_char: str, have_header: bool,
-                             delimiter: str, encoding: str, line_delimiter: str,
-                             skip_initial_space: bool = True) -> bool:
+def _identifier_at_beginning(path: str, identifier: str, have_header: bool, dialect: Dialect) -> bool:
     """ Check if the identifier column is at the beginning of the database. """
     if is_an_int(identifier):
         return int(identifier) == 0
