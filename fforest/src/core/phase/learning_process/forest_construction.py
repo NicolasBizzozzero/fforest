@@ -53,7 +53,8 @@ def forest_construction():
                                   "quality_vector_prefix": env.quality_vector_prefix,
                                   "cclassified_vector_prefix": env.cclassified_vector_prefix,
                                   "vector_file_extension": env.vector_file_extension,
-                                  "possible_classes": env.possible_classes
+                                  "possible_classes": env.possible_classes,
+                                  "line_delimiter": env.line_delimiter_output,
                                   })
         processes.append(process)
 
@@ -100,7 +101,7 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
 def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
                        chosen_options: iter, delimiter: str, quoting: int, quote_char: str, encoding: str,
                        vector_file_extension: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
-                       possible_classes: List[str]) -> None:
+                       line_delimiter: str, possible_classes: List[str]) -> None:
     """ Create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the Salammbô
     executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and quality
     vectors for each t_norms on each tree and save it inside the tree directory.
@@ -124,6 +125,7 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
                   quote_char=quote_char,
                   encoding=encoding,
                   possible_classes=possible_classes,
+                  line_delimiter=line_delimiter,
                   skip_initial_space=True)
 
 
@@ -190,7 +192,7 @@ def _get_cclassified_dictionary(quality: dict, number_of_tnorms: int) -> dict:
 def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector: Dict, number_of_tnorms: int,
                   subsubtrain_dir_path: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
                   vector_file_extension: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
-                  possible_classes: List[str], skip_initial_space: bool = True) -> None:
+                  possible_classes: List[str], line_delimiter: str, skip_initial_space: bool = True) -> None:
     """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a
     cclassified vector and a quality vector.
     """
@@ -207,7 +209,8 @@ def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector
                                  quoting=quoting,
                                  quote_char=quote_char,
                                  encoding=encoding,
-                                 skip_initial_space=skip_initial_space)
+                                 skip_initial_space=skip_initial_space,
+                                 line_delimiter=line_delimiter)
 
         _save_quality_vector(vector_path=quality_vector_path,
                              quality_vector=quality_vector,
@@ -219,14 +222,15 @@ def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector
                              encoding=encoding,
                              skip_initial_space=skip_initial_space,
                              identifier_name=KEY_ID,
-                             tnorm_name=tnorm_name)
+                             tnorm_name=tnorm_name,
+                             line_delimiter=line_delimiter)
 
 
 def _save_cclassified_vector(vector_path: str, cclassified_vector: Dict[str, Dict[str, bool]], tnorm_name: str,
-                             delimiter: str, quoting: int, quote_char: str, encoding: str,
+                             delimiter: str, quoting: int, quote_char: str, encoding: str, line_delimiter: str,
                              skip_initial_space: bool = True) -> True:
     """ Dump the cclassified vector inside the subsubtrain directory for one t-norm. """
-    with open(vector_path, "w", encoding=encoding) as file:
+    with open(vector_path, "w", encoding=encoding, newline=line_delimiter) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
 
@@ -236,9 +240,9 @@ def _save_cclassified_vector(vector_path: str, cclassified_vector: Dict[str, Dic
 
 def _save_quality_vector(vector_path: str, quality_vector: Dict, identifier_name: str, real_class_name: str,
                          delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
-                         tnorm_name: str, skip_initial_space: bool = True) -> True:
+                         tnorm_name: str, line_delimiter: str, skip_initial_space: bool = True) -> True:
     """ Dump the quality vector inside the subsubtrain directory for one t-norm. """
-    with open(vector_path, "w", encoding=encoding) as file:
+    with open(vector_path, "w", encoding=encoding, newline=line_delimiter) as file:
         writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                             skipinitialspace=skip_initial_space)
 
