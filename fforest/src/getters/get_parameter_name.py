@@ -28,6 +28,10 @@ def database() -> str:
     return _get_name_from_file("database")
 
 
+def parent_dir() -> str:
+    return _get_name_from_file("parent_dir")
+
+
 def training_value() -> str:
     return _get_name_from_file("training_value")
 
@@ -198,6 +202,14 @@ def quote_char_input() -> str:
 
 def quote_char_output() -> str:
     return _get_name_from_file("quote_char_output")
+
+
+def line_delimiter_input() -> str:
+    return _get_name_from_file("line_delimiter_input")
+
+
+def line_delimiter_output() -> str:
+    return _get_name_from_file("line_delimiter_output")
 
 
 def verbosity() -> str:

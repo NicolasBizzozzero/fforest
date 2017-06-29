@@ -1,7 +1,7 @@
 """ The only method called from outside this module should be `preprocessing`.
 It'll backup the original database into a database called `preprocessed_database`, then'll clean this new database by
 applying a set of operations on it. Theses operations consist of :
-- Change its encoding, delimiter, format, quote character and quoting behavior.
+- Change its encoding, delimiter, format, quote character, quoting behavior and newline delimiter.
 - Add an ID column if it's not already present.
 - Move the ID column at the beginning of the database.
 - Move the class column at the end of the database.
@@ -22,14 +22,14 @@ def preprocessing() -> None:
     """ Prepare the original database to be processed.
     It'll backup the original database into a database called `preprocessed_database`, then'll clean this new database
     by applying a set of operations on it. Theses operations consist of :
-        - Change its encoding, delimiter, format, quote character and quoting behavior.
+        - Change its encoding, delimiter, format, quote character, quoting behavior and newline delimiter.
         - Add an ID column if it's not already present.
         - Move the ID column at the beginning of the database.
         - Move the class column at the end of the database.
         - Extract the header if it's present.
     """
     # Create the main directory of the application
-    create_dir(env.main_directory)
+    create_dir(env.main_directory_path)
 
     # Change the encoding, delimiter, format, quoting behavior and quoting character of the original
     # database to initialize the preprocessed database. Once it's done, we can forget about the original database.
@@ -45,7 +45,9 @@ def preprocessing() -> None:
                                 input_quote_char=env.quote_character_input,
                                 output_quote_char=env.quote_character_output,
                                 input_quoting=env.quoting_input,
-                                output_quoting=env.quoting_output)
+                                output_quoting=env.quoting_output,
+                                input_line_delimiter=env.line_delimiter_input,
+                                output_line_delimiter=env.line_delimiter_output)
 
     # Check if the database contains an identifier column
     if env.identifier is None:
@@ -58,6 +60,7 @@ def preprocessing() -> None:
                 quoting=env.quoting_output,
                 quote_char=env.quote_character_output,
                 encoding=env.encoding_output,
+                line_delimiter=env.line_delimiter_output,
                 skip_initial_space=True)
 
         # An header as been added
@@ -74,13 +77,14 @@ def preprocessing() -> None:
     if not _identifier_at_beginning(path=env.preprocessed_database_path, identifier=env.identifier,
                                     have_header=env.have_header, quoting=env.quoting_output,
                                     quote_char=env.quote_character_output, delimiter=env.delimiter_output,
-                                    encoding=env.encoding_output):
+                                    encoding=env.encoding_output, line_delimiter=env.line_delimiter_output):
         vprint(Message.PREPEND_ID)
         preprend_column(input_path=env.preprocessed_database_path,
                         output_path=env.preprocessed_database_path,
                         column=env.identifier,
                         encoding=env.encoding_output,
-                        delimiter=env.delimiter_output)
+                        delimiter=env.delimiter_output,
+                        line_delimiter=env.line_delimiter_output)
 
         # The identifier is now a the beginning of the database, we change it to the index 0
         env.identifier = 0
@@ -88,13 +92,15 @@ def preprocessing() -> None:
     # Check if the class column is at the end of the database
     if not _class_at_end(path=env.preprocessed_database_path, class_name=env.class_name, have_header=env.have_header,
                          quoting=env.quoting_output, quote_char=env.quote_character_output,
-                         delimiter=env.delimiter_output, encoding=env.encoding_output):
+                         delimiter=env.delimiter_output, encoding=env.encoding_output,
+                         line_delimiter=env.line_delimiter_output,):
         vprint(Message.APPEND_CLASS)
         append_column(input_path=env.preprocessed_database_path,
                       output_path=env.preprocessed_database_path,
                       column=env.class_name,
                       encoding=env.encoding_output,
-                      delimiter=env.delimiter_output)
+                      delimiter=env.delimiter_output,
+                      line_delimiter=env.line_delimiter_output)
 
         # The class column is now a the end of the database, we change it to the last index
         env.class_name = get_number_of_columns(env.preprocessed_database_path,
@@ -115,10 +121,12 @@ def preprocessing() -> None:
 # TODO: Change also the format of the database
 def _init_preprocessed_database(original_database_path, preprocessed_database_path, input_encoding, output_encoding,
                                 input_delimiter, output_delimiter, input_format, output_format, input_quote_char,
-                                output_quote_char, input_quoting, output_quoting):
+                                output_quote_char, input_quoting, output_quoting, input_line_delimiter,
+                                output_line_delimiter) -> None:
     """ Change the encoding, delimiter, format, quoting behavior and quoting character of the original database."""
-    with open(original_database_path, encoding=input_encoding) as input_file,\
-            open(preprocessed_database_path, "w", encoding=output_encoding) as output_file:
+    with open(original_database_path, encoding=input_encoding, newline=input_line_delimiter) as input_file,\
+            open(preprocessed_database_path, "w", encoding=output_encoding,
+                 newline=output_line_delimiter) as output_file:
         input_reader = csv.reader(input_file, delimiter=input_delimiter, quoting=input_quoting,
                                   quotechar=input_quote_char, skipinitialspace=True)
         output_writer = csv.writer(output_file, delimiter=output_delimiter, quoting=output_quoting,
@@ -128,11 +136,12 @@ def _init_preprocessed_database(original_database_path, preprocessed_database_pa
 
 
 def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, delimiter: str,
-            quoting: int, quote_char: str, encoding: str = "utf8", skip_initial_space: bool = True) -> None:
+            quoting: int, quote_char: str, line_delimiter: str, encoding: str = "utf8",
+            skip_initial_space: bool = True) -> None:
     """ Add an identificator for each instance into the database.
     If the parameter id_name is provided, it'll be inserted as a header of the output_file.
     """
-    with open(input_path, encoding=encoding) as input_file:
+    with open(input_path, encoding=encoding, newline=line_delimiter) as input_file:
         input_reader = csv.reader(input_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
                                   skipinitialspace=skip_initial_space)
         content = []
@@ -158,7 +167,8 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
 
 
 def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_char: str, have_header: bool,
-                             delimiter: str, encoding: str, skip_initial_space: bool = True) -> bool:
+                             delimiter: str, encoding: str, line_delimiter: str,
+                             skip_initial_space: bool = True) -> bool:
     """ Check if the identifier column is at the beginning of the database. """
     if is_an_int(identifier):
         return int(identifier) == 0
@@ -167,14 +177,14 @@ def _identifier_at_beginning(path: str, identifier: str, quoting: int, quote_cha
         raise NamedAttributeButNoHeader()
     else:
         header = next(iter_rows(path, delimiter=delimiter, encoding=encoding, quoting=quoting, quote_char=quote_char,
-                                skipinitialspace=skip_initial_space))
+                                skip_initial_space=skip_initial_space, line_delimiter=line_delimiter))
         if len(header) == 0:
             raise EmptyHeader(path)
         return header[0] == identifier
 
 
 def _class_at_end(path: str, class_name: str, quoting: int, quote_char: str, have_header: bool, delimiter: str,
-                  encoding: str, skip_initial_space: bool = True) -> bool:
+                  encoding: str, line_delimiter: str, skip_initial_space: bool = True) -> bool:
     """ Check if the class column is at the end of the database. """
     if is_an_int(class_name):
         return int(class_name) == -1 or \
@@ -184,7 +194,7 @@ def _class_at_end(path: str, class_name: str, quoting: int, quote_char: str, hav
         raise NamedAttributeButNoHeader()
     else:
         header = next(iter_rows(path, delimiter=delimiter, encoding=encoding, quoting=quoting, quote_char=quote_char,
-                                skipinitialspace=skip_initial_space))
+                                skip_initial_space=skip_initial_space, line_delimiter=line_delimiter))
         if len(header) == 0:
             raise EmptyHeader(path)
         return header[-1] == class_name

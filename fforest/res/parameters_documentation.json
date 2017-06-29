@@ -1,5 +1,5 @@
 {
-    "usage": "fforest <{param_database}> [options] [{param_class_name} <name>] [{param_trees_in_forest} <trees>]",
+    "usage": "fforest <{param_database}> [options]\n  fforest <{param_database}> <{param_parent_dir}> [options]",
     "help": "Print this help message.",
 
     "training_value": "% of values you want to extract from the database and put in the train database. The rest will be put in the test database. You can also pass the number of values you want to use (by passing an integer greater than 1). [default: {default_training_value}]",
@@ -49,5 +49,7 @@
     "quoting_output": "The usage of the quote character for the output databases in CSV format. Values can be `all`, `minimal`, `nonnumeric` or `none`. [default: {default_quoting_output}]",
     "quote_char_input": "The symbol used to quote the required fields for the input database in CSV format. [default: {default_quote_char_input}]",
     "quote_char_output": "The symbol used to quote the required fields for the output databases in CSV format. [default: {default_quote_char_output}]",
+    "line_delimiter_input": "The symbol used to mark a newline for the input database. [default: {default_line_delimiter_input}]",
+    "line_delimiter_output": "The symbol used to mark a newline for the output database. [default: {default_line_delimiter_output}]",
     "verbosity": "Change the output behavior of the software. Values can be `quiet`, `normal` or `verbose`. [default: {default_verbosity}]"
 }

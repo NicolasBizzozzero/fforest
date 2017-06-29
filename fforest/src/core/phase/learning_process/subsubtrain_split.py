@@ -16,10 +16,7 @@ def subsubtrain_split() -> None:
     module.
     """
     # Create the subsubtrain directories
-    subsubtrain_names = _create_subtrain_directories(number_of_trees=env.trees_in_forest,
-                                                     main_directory=env.main_directory,
-                                                     subtrain_directory=env.subtrain_directory,
-                                                     subsubtrain_directory_pattern=env.subsubtrain_directory_pattern)
+    _create_subsubtrain_directories(env.subsubtrain_directories_path)
 
     # Split the database
     row_limit = env.subtrain_database_instances // env.trees_in_forest
@@ -31,22 +28,16 @@ def subsubtrain_split() -> None:
               encoding=env.encoding_output,
               class_name=env.class_name,
               number_of_rows=env.subtrain_database_instances,
-              tree_names=subsubtrain_names,
+              output_pathes=env.subsubtrain_databases_paths,
               quote_char=env.quote_character_output,
-              quoting=env.quoting_output)
+              quoting=env.quoting_output,
+              line_delimiter=env.line_delimiter_output)
 
     # Store the number of instances of each tree along with its name in the `env` module
-    env.subsubtrain_databases_instances = dict(zip(subsubtrain_names, list_instances))
+    env.subsubtrain_databases_instances = dict(zip(env.subsubtrain_directories_path, list_instances))
 
 
-def _create_subtrain_directories(number_of_trees: int, main_directory: str, subtrain_directory: str,
-                                 subsubtrain_directory_pattern: str) -> List[str]:
-    """ Create all needed directories which will each serves as a workplace for a single tree.
-    Return all the names of the directories created.
-    """
-    subsubtrain_names = []
-    for dir_name in subsubtrain_dir_path(number_of_trees, main_directory, subtrain_directory,
-                                         subsubtrain_directory_pattern):
-        subsubtrain_names.append(dir_name)
+def _create_subsubtrain_directories(subsubtrain_directories: List[str]) -> None:
+    """ Create all needed directories which will each serves as a workplace for a single tree. """
+    for dir_name in subsubtrain_directories:
         create_dir(dir_name)
-    return subsubtrain_names

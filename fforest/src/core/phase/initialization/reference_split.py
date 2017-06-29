@@ -13,8 +13,7 @@ def reference_split():
     Store the number of instances of the reference and subtrain databases into the `instances_reference_database` and
     `instances_subtrain_database` variables in the `env` module.
     """
-    _create_subtrain_directory(main_directory=env.main_directory,
-                               subtrain_directory=env.subtrain_directory)
+    create_dir(env.subtrain_directory_path)
 
     _calculate_row_limit(reference_value=env.reference_value, instances_in_train_database=env.train_database_instances)
 
@@ -30,7 +29,9 @@ def reference_split():
                class_name=env.class_name,
                number_of_rows=env.train_database_instances,
                quoting=env.quoting_output,
-               quote_char=env.quote_character_output)
+               quote_char=env.quote_character_output,
+               line_delimiter=env.line_delimiter_output,
+               skip_initial_space=True)
 
 
 def _create_subtrain_directory(main_directory: str, subtrain_directory: str):
