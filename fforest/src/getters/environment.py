@@ -80,6 +80,6 @@ subtrain_database_instances = None
 subsubtrain_databases_instances = None
 
 # Miscellaneous
+dialect = None
 possible_classes = None
 t_norms_names = None
-dialect = None

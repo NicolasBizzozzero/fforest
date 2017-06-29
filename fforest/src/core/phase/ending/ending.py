@@ -3,6 +3,7 @@ from typing import Callable
 
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_statistic_name as gsn
+from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.file_system import dump_dict
 
 
@@ -21,7 +22,7 @@ def dump_statistics_dictionary():
         filepath = "."
     else:
         filepath = env.statistics_file_path
-    dump_dict(instances_dictionary, filepath)
+    dump_dict(instances_dictionary, filepath, dialect=Dialect())
 
 
 def _function_post_failure():

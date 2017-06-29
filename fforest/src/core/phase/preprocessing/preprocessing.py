@@ -180,7 +180,7 @@ def _class_at_end(path: str, class_name: str, have_header: bool, dialect: Dialec
 def _extract_header(input_path: str, header_path: str, dialect: Dialect):
     """ Extract the header from a database then dump it elsewhere. """
     header = extract_first_line(input_path, dialect=dialect)
-    dump_string(header_path, header)
+    dump_string(header_path, header, dialect=dialect)
 
 
 if __name__ == '__main__':

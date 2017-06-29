@@ -5,7 +5,6 @@ from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.file_tools.format import format_to_string
-from fforest.src.vrac.iterators import repeat_cycle
 
 
 def init_environment(args: dict) -> None:
@@ -119,17 +118,14 @@ def _init_names(args: dict) -> None:
 
 def _init_miscellaneous(args: dict) -> None:
     """ Initialize all the others variables inside the `env` module. """
-    env.possible_classes = list(set(get_column(path=args[gpn.database()],
-                                               column=args[gpn.class_name()],
-                                               have_header=args[gpn.have_header()],
-                                               delimiter=args[gpn.delimiter_input()],
-                                               quoting=args[gpn.quoting_input()],
-                                               quote_character=args[gpn.quote_char_input()],
-                                               encoding=args[gpn.encoding_input()])))
-    env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()])]
     env.dialect = Dialect(encoding=env.encoding_output,
                           delimiter=env.delimiter_output,
                           quoting=env.quoting_output,
                           quote_char=env.quote_character_output,
                           line_delimiter=env.line_delimiter_output,
                           skip_initial_space=True)
+    env.possible_classes = list(set(get_column(path=args[gpn.database()],
+                                               column=args[gpn.class_name()],
+                                               have_header=args[gpn.have_header()],
+                                               dialect=env.dialect)))
+    env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()])]
