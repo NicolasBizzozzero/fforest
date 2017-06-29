@@ -28,7 +28,7 @@ def subsubtrain_split() -> None:
               encoding=env.encoding_output,
               class_name=env.class_name,
               number_of_rows=env.subtrain_database_instances,
-              output_pathes=env.subsubtrain_databases_path,
+              output_pathes=env.subsubtrain_databases_paths,
               quote_char=env.quote_character_output,
               quoting=env.quoting_output,
               line_delimiter=env.line_delimiter_output)

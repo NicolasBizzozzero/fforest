@@ -35,41 +35,88 @@ def str_to_quoting(string: str) -> int:
         raise UndefinedQuoting(string)
 
 
-def iter_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
-              quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> iter:
+def iter_rows(path: str, skip_header: bool = False, encoding: str = "utf8", delimiter: str = ",",
+              quoting: int = csv.QUOTE_NONNUMERIC, quote_char: str = "\"", line_delimiter: str = None,
+              skip_initial_space: bool = True) -> iter:
     """ Iterate trough the rows of the file located at `path`. """
     with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
-        content = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                             skipinitialspace=skip_initial_space)
-        for line in content:
-            yield line
+        reader = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+
+        if skip_header:
+            next(reader)
+
+        for row in reader:
+            if row:
+                yield row
+
+
+def get_header(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
+               quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> List[str]:
+    """ Return the header located in `path`.
+
+        Example :
+        >>> get_header("../../test/data/bank.csv", delimiter=";")[:11]
+        ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month']
+     """
+    with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
+        return next(csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                               skipinitialspace=skip_initial_space))
 
 
 def get_number_of_rows(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
                        quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
-    """ Return the number of rows of the file located at `path`. """
+    """ Return the number of rows, header included, newline at the end excluded, of the file located at `path`.
+
+        Example :
+        >>> get_number_of_rows("../../test/data/bank.csv", delimiter=";")
+        4522
+    """
+    number_of_rows = 0
     with open(path, encoding=encoding, newline=line_delimiter) as csv_file:
-        return len(list(csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                                   skipinitialspace=skip_initial_space))) - 1
+        reader = csv.reader(csv_file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
+                            skipinitialspace=skip_initial_space)
+
+        for row in reader:
+            if row:
+                number_of_rows += 1
+    return number_of_rows
 
 
 def get_number_of_columns(path: str, encoding: str = "utf8", delimiter: str = ",", quoting: int = csv.QUOTE_NONNUMERIC,
                           quote_char: str = "\"", line_delimiter: str = None, skip_initial_space: bool = True) -> int:
-    """ Return the number of columns of the file located at `path`. """
+    """ Return the number of columns of the file located at `path`.
+
+        Example :
+        >>> get_number_of_columns("../../test/data/bank.csv", delimiter=";")
+        17
+    """
     return len(next(iter_rows(path, encoding=encoding, delimiter=delimiter, quoting=quoting, quote_char=quote_char,
                               skip_initial_space=skip_initial_space, line_delimiter=line_delimiter)))
 
 
-def get_row(path: str, row_number: int, encoding: str = "utf8") -> Union[list, None]:
+def get_row(path: str, row_number: int, skip_header: bool = False, encoding: str = "utf8", delimiter: str = ",",
+            quoting: int = csv.QUOTE_NONNUMERIC, quote_char: str = "\"", line_delimiter: str = None,
+            skip_initial_space: bool = True) -> Union[list, None]:
     """ Return the `row_number`-th row as a list from the file located at `path`.
     The rows are indexed from 1 to len(`path`).
     If a `row_number` is out-of-bound, this function return the `None` value.
+
+        Example :
+        >>> get_row("../../test/data/bank.csv", -1, delimiter=";") is None
+        True
+        >>> get_row("../../test/data/bank.csv", get_number_of_rows("../../test/data/bank.csv", delimiter=";") + 1,
+        ...                                     delimiter=";") is None
+        True
+        >>> get_row("../../test/data/bank.csv", 77, delimiter=";")[:14]
+        [54.0, 'management', 'divorced', 'tertiary', 'no', 3222.0, 'no', 'no', 'cellular', 14.0, 'aug', 67.0, 2.0, -1.0]
     """
-    if row_number <= 0 or row_number > get_number_of_rows(path, encoding=encoding):
+    if row_number <= 0:
         return None
 
     current_row = 0
-    for row in iter_rows(path):
+    for row in iter_rows(path=path, skip_header=skip_header, encoding=encoding, delimiter=delimiter, quoting=quoting,
+                         quote_char=quote_char, line_delimiter=line_delimiter, skip_initial_space=skip_initial_space):
         current_row += 1
         if current_row == row_number:
             return row
@@ -187,3 +234,7 @@ def index_in_bounds(input_path: str, index: int, encoding: str = "utf8", delimit
     """ Check if an index is inbound of the CSV file columns. Columns can be accessed with a negative index. """
     length = get_number_of_columns(path=input_path, encoding=encoding, delimiter=delimiter)
     return (-length <= index < 0) or (0 <= index < length)
+
+
+if __name__ == "__main__":
+    pass

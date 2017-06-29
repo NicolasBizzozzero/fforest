@@ -63,10 +63,10 @@ test_database_path = None
 train_database_path = None
 reference_database_path = None
 subtrain_database_path = None
-subsubtrain_databases_path = None
-difficulty_vectors_path = None
-cclassified_vectors_path = None
-quality_vectors_path = None
+subsubtrain_databases_paths = None
+difficulty_vectors_paths = None
+cclassified_vectors_paths = None
+quality_vectors_paths = None
 
 # Names
 original_database_name = None
@@ -81,3 +81,4 @@ subsubtrain_databases_instances = None
 
 # Miscellaneous
 possible_classes = None
+t_norms_names = None
