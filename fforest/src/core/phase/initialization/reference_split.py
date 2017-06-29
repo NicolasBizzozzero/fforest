@@ -20,18 +20,13 @@ def reference_split():
     # Split the database
     env.reference_database_instances, env.subtrain_database_instances = \
         split2(input_path=env.train_database_path,
-               delimiter=env.delimiter_output,
                row_limit=env.reference_value,
                method=env.reference_split_method,
                output_name_train=env.reference_database_path,
                output_name_test=env.subtrain_database_path,
-               encoding=env.encoding_output,
                class_name=env.class_name,
                number_of_rows=env.train_database_instances,
-               quoting=env.quoting_output,
-               quote_char=env.quote_character_output,
-               line_delimiter=env.line_delimiter_output,
-               skip_initial_space=True)
+               dialect=env.dialect)
 
 
 def _create_subtrain_directory(main_directory: str, subtrain_directory: str):
