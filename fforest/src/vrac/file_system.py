@@ -1,7 +1,5 @@
 import json
 import os
-import errno
-import sys
 
 from fforest.src.file_tools.dialect import Dialect
 

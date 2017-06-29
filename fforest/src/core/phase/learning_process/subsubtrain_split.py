@@ -7,7 +7,6 @@ from typing import List
 import fforest.src.getters.environment as env
 from fforest.src.core.splitting_methods.split import split
 from fforest.src.vrac.file_system import create_dir
-from fforest.src.vrac.iterators import subsubtrain_dir_path
 
 
 def subsubtrain_split() -> None:

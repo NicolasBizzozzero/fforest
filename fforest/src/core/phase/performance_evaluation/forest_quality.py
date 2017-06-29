@@ -4,8 +4,6 @@ divide this sum by the number of instances to normalize the result. An instance 
 by the % of membership found by the tree. Theses quality's forest vectors will be dumped into the subtrain directory.
 """
 
-import csv
-from typing import Dict, List
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS

@@ -8,7 +8,6 @@ import csv
 import enum
 from typing import Tuple, List
 
-import fforest.src.getters.environment as env
 from fforest.src.core.splitting_methods.halfing import halfing
 from fforest.src.core.splitting_methods.halfing import halfing2
 from fforest.src.core.splitting_methods.keep_distribution import keep_distribution
