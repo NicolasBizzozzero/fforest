@@ -22,6 +22,12 @@ def round_float(f: float, epsilon: float = 0.0000000000000002) -> Union[float, i
         1
         >>> round_float(0.9999999999999998)
         0.9999999999999998
+        >>> round_float(0.8999999999999999)
+        0.9
+        >>> round_float(0.7999999999999999)
+        0.8
+        >>> round_float(0.30000000000000004)
+        0.3
     """
     if delta(round(f), f) < epsilon:
         return int(round(f))

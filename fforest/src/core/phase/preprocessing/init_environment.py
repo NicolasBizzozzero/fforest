@@ -1,5 +1,6 @@
 """ Initialize the variables contained in the `environment` module. """
 from fforest.src.file_tools.csv_tools import get_column
+from fforest.src.file_tools.dialect import Dialect
 from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
@@ -126,3 +127,9 @@ def _init_miscellaneous(args: dict) -> None:
                                                quote_character=args[gpn.quote_char_input()],
                                                encoding=args[gpn.encoding_input()])))
     env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()])]
+    env.dialect = Dialect(encoding=env.encoding_output,
+                          delimiter=env.delimiter_output,
+                          quoting=env.quoting_output,
+                          quote_char=env.quote_character_output,
+                          line_delimiter=env.line_delimiter_output,
+                          skip_initial_space=True)

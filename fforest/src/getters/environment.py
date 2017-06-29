@@ -82,3 +82,4 @@ subsubtrain_databases_instances = None
 # Miscellaneous
 possible_classes = None
 t_norms_names = None
+dialect = None

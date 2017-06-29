@@ -1,3 +1,8 @@
+""" Compute one difficulty vector for each triangular norm used. A difficulty vector correspond to the sum of all true
+class's % of membership for all quality vectors. It assign a classification difficulty to an example from the reference
+database. Theses difficulty vectors will be dumped into the subtrain directory.
+"""
+
 import csv
 from typing import Dict, List
 
@@ -7,6 +12,10 @@ from fforest.src.vrac.maths import round_float
 
 
 def forest_reduction() -> None:
+    """ Compute one difficulty vector for each triangular norm used. A difficulty vector correspond to the sum of all
+    true class's % of membership for all quality vectors. It assign a classification difficulty to an example from the
+    reference database. Theses difficulty vectors will be dumped into the subtrain directory.
+    """
     difficulty_vectors = \
         _compute_difficulty_vectors(number_of_trees=env.trees_in_forest,
                                     quality_vectors_dict=env.quality_vectors_paths,

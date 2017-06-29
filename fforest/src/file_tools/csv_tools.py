@@ -162,7 +162,7 @@ def select_all_rows_where(path: str, predicate: callable, delimiter: str = ";", 
                                               skipinitialspace=skip_initial_space) if predicate(row)]
 
 
-def get_identified_row(path: str, identifier_name: str, row_id: int, delimiter: str = ";",
+def get_identified_row(path: str, identifier_name: str, row_id: str, delimiter: str = ";",
                        quoting: int = csv.QUOTE_NONNUMERIC, quote_character: str = "\"", encoding: str = "utf8",
                        skip_initial_space: bool = True) -> Union[List, None]:
     """ A wrapper for `select_all_rows_where`.
@@ -170,7 +170,7 @@ def get_identified_row(path: str, identifier_name: str, row_id: int, delimiter: 
 
         Example:
         >>> # SELECT row WHERE ID == 77
-        >>> get_identified_row(path, "ID", 77)
+        >>> get_identified_row(path, "ID", "77")
     """
     try:
         return select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, encoding=encoding,
