@@ -11,8 +11,8 @@ import csv
 
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_default_value as gdv
-from fforest.src.file_tools.csv_tools import iter_rows, get_number_of_columns, preprend_column, \
-    append_column, NamedAttributeButNoHeader, EmptyHeader
+from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_column, append_column,\
+    NamedAttributeButNoHeader, EmptyHeader, dump_content, get_header
 from fforest.src.getters.get_output_message import Message, vprint
 from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from fforest.src.vrac.maths import is_an_int
@@ -145,11 +145,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 content.append(row)
 
     # Prevent the input database to be erased if it's the same as the output database
-    with open(output_path, "w", encoding=dialect.encoding, newline=dialect.line_delimiter) as output_file:
-        output_writer = csv.writer(output_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
-                                   quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
-        for row in content:
-            output_writer.writerow(row)
+    dump_content(path=output_path, content=content, dialect=dialect)
 
 
 def _identifier_at_beginning(path: str, identifier: str, have_header: bool, dialect: Dialect) -> bool:
@@ -160,33 +156,30 @@ def _identifier_at_beginning(path: str, identifier: str, have_header: bool, dial
     if not have_header:
         raise NamedAttributeButNoHeader()
     else:
-        header = next(iter_rows(path, delimiter=delimiter, encoding=encoding, quoting=quoting, quote_char=quote_char,
-                                skip_initial_space=skip_initial_space, line_delimiter=line_delimiter))
+        header = get_header(path=path, dialect=dialect)
         if len(header) == 0:
             raise EmptyHeader(path)
         return header[0] == identifier
 
 
-def _class_at_end(path: str, class_name: str, quoting: int, quote_char: str, have_header: bool, delimiter: str,
-                  encoding: str, line_delimiter: str, skip_initial_space: bool = True) -> bool:
+def _class_at_end(path: str, class_name: str, have_header: bool, dialect: Dialect) -> bool:
     """ Check if the class column is at the end of the database. """
     if is_an_int(class_name):
         return int(class_name) == -1 or \
-               int(class_name) == get_number_of_columns(path, delimiter=delimiter, encoding=encoding) - 1
+               int(class_name) == get_number_of_columns(path, dialect=dialect) - 1
 
     if not have_header:
         raise NamedAttributeButNoHeader()
     else:
-        header = next(iter_rows(path, delimiter=delimiter, encoding=encoding, quoting=quoting, quote_char=quote_char,
-                                skip_initial_space=skip_initial_space, line_delimiter=line_delimiter))
+        header = get_header(path=path, dialect=dialect)
         if len(header) == 0:
             raise EmptyHeader(path)
         return header[-1] == class_name
 
 
-def _extract_header(input_path: str, header_path: str, encoding: str):
+def _extract_header(input_path: str, header_path: str, dialect: Dialect):
     """ Extract the header from a database then dump it elsewhere. """
-    header = extract_first_line(input_path, encoding=encoding)
+    header = extract_first_line(input_path, dialect=dialect)
     dump_string(header_path, header)
 
 
