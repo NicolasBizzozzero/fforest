@@ -9,7 +9,7 @@ import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropy_measure
 from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
-from fforest.src.file_tools.csv_tools import find_index_for_class, index_in_bounds, \
+from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bounds, \
     get_number_of_columns
 from fforest.src.file_tools.csv_tools import str_to_quoting
 from fforest.src.file_tools.format import string_to_format
@@ -122,13 +122,13 @@ def _clean_column_index_or_name(args: dict, param_name: str, column_name: str) -
     """
     if (not is_an_int(args[param_name])) and (type(args[param_name]) == str):
         # User asked for a named class, we retrieve its index then change it
-        args[param_name] = find_index_for_class(input_path=args[gpn.database()],
-                                                class_name=args[param_name],
-                                                encoding=args[gpn.encoding_input()],
-                                                delimiter=args[gpn.delimiter_input()],
-                                                quoting=args[gpn.quoting_input()],
-                                                quote_char=args[gpn.quote_char_input()],
-                                                skip_initial_space=True)
+        args[param_name] = find_index_with_class(input_path=args[gpn.database()],
+                                                 class_name=args[param_name],
+                                                 encoding=args[gpn.encoding_input()],
+                                                 delimiter=args[gpn.delimiter_input()],
+                                                 quoting=args[gpn.quoting_input()],
+                                                 quote_char=args[gpn.quote_char_input()],
+                                                 skip_initial_space=True)
     else:
         # User asked for an index, we convert it to int then check if it's inbound
         args[param_name] = int(args[param_name])

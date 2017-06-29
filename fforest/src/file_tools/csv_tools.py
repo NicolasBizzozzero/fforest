@@ -36,7 +36,7 @@ def str_to_quoting(string: str) -> int:
         raise UndefinedQuoting(string)
 
 
-def iter_rows(path: str, skip_header: bool = False, dialect: Dialect = None) -> iter:
+def iter_rows(path: str, skip_header: bool, dialect: Dialect) -> iter:
     """ Iterate trough the rows of the file located at `path`. """
     with open(path, encoding=dialect.encoding, newline=dialect.line_delimiter) as csv_file:
         reader = csv.reader(csv_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
@@ -58,6 +58,11 @@ def iter_rows_dict(path: str, dialect: Dialect) -> Dict:
         for row in reader:
             if row:
                 yield row
+
+
+def get_content(path: str, skip_header: bool, dialect: Dialect) -> Iterable[List]:
+    """ Get rows from a CSV file. """
+    return [row for row in iter_rows(path=path, skip_header=skip_header, dialect=dialect)]
 
 
 def dump_content(path: str, content: Iterable[List], dialect: Dialect) -> None:
@@ -103,7 +108,7 @@ def get_number_of_columns(path: str, dialect: Dialect) -> int:
     return len(get_header(path=path, dialect=dialect))
 
 
-def get_row(path: str, row_number: int, skip_header: bool = False, dialect: Dialect = None) -> Union[list, None]:
+def get_row(path: str, row_number: int, skip_header: bool, dialect: Dialect) -> Union[List, None]:
     """ Return the `row_number`-th row as a list from the file located at `path`.
     The rows are indexed from 1 to len(`path`).
     If a `row_number` is out-of-bound, this function return the `None` value.
@@ -128,7 +133,7 @@ def get_row(path: str, row_number: int, skip_header: bool = False, dialect: Dial
             return row
 
 
-def get_column(path: str, column: Union[str, int], have_header: bool = True, dialect: Dialect = None) -> List:
+def get_column(path: str, column: Union[str, int], have_header: bool, dialect: Dialect) -> List:
     """ Get a column from the CSV database with its index or its name. Remove the header if it's present. """
     if not ((type(column) == int) or ((type(column) == str) and have_header)):
         raise NamedAttributeButNoHeader()
@@ -166,59 +171,40 @@ def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Di
         return None
 
 
-def write_header(input_reader, *out_writers):
-    header = next(input_reader)
-
-    for writer in out_writers:
-        writer.writerow(header)
-
-
-def preprend_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ",",
-                    line_delimiter: str = None):
+def preprend_column(input_path: str, output_path: str, column: Union[str, int], dialect: Dialect) -> None:
+    """ Prepend a column into input_path, then dump the result file into output_path. """
     if not is_an_int(column):
-        header = next(iter_rows(input_path, encoding=encoding, delimiter=delimiter))
-        index_column = header.index(column)
-        preprend_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter,
-                        line_delimiter=line_delimiter)
+        index_column = find_index_with_class(path=input_path, class_name=column, dialect=dialect)
+        preprend_column(input_path, output_path, index_column, dialect)
     else:
-        content = [line for line in iter_rows(input_path, encoding=encoding, delimiter=delimiter)]
-        with open(output_path, "w", encoding=encoding, newline=line_delimiter) as output_file:
-            output_writer = csv.writer(output_file, delimiter=delimiter)
-            for line in content:
-                line.insert(0, (line.pop(column)))
-                output_writer.writerow(line)
+        content = get_content(path=input_path, skip_header=False, dialect=dialect)
+        # Move the column at the beginning
+        for line in content:
+            line.insert(0, (line.pop(column)))
+        dump_content(path=output_path, content=content, dialect=dialect)
 
 
-def append_column(input_path: str, output_path: str, column: str, encoding: str = "utf8", delimiter: str = ",",
-                  line_delimiter: str = None):
+def append_column(input_path: str, output_path: str, column: Union[str, int], dialect: Dialect) -> None:
+    """ Append a column into input_path, then dump the result file into output_path. """
     if not is_an_int(column):
-        header = next(iter_rows(input_path, encoding=encoding, delimiter=delimiter))
-        index_column = header.index(column)
-        append_column(input_path, output_path, index_column, encoding=encoding, delimiter=delimiter,
-                      line_delimiter=line_delimiter)
+        index_column = find_index_with_class(path=input_path, class_name=column, dialect=dialect)
+        append_column(input_path, output_path, index_column, dialect)
     else:
-        content = [line for line in iter_rows(input_path, encoding=encoding, delimiter=delimiter)]
-        with open(output_path, "w", encoding=encoding, newline=line_delimiter) as output_file:
-            output_writer = csv.writer(output_file, delimiter=delimiter)
-            for line in content:
-                line.append(line.pop(column))
-                output_writer.writerow(line)
+        content = get_content(path=input_path, skip_header=False, dialect=dialect)
+        # Move the column at the beginning
+        for line in content:
+            line.append(line.pop(column))
+        dump_content(path=output_path, content=content, dialect=dialect)
 
 
-def find_index_for_class(input_path: str, class_name: str, delimiter: str, quoting: str, quote_char: str,
-                         encoding: str = "utf8", skip_initial_space: bool = True) -> int:
+def find_index_with_class(path: str, class_name: str, dialect: Dialect) -> int:
     """ Return the column index given a class name for a CSV file containing a header. """
-    with open(input_path, encoding=encoding) as file:
-        reader = csv.reader(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                            skipinitialspace=skip_initial_space)
-        header = next(reader)
-
-    return header.index(class_name)
+    return get_header(path=path, dialect=dialect).index(class_name)
 
 
-def index_in_bounds(input_path: str, index: int, encoding: str = "utf8", delimiter: str = ",") -> bool:
+def index_in_bounds(input_path: str, index: int, dialect: Dialect) -> bool:
     """ Check if an index is inbound of the CSV file columns. Columns can be accessed with a negative index. """
-    length = get_number_of_columns(path=input_path, encoding=encoding, delimiter=delimiter)
+    length = get_number_of_columns(path=input_path, dialect=dialect)
     return (-length <= index < 0) or (0 <= index < length)
 
 
