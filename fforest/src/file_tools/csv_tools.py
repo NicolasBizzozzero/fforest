@@ -157,7 +157,7 @@ def select_all_rows_where(path: str, predicate: callable, dialect: Dialect) -> l
                                               skipinitialspace=dialect.skip_initial_space) if predicate(row)]
 
 
-def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[Dict, None]:
+def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[List, None]:
     """ A wrapper for `select_all_rows_where`.
     Select the row identified at the column `identifier_name` with the value `row_id`.
 
@@ -169,6 +169,22 @@ def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Di
         return select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, dialect=dialect)[0]
     except IndexError:  # Row was not found
         return None
+
+
+def get_identified_row_dict(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[Dict, None]:
+    """ A wrapper for `select_all_rows_where`.
+    Select the row identified at the column `identifier_name` with the value `row_id`, then return a dictionary.
+
+        Example:
+        >>> # SELECT row WHERE ID == 77
+        >>> get_identified_row(path, "ID", "77")
+    """
+    try:
+        row = select_all_rows_where(path=path, predicate=lambda r: r[identifier_name] == row_id, dialect=dialect)[0]
+    except IndexError:  # Row was not found
+        return None
+    header = get_header(path=path, dialect=dialect)
+    return dict(zip(header, row))
 
 
 def preprend_column(input_path: str, output_path: str, column: Union[str, int], dialect: Dialect) -> None:
