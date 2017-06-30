@@ -12,7 +12,7 @@ import csv
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_default_value as gdv
 from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_column, append_column,\
-    NamedAttributeButNoHeader, EmptyHeader, dump_content, get_header
+    NamedAttributeButNoHeader, EmptyHeader, dump_csv_content, get_header
 from fforest.src.getters.get_output_message import Message, vprint
 from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from fforest.src.vrac.maths import is_an_int
@@ -145,7 +145,7 @@ def _add_id(input_path: str, output_path: str, id_name: str, have_header: bool, 
                 content.append(row)
 
     # Prevent the input database to be erased if it's the same as the output database
-    dump_content(path=output_path, content=content, dialect=dialect)
+    dump_csv_content(path=output_path, content=content, dialect=dialect)
 
 
 def _identifier_at_beginning(path: str, identifier: str, have_header: bool, dialect: Dialect) -> bool:

@@ -9,7 +9,7 @@ from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, 
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import kappa_rifqi_marsala
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     QualityComputingMethod, UnknownQualityComputingMethod
-from fforest.src.file_tools.csv_tools import get_identified_row, dump_content
+from fforest.src.file_tools.csv_tools import get_identified_row, dump_csv_content
 from fforest.src.file_tools.dialect import Dialect
 
 
@@ -48,7 +48,7 @@ def _dump_forest_quality(content: Dict[str, float], forest_quality_vector_path: 
     its quality.
     """
     content = [[tree, quality] for tree, quality in zip(content.keys(), content.values())]
-    dump_content(path=forest_quality_vector_path, content=content, dialect=dialect)
+    dump_csv_content(path=forest_quality_vector_path, content=content, dialect=dialect)
 
 
 if __name__ == "__main__":

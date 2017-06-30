@@ -60,12 +60,12 @@ def iter_rows_dict(path: str, dialect: Dialect) -> Dict:
                 yield row
 
 
-def get_content(path: str, skip_header: bool, dialect: Dialect) -> Iterable[List]:
+def get_csv_content(path: str, skip_header: bool, dialect: Dialect) -> Iterable[List]:
     """ Get rows from a CSV file. """
     return [row for row in iter_rows(path=path, skip_header=skip_header, dialect=dialect)]
 
 
-def dump_content(path: str, content: Iterable[List], dialect: Dialect) -> None:
+def dump_csv_content(path: str, content: Iterable[List], dialect: Dialect) -> None:
     """ Dump rows into a CSV file. """
     with open(path, "w", encoding=dialect.encoding, newline=dialect.line_delimiter) as output_file:
         output_writer = csv.writer(output_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
@@ -177,11 +177,11 @@ def preprend_column(input_path: str, output_path: str, column: Union[str, int], 
         index_column = find_index_with_class(path=input_path, class_name=column, dialect=dialect)
         preprend_column(input_path, output_path, index_column, dialect)
     else:
-        content = get_content(path=input_path, skip_header=False, dialect=dialect)
+        content = get_csv_content(path=input_path, skip_header=False, dialect=dialect)
         # Move the column at the beginning
         for line in content:
             line.insert(0, (line.pop(column)))
-        dump_content(path=output_path, content=content, dialect=dialect)
+        dump_csv_content(path=output_path, content=content, dialect=dialect)
 
 
 def append_column(input_path: str, output_path: str, column: Union[str, int], dialect: Dialect) -> None:
@@ -190,11 +190,11 @@ def append_column(input_path: str, output_path: str, column: Union[str, int], di
         index_column = find_index_with_class(path=input_path, class_name=column, dialect=dialect)
         append_column(input_path, output_path, index_column, dialect)
     else:
-        content = get_content(path=input_path, skip_header=False, dialect=dialect)
+        content = get_csv_content(path=input_path, skip_header=False, dialect=dialect)
         # Move the column at the beginning
         for line in content:
             line.append(line.pop(column))
-        dump_content(path=output_path, content=content, dialect=dialect)
+        dump_csv_content(path=output_path, content=content, dialect=dialect)
 
 
 def find_index_with_class(path: str, class_name: str, dialect: Dialect) -> int:

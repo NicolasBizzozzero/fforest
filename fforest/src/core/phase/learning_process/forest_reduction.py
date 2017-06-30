@@ -7,7 +7,7 @@ import csv
 from typing import Dict, List
 
 import fforest.src.getters.environment as env
-from fforest.src.file_tools.csv_tools import iter_rows, get_header
+from fforest.src.file_tools.csv_tools import iter_rows, get_header, dump_csv_content
 from fforest.src.vrac.maths import round_float
 from fforest.src.file_tools.dialect import Dialect
 
@@ -96,12 +96,8 @@ def _dump_difficulty_vector(vector_path: str, difficulty_vector: Dict[str, float
     class's % of membership for all salammbo vectors. It assign a classification difficulty to an example from the
     reference database.
     """
-    with open(vector_path, "w", encoding=dialect.encoding, newline=dialect.line_delimiter) as file:
-        writer = csv.writer(file, delimiter=dialect.delimiter, quoting=dialect.quoting, quotechar=dialect.quote_char,
-                            skipinitialspace=dialect.skip_initial_space)
-        for identifier in difficulty_vector.keys():
-            row = [identifier, difficulty_vector[identifier]]
-            writer.writerow(row)
+    content = [[identifier, difficulty_vector[identifier]] for identifier in difficulty_vector.keys()]
+    dump_csv_content(path=vector_path, content=content, dialect=dialect)
 
 
 if __name__ == "__main__":

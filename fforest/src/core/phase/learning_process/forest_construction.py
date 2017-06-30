@@ -9,7 +9,7 @@ from typing import List, Dict
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
-from fforest.src.file_tools.csv_tools import dump_content
+from fforest.src.file_tools.csv_tools import dump_csv_content
 from fforest.src.file_tools.format import format_to_string
 from fforest.src.vrac.file_system import get_path
 from fforest.src.vrac.iterators import grouper
@@ -31,26 +31,22 @@ def forest_construction():
     the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified
     and salammbo vectors for each t_norms on each tree and save it inside the tree directory.
     """
-    subtrain_dir_path = get_path(env.subtrain_database_path)
     chosen_options = _parameters_to_salammbo_options(discretization_threshold=str(env.discretization_threshold),
                                                      entropy_measure=env.entropy_measure,
                                                      number_of_tnorms=str(env.t_norms),
                                                      entropy_threshold=env.entropy_threshold,
                                                      min_size_leaf=env.minimal_size_leaf)
-    counter_size = len(str(env.trees_in_forest))
+
     processes = list()
     for tree_index in range(1, env.trees_in_forest + 1):
-        database_name = env.subsubtrain_directory_pattern % str(tree_index).zfill(counter_size)
-        database_path = "{0}/{1}/{1}.{2}".format(subtrain_dir_path, database_name, format_to_string(env.format_output))
         process = Process(target=_tree_construction,
-                          kwargs={"path_to_database": database_path,
+                          kwargs={"path_to_database": env.subsubtrain_databases_paths[tree_index - 1],
                                   "path_to_reference_database": env.reference_database_path,
-                                  "number_of_tnorms": env.t_norms,
                                   "chosen_options": chosen_options,
-                                  "vector_file_extension": env.vector_file_extension,
-                                  "salammbo_vector_prefix": env.salammbo_vector_prefix,
-                                  "cclassified_vector_prefix": env.cclassified_vector_prefix,
+                                  "cclassified_vectors_paths": env.cclassified_vectors_paths,
+                                  "salammbo_vectors_paths": env.salammbo_vectors_paths,
                                   "possible_classes": env.possible_classes,
+                                  "tree_index": tree_index,
                                   "dialect": env.dialect,
                                   })
         processes.append(process)
@@ -95,13 +91,14 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
     return options
 
 
-def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
-                       chosen_options: iter, vector_file_extension: str, salammbo_vector_prefix: str,
-                       cclassified_vector_prefix: str, possible_classes: List[str], dialect: Dialect) -> None:
+def _tree_construction(path_to_database: str, path_to_reference_database: str, chosen_options: iter,
+                       cclassified_vectors_paths: Dict[str, List[str]], salammbo_vectors_paths: Dict[str, List[str]],
+                       possible_classes: List[str], tree_index: int, dialect: Dialect) -> None:
     """ Create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the Salammbô
     executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and salammbo
     vectors for each t_norms on each tree and save it inside the tree directory.
     """
+    number_of_tnorms = len(cclassified_vectors_paths.keys())
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
@@ -109,15 +106,15 @@ def _tree_construction(path_to_database: str, path_to_reference_database: str, n
                                      number_of_tnorms=number_of_tnorms)
     cclassified_vectors = _get_cclassified_dictionary(salammbo_dict=salammbo_vectors,
                                                       number_of_tnorms=number_of_tnorms)
-    _save_vectors(salammbo_vector_content=salammbo_vectors,
-                  cclassified_vector=cclassified_vectors,
-                  number_of_tnorms=number_of_tnorms,
-                  subsubtrain_dir_path=get_path(path_to_database),
-                  salammbo_vector_prefix=salammbo_vector_prefix,
-                  cclassified_vector_prefix=cclassified_vector_prefix,
-                  vector_file_extension=vector_file_extension,
-                  possible_classes=possible_classes,
-                  dialect=dialect)
+    _save_cclassified_vectors(cclassified_vector=cclassified_vectors,
+                              vectors_path=cclassified_vectors_paths,
+                              tree_index=tree_index,
+                              dialect=dialect)
+    _save_salammbo_vectors(vector_content=salammbo_vectors,
+                           vectors_path=salammbo_vectors_paths,
+                           tree_index=tree_index,
+                           possible_classes=possible_classes,
+                           dialect=dialect)
 
 
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
@@ -180,28 +177,14 @@ def _get_cclassified_dictionary(salammbo_dict: dict, number_of_tnorms: int) -> D
     return cclassified
 
 
-def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], salammbo_vector_content: Dict, number_of_tnorms: int,
-                  subsubtrain_dir_path: str, salammbo_vector_prefix: str, cclassified_vector_prefix: str,
-                  vector_file_extension: str, possible_classes: List[str], dialect: Dialect) -> None:
-    """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a
-    cclassified vector and a salammbo vector.
-    """
-    for tnorm in range(number_of_tnorms + 1):
-        tnorm_name = tnorm_to_str(tnorm)
-        cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
-                                                      vector_file_extension)
-        salammbo_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, salammbo_vector_prefix, tnorm_name,
-                                                   vector_file_extension)
-        _save_cclassified_vector(vector_path=cclassified_vector_path,
+def _save_cclassified_vectors(cclassified_vector: Dict[str, Dict[str, bool]], vectors_path: Dict[str, List[str]],
+                              tree_index: int, dialect: Dialect) -> None:
+    """ Dump the content of the cclassified vectors inside the subsubtrain directory. """
+    for tnorm in vectors_path.keys():
+        _save_cclassified_vector(vector_path=vectors_path[tnorm][tree_index - 1],
                                  vector_content=cclassified_vector,
-                                 tnorm_name=tnorm_name,
+                                 tnorm_name=tnorm,
                                  dialect=dialect)
-
-        _save_salammbo_vector(vector_path=salammbo_vector_path,
-                              vector_content=salammbo_vector_content,
-                              tnorm=tnorm_name,
-                              possible_classes=possible_classes,
-                              dialect=dialect)
 
 
 def _save_cclassified_vector(vector_path: str, vector_content: Dict[str, Dict[str, bool]], tnorm_name: str,
@@ -211,7 +194,18 @@ def _save_cclassified_vector(vector_path: str, vector_content: Dict[str, Dict[st
     for identifier in vector_content.keys():
         content.append([identifier, 1.0 if vector_content[identifier][tnorm_name] else 0.0])
 
-    dump_content(path=vector_path, content=content, dialect=dialect)
+    dump_csv_content(path=vector_path, content=content, dialect=dialect)
+
+
+def _save_salammbo_vectors(vector_content: Dict, vectors_path: Dict[str, List[str]], possible_classes: List[str],
+                           tree_index: int, dialect: Dialect) -> None:
+    """ Dump the content of the salammbo vectors inside the subsubtrain directory. """
+    for tnorm in vectors_path.keys():
+        _save_salammbo_vector(vector_path=vectors_path[tnorm][tree_index - 1],
+                              vector_content=vector_content,
+                              tnorm=tnorm,
+                              possible_classes=possible_classes,
+                              dialect=dialect)
 
 
 def _save_salammbo_vector(vector_path: str, vector_content: Dict, tnorm: str, possible_classes: List[str],
@@ -231,7 +225,7 @@ def _save_salammbo_vector(vector_path: str, vector_content: Dict, tnorm: str, po
             except KeyError:
                 row.append(0.0)
 
-    dump_content(path=vector_path, content=content, dialect=dialect)
+    dump_csv_content(path=vector_path, content=content, dialect=dialect)
 
 
 if __name__ == "__main__":
