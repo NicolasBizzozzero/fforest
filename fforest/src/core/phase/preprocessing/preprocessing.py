@@ -57,7 +57,7 @@ def preprocessing() -> None:
                 output_path=env.preprocessed_database_path,
                 id_name=gdv.identifier(),
                 have_header=env.have_header,
-                dialect=env.dialect)
+                dialect=env.dialect_output)
 
         # An header as been added
         env.have_header = True
@@ -73,34 +73,34 @@ def preprocessing() -> None:
     if not _identifier_at_beginning(path=env.preprocessed_database_path,
                                     have_header=env.have_header,
                                     identifier=env.identifier,
-                                    dialect=env.dialect):
+                                    dialect=env.dialect_output):
         vprint(Message.PREPEND_ID)
         preprend_column(input_path=env.preprocessed_database_path,
                         output_path=env.preprocessed_database_path,
                         column=env.identifier,
-                        dialect=env.dialect)
+                        dialect=env.dialect_output)
 
         # The identifier is now a the beginning of the database, we change it to the index 0
         env.identifier = 0
 
     # Check if the class column is at the end of the database
     if not _class_at_end(path=env.preprocessed_database_path, class_name=env.class_name, have_header=env.have_header,
-                         dialect=env.dialect):
+                         dialect=env.dialect_output):
         vprint(Message.APPEND_CLASS)
         append_column(input_path=env.preprocessed_database_path,
                       output_path=env.preprocessed_database_path,
                       column=env.class_name,
-                      dialect=env.dialect)
+                      dialect=env.dialect_output)
 
         # The class column is now a the end of the database, we change it to the last index
-        env.class_name = get_number_of_columns(env.preprocessed_database_path, dialect=env.dialect) - 1
+        env.class_name = get_number_of_columns(env.preprocessed_database_path, dialect=env.dialect_output) - 1
 
     # Check if the database have a header
     if env.have_header:
         vprint(Message.EXTRACT_HEADER)
         _extract_header(input_path=env.preprocessed_database_path,
                         header_path=env.header_path,
-                        dialect=env.dialect)
+                        dialect=env.dialect_output)
 
         # The header have been extracted, we remove the boolean value attesting for its presence
         env.have_header = False

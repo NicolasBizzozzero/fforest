@@ -114,13 +114,13 @@ def get_row(path: str, row_number: int, skip_header: bool, dialect: Dialect) -> 
     If a `row_number` is out-of-bound, this function return the `None` value.
 
         Example :
-        >>> get_row("../../test/data/bank.csv", -1, dialect=Dialect(delimiter=";")) is None
+        >>> get_row("../../test/data/bank.csv", -1, dialect_output=Dialect(delimiter=";")) is None
         True
         >>> get_row("../../test/data/bank.csv", get_number_of_rows("../../test/data/bank.csv",
         ...                                                        Dialect(delimiter=";")) + 1,
-        ...                                     dialect=Dialect(delimiter=";")) is None
+        ...                                     dialect_output=Dialect(delimiter=";")) is None
         True
-        >>> get_row("../../test/data/bank.csv", 77, dialect=Dialect(delimiter=";"))[:14]
+        >>> get_row("../../test/data/bank.csv", 77, dialect_output=Dialect(delimiter=";"))[:14]
         [54.0, 'management', 'divorced', 'tertiary', 'no', 3222.0, 'no', 'no', 'cellular', 14.0, 'aug', 67.0, 2.0, -1.0]
     """
     if row_number <= 0:

@@ -47,7 +47,7 @@ def forest_construction():
                                   "salammbo_vectors_paths": env.salammbo_vectors_paths,
                                   "possible_classes": env.possible_classes,
                                   "tree_index": tree_index,
-                                  "dialect": env.dialect,
+                                  "dialect_output": env.dialect_output,
                                   })
         processes.append(process)
 

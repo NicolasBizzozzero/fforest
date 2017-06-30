@@ -20,11 +20,11 @@ def forest_reduction() -> None:
     difficulty_vectors = \
         _compute_difficulty_vectors(number_of_trees=env.trees_in_forest,
                                     salammbo_vectors_dict=env.salammbo_vectors_paths,
-                                    dialect=env.dialect)
+                                    dialect=env.dialect_output)
 
     _dump_difficulty_vectors(difficulty_vectors=difficulty_vectors,
                              difficulty_vectors_paths=env.difficulty_vectors_paths,
-                             dialect=env.dialect)
+                             dialect=env.dialect_output)
 
 
 def _compute_difficulty_vectors(number_of_trees: int, salammbo_vectors_dict: Dict[str, List],

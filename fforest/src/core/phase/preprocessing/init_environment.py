@@ -118,14 +118,20 @@ def _init_names(args: dict) -> None:
 
 def _init_miscellaneous(args: dict) -> None:
     """ Initialize all the others variables inside the `env` module. """
-    env.dialect = Dialect(encoding=env.encoding_output,
-                          delimiter=env.delimiter_output,
-                          quoting=env.quoting_output,
-                          quote_char=env.quote_character_output,
-                          line_delimiter=env.line_delimiter_output,
-                          skip_initial_space=True)
+    env.dialect_input = Dialect(encoding=env.encoding_input,
+                                delimiter=env.delimiter_input,
+                                quoting=env.quoting_input,
+                                quote_char=env.quote_character_input,
+                                line_delimiter=env.line_delimiter_input,
+                                skip_initial_space=True)
+    env.dialect_output = Dialect(encoding=env.encoding_output,
+                                 delimiter=env.delimiter_output,
+                                 quoting=env.quoting_output,
+                                 quote_char=env.quote_character_output,
+                                 line_delimiter=env.line_delimiter_output,
+                                 skip_initial_space=True)
     env.possible_classes = list(set(get_column(path=args[gpn.database()],
                                                column=args[gpn.class_name()],
                                                have_header=args[gpn.have_header()],
-                                               dialect=env.dialect)))
+                                               dialect=env.dialect_input)))
     env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()])]

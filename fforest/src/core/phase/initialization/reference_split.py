@@ -26,7 +26,7 @@ def reference_split():
                output_name_test=env.subtrain_database_path,
                class_name=env.class_name,
                number_of_rows=env.train_database_instances,
-               dialect=env.dialect)
+               dialect=env.dialect_output)
 
 
 def _create_subtrain_directory(main_directory: str, subtrain_directory: str):

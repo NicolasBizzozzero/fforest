@@ -15,7 +15,7 @@ def initial_split() -> None:
     """
     # Count instances in initial database to convert the training value into a number of instances to give to the train
     # database.
-    env.original_database_instances = get_number_of_rows(env.preprocessed_database_path, env.dialect)
+    env.original_database_instances = get_number_of_rows(env.preprocessed_database_path, env.dialect_output)
     env.training_value = convert_row_limit(env.training_value, env.original_database_instances)
 
     env.train_database_instances, env.test_database_instances = \
@@ -26,4 +26,4 @@ def initial_split() -> None:
                output_name_test=env.test_database_path,
                class_name=env.class_name,
                number_of_rows=env.original_database_instances,
-               dialect=env.dialect)
+               dialect=env.dialect_output)

@@ -18,7 +18,7 @@ def forest_quality() -> None:
 
     _dump_forest_quality_dict(forest_quality_dict=forest_quality_dict,
                               forest_quality_vectors_path=env.subtrain_directory_path,
-                              dialect=env.dialect)
+                              dialect=env.dialect_output)
 
 
 def _get_forest_quality(method: QualityComputingMethod) -> Dict[str, Dict[str, float]]:
