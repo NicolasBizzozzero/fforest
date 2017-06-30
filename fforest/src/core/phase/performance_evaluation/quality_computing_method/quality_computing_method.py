@@ -2,7 +2,7 @@ import enum
 
 
 class QualityComputingMethod(enum.IntEnum):
-    ASKMARSALA = 0
+    KAPPARIFQIMARSALA = 0
 
 
 class UnknownQualityComputingMethod(Exception):
@@ -13,7 +13,7 @@ class UnknownQualityComputingMethod(Exception):
 
 def str_to_qualitycomputingmethod(string: str):
     string = string.lower()
-    if string == "askmarsala":
-        return QualityComputingMethod.ASKMARSALA
+    if string == "kapparifqimarsala":
+        return QualityComputingMethod.KAPPARIFQIMARSALA
     else:
         raise UnknownQualityComputingMethod(string)

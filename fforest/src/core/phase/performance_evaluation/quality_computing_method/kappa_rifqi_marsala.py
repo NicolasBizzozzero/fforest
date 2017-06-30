@@ -5,7 +5,7 @@ An instance score is the product of its difficulty by the % of membership found 
 from typing import Dict
 
 
-def askmarsala() -> Dict[str, Dict[str, float]]:
+def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
     pass
 
 

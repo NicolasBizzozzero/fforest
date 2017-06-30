@@ -6,7 +6,7 @@ from typing import Dict, List
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS
-from fforest.src.core.phase.performance_evaluation.quality_computing_method.askmarsala import askmarsala
+from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import kappa_rifqi_marsala
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     QualityComputingMethod, UnknownQualityComputingMethod
 from fforest.src.file_tools.csv_tools import get_identified_row, dump_content
@@ -25,8 +25,8 @@ def _get_forest_quality(method: QualityComputingMethod) -> Dict[str, Dict[str, f
     """ Get a forest's quality with a defined method. A forest's quality content map each tree from the forest to its
     quality.
     """
-    if method == QualityComputingMethod.ASKMARSALA:
-        return askmarsala()
+    if method == QualityComputingMethod.KAPPARIFQIMARSALA:
+        return kappa_rifqi_marsala()
     else:
         raise UnknownQualityComputingMethod()
 
