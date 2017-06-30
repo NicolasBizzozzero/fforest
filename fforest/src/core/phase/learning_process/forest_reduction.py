@@ -3,7 +3,6 @@ class's % of membership for all salammbo vectors. It assign a classification dif
 database. Theses difficulty vectors will be dumped into the subtrain directory.
 """
 
-import csv
 from typing import Dict, List
 
 import fforest.src.getters.environment as env
@@ -73,11 +72,9 @@ def _get_salammbo_vector(vector_path: str, number_of_trees: int, dialect: Dialec
 
     # Extract classes from the header
     classes = get_header(path=vector_path, dialect=dialect)[2:]
-    print(classes)
 
     for row in iter_rows(path=vector_path, skip_header=True, dialect=dialect):
         identifier, true_class, *rest = row
-        print(identifier, true_class)
         membership = rest[classes.index(true_class)]
         salammbo_vector[identifier] = membership / number_of_trees
 
