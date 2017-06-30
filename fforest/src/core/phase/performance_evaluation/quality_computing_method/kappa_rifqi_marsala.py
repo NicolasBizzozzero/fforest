@@ -4,8 +4,8 @@ An instance's score is the product of its difficulty by the % of membership foun
 
 from typing import Dict, List
 
-from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS
-from fforest.src.file_tools.csv_tools import get_identified_row, iter_rows, get_column, get_identified_row_dict
+from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS, KEY_DIFFICULTY
+from fforest.src.file_tools.csv_tools import get_identified_row, iter_rows, get_column
 from fforest.src.file_tools.dialect import Dialect
 import fforest.src.getters.environment as env
 
@@ -52,7 +52,6 @@ def _get_instance_score(instance_identifier: str, difficulty_vector_path: str, s
                                          dialect=dialect)
     difficulty = _get_instance_difficulty(instance_identifier=instance_identifier,
                                           difficulty_vector_path=difficulty_vector_path,
-                                          true_class=true_class,
                                           dialect=dialect)
     membership = _get_instance_membership(instance_identifier=instance_identifier,
                                           salammbo_vector_path=salammbo_vector_path,
@@ -69,19 +68,18 @@ def _get_instance_trueclass(instance_identifier: str, salammbo_vector_path: str,
     return row[KEY_TRUECLASS]
 
 
-def _get_instance_difficulty(instance_identifier: str, difficulty_vector_path: str, true_class: str,
-                             dialect: Dialect) -> float:
+def _get_instance_difficulty(instance_identifier: str, difficulty_vector_path: str, dialect: Dialect) -> float:
     row = get_identified_row(path=difficulty_vector_path,
                              identifier_name=KEY_ID,
                              row_id=instance_identifier,
                              dialect=dialect)
-    return float(row[-1])
+    return float(row[KEY_DIFFICULTY])
 
 
 def _get_instance_membership(instance_identifier: str, salammbo_vector_path: str, true_class: str,
                              dialect: Dialect) -> float:
-    row = get_identified_row_dict(path=salammbo_vector_path,
-                                  identifier_name=KEY_ID,
-                                  row_id=instance_identifier,
-                                  dialect=dialect)
+    row = get_identified_row(path=salammbo_vector_path,
+                             identifier_name=KEY_ID,
+                             row_id=instance_identifier,
+                             dialect=dialect)
     return float(row[true_class])
