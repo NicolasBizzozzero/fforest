@@ -66,7 +66,7 @@ subtrain_database_path = None
 subsubtrain_databases_paths = None
 difficulty_vectors_paths = None
 cclassified_vectors_paths = None
-quality_vectors_paths = None
+salammbo_vectors_paths = None
 
 # Names
 original_database_name = None

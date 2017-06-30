@@ -19,7 +19,7 @@
     "vector_file_extension": "vector",
     "header_extension": "att",
     "cclassified_vector_prefix": "cclassified_",
-    "quality_vector_prefix": "quality_",
+    "salammbo_vector_prefix": "salammbo_",
     "difficulty_vector_prefix": "difficulty_",
 
     "subtrain_directory": "subtrain",

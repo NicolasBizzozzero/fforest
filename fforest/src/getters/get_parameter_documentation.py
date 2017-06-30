@@ -108,7 +108,7 @@ def cclassified_vector_prefix() -> str:
     return _get_doc_from_file("cclassified_vector_prefix")
 
 
-def quality_vector_prefix() -> str:
+def salammbo_vector_prefix() -> str:
     return _get_doc_from_file("salammbo_vector_prefix")
 
 

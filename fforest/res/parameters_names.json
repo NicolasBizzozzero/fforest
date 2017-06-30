@@ -21,7 +21,7 @@
     "header_name": "--header-name",
     "subsubtrain_name_pattern": "--subsubtrain-name-pattern",
     "cclassified_vector_prefix": "--cclassified-vector-prefix",
-    "quality_vector_prefix": "--quality-vector-prefix",
+    "salammbo_vector_prefix": "--salammbo-vector-prefix",
     "difficulty_vector_prefix": "--difficulty-vector-prefix",
     "tree_file_extension": "--tree-file-extension",
     "vector_file_extension": "--vector-file-extension",
