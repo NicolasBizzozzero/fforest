@@ -1,8 +1,7 @@
 """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the
 Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and
-quality vectors for each t_norms on each tree and save it inside the tree directory.
+salammbo vectors for each t_norms on each tree and save it inside the tree directory.
 """
-import csv
 from multiprocessing import Process
 from os import path
 from typing import List, Dict
@@ -10,10 +9,12 @@ from typing import List, Dict
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
+from fforest.src.file_tools.csv_tools import dump_content
 from fforest.src.file_tools.format import format_to_string
 from fforest.src.vrac.file_system import get_path
 from fforest.src.vrac.iterators import grouper
 from fforest.src.vrac.process import execute_and_get_stdout
+from fforest.src.file_tools.csv_tools import Dialect
 
 
 HERE = path.abspath(path.dirname(__file__))
@@ -28,7 +29,7 @@ KEY_ID = "ID"
 def forest_construction():
     """ Asynchronously create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of
     the Salammbô executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified
-    and quality vectors for each t_norms on each tree and save it inside the tree directory.
+    and salammbo vectors for each t_norms on each tree and save it inside the tree directory.
     """
     subtrain_dir_path = get_path(env.subtrain_database_path)
     chosen_options = _parameters_to_salammbo_options(discretization_threshold=str(env.discretization_threshold),
@@ -46,15 +47,11 @@ def forest_construction():
                                   "path_to_reference_database": env.reference_database_path,
                                   "number_of_tnorms": env.t_norms,
                                   "chosen_options": chosen_options,
-                                  "delimiter": env.delimiter_output,
-                                  "quoting": env.quoting_output,
-                                  "quote_char": env.quote_character_output,
-                                  "encoding": env.encoding_output,
-                                  "quality_vector_prefix": env.quality_vector_prefix,
-                                  "cclassified_vector_prefix": env.cclassified_vector_prefix,
                                   "vector_file_extension": env.vector_file_extension,
+                                  "salammbo_vector_prefix": env.salammbo_vector_prefix,
+                                  "cclassified_vector_prefix": env.cclassified_vector_prefix,
                                   "possible_classes": env.possible_classes,
-                                  "line_delimiter": env.line_delimiter_output,
+                                  "dialect": env.dialect,
                                   })
         processes.append(process)
 
@@ -68,7 +65,7 @@ def forest_construction():
 
 
 def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measure: EntropyMeasure,
-                                    number_of_tnorms: str, entropy_threshold: str, min_size_leaf: str) -> List:
+                                    number_of_tnorms: str, entropy_threshold: str, min_size_leaf: str) -> List[str]:
     """ Compute then return a list of options which'll be understood and used by the Salammbô executable, located inside
     the `bin` directory, at the root of the software.
     """
@@ -99,34 +96,28 @@ def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measu
 
 
 def _tree_construction(path_to_database: str, path_to_reference_database: str, number_of_tnorms: int,
-                       chosen_options: iter, delimiter: str, quoting: int, quote_char: str, encoding: str,
-                       vector_file_extension: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
-                       line_delimiter: str, possible_classes: List[str]) -> None:
+                       chosen_options: iter, vector_file_extension: str, salammbo_vector_prefix: str,
+                       cclassified_vector_prefix: str, possible_classes: List[str], dialect: Dialect) -> None:
     """ Create `t_norms` number of trees/fuzzy-trees inside each subsubtrain directory with the help of the Salammbô
-    executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and quality
+    executable, located inside the `bin` directory, at the root of the software. Then, compute cclassified and salammbo
     vectors for each t_norms on each tree and save it inside the tree directory.
     """
     lines = _construct_tree(path_to_database=path_to_database,
                             path_to_reference_database=path_to_reference_database,
                             chosen_options=chosen_options)
-    quality_vectors = _parse_result(lines=lines,
-                                    number_of_tnorms=number_of_tnorms)
-    cclassified_vectors = _get_cclassified_dictionary(quality=quality_vectors,
+    salammbo_vectors = _parse_result(lines=lines,
+                                     number_of_tnorms=number_of_tnorms)
+    cclassified_vectors = _get_cclassified_dictionary(salammbo_dict=salammbo_vectors,
                                                       number_of_tnorms=number_of_tnorms)
-    _save_vectors(quality_vector=quality_vectors,
+    _save_vectors(salammbo_vector_content=salammbo_vectors,
                   cclassified_vector=cclassified_vectors,
                   number_of_tnorms=number_of_tnorms,
                   subsubtrain_dir_path=get_path(path_to_database),
-                  quality_vector_prefix=quality_vector_prefix,
+                  salammbo_vector_prefix=salammbo_vector_prefix,
                   cclassified_vector_prefix=cclassified_vector_prefix,
                   vector_file_extension=vector_file_extension,
-                  delimiter=delimiter,
-                  quoting=quoting,
-                  quote_char=quote_char,
-                  encoding=encoding,
                   possible_classes=possible_classes,
-                  line_delimiter=line_delimiter,
-                  skip_initial_space=True)
+                  dialect=dialect)
 
 
 def _construct_tree(path_to_database: str, path_to_reference_database: str, chosen_options: iter) -> str:
@@ -161,25 +152,25 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
                     result[identifier] = dict()
                     result[identifier][KEY_TRUECLASS] = true_class.strip("\"")
                     result[identifier][tnorm_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
-                                                                    for class_found,
-                                                                        membership_degree in grouper(2, rest)}
+                                                                    for class_found, membership_degree in
+                                                                    grouper(2, rest)}
     except ValueError:  # For the last empty line
         pass
     return result
 
 
-def _get_cclassified_dictionary(quality: dict, number_of_tnorms: int) -> dict:
-    """ Return a cclassified dictionary, mapping to every t-norm for each identifier of the `quality` dictionary,
-    True if this t-norm has correctly predicted the real class, or False otherwise.
+def _get_cclassified_dictionary(salammbo_dict: dict, number_of_tnorms: int) -> Dict[str, Dict[str, bool]]:
+    """ Return a correctly classified dictionary, mapping to every t-norm for each identifier of the salammbo
+    dictionary, True if this t-norm has correctly predicted the real class, or False otherwise.
     """
     tnorms = [tnorm_to_str(tnorm) for tnorm in range(number_of_tnorms + 1)]
     cclassified = dict()
-    for identifier in quality.keys():
+    for identifier in salammbo_dict.keys():
         cclassified[identifier] = dict()
-        real_class = quality[identifier][KEY_TRUECLASS]
+        real_class = salammbo_dict[identifier][KEY_TRUECLASS]
         for tnorm in tnorms:
             try:
-                classes = quality[identifier][tnorm]
+                classes = salammbo_dict[identifier][tnorm]
                 class_found = max(classes, key=(lambda key: classes[key]))
                 cclassified[identifier][tnorm] = class_found == real_class
             except KeyError:
@@ -189,75 +180,58 @@ def _get_cclassified_dictionary(quality: dict, number_of_tnorms: int) -> dict:
     return cclassified
 
 
-def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], quality_vector: Dict, number_of_tnorms: int,
-                  subsubtrain_dir_path: str, quality_vector_prefix: str, cclassified_vector_prefix: str,
-                  vector_file_extension: str, delimiter: str, quoting: int, quote_char: str, encoding: str,
-                  possible_classes: List[str], line_delimiter: str, skip_initial_space: bool = True) -> None:
+def _save_vectors(cclassified_vector: Dict[str, Dict[str, bool]], salammbo_vector_content: Dict, number_of_tnorms: int,
+                  subsubtrain_dir_path: str, salammbo_vector_prefix: str, cclassified_vector_prefix: str,
+                  vector_file_extension: str, possible_classes: List[str], dialect: Dialect) -> None:
     """ Dump the content of the vectors inside the subsubtrain directory. This method'll dump for each tnorm, a
-    cclassified vector and a quality vector.
+    cclassified vector and a salammbo vector.
     """
     for tnorm in range(number_of_tnorms + 1):
         tnorm_name = tnorm_to_str(tnorm)
         cclassified_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, cclassified_vector_prefix, tnorm_name,
                                                       vector_file_extension)
-        quality_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, quality_vector_prefix, tnorm_name,
-                                                  vector_file_extension)
+        salammbo_vector_path = "{}/{}{}.{}".format(subsubtrain_dir_path, salammbo_vector_prefix, tnorm_name,
+                                                   vector_file_extension)
         _save_cclassified_vector(vector_path=cclassified_vector_path,
-                                 cclassified_vector=cclassified_vector,
+                                 vector_content=cclassified_vector,
                                  tnorm_name=tnorm_name,
-                                 delimiter=delimiter,
-                                 quoting=quoting,
-                                 quote_char=quote_char,
-                                 encoding=encoding,
-                                 skip_initial_space=skip_initial_space,
-                                 line_delimiter=line_delimiter)
+                                 dialect=dialect)
 
-        _save_quality_vector(vector_path=quality_vector_path,
-                             quality_vector=quality_vector,
-                             possible_classes=possible_classes,
-                             real_class_name=KEY_TRUECLASS,
-                             delimiter=delimiter,
-                             quoting=quoting,
-                             quote_char=quote_char,
-                             encoding=encoding,
-                             skip_initial_space=skip_initial_space,
-                             identifier_name=KEY_ID,
-                             tnorm_name=tnorm_name,
-                             line_delimiter=line_delimiter)
+        _save_salammbo_vector(vector_path=salammbo_vector_path,
+                              vector_content=salammbo_vector_content,
+                              tnorm=tnorm_name,
+                              possible_classes=possible_classes,
+                              dialect=dialect)
 
 
-def _save_cclassified_vector(vector_path: str, cclassified_vector: Dict[str, Dict[str, bool]], tnorm_name: str,
-                             delimiter: str, quoting: int, quote_char: str, encoding: str, line_delimiter: str,
-                             skip_initial_space: bool = True) -> True:
+def _save_cclassified_vector(vector_path: str, vector_content: Dict[str, Dict[str, bool]], tnorm_name: str,
+                             dialect: Dialect) -> None:
     """ Dump the cclassified vector inside the subsubtrain directory for one t-norm. """
-    with open(vector_path, "w", encoding=encoding, newline=line_delimiter) as file:
-        writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                            skipinitialspace=skip_initial_space)
+    content = list()
+    for identifier in vector_content.keys():
+        content.append([identifier, 1.0 if vector_content[identifier][tnorm_name] else 0.0])
 
-        for identifier in cclassified_vector.keys():
-            writer.writerow([identifier, 1.0 if cclassified_vector[identifier][tnorm_name] else 0.0])
+    dump_content(path=vector_path, content=content, dialect=dialect)
 
 
-def _save_quality_vector(vector_path: str, quality_vector: Dict, identifier_name: str, real_class_name: str,
-                         delimiter: str, quoting: int, quote_char: str, encoding: str, possible_classes: List[str],
-                         tnorm_name: str, line_delimiter: str, skip_initial_space: bool = True) -> True:
-    """ Dump the quality vector inside the subsubtrain directory for one t-norm. """
-    with open(vector_path, "w", encoding=encoding, newline=line_delimiter) as file:
-        writer = csv.writer(file, delimiter=delimiter, quoting=quoting, quotechar=quote_char,
-                            skipinitialspace=skip_initial_space)
+def _save_salammbo_vector(vector_path: str, vector_content: Dict, tnorm: str, possible_classes: List[str],
+                          dialect: Dialect) -> None:
+    """ Dump the salammbo vector inside the subsubtrain directory for one t-norm. """
+    content = list()
 
-        # Write header
-        header = [identifier_name, real_class_name, *(possible_class for possible_class in possible_classes)]
-        writer.writerow(header)
+    # Add header
+    content.append([KEY_ID, KEY_TRUECLASS, *(possible_class for possible_class in possible_classes)])
 
-        for identifier in quality_vector.keys():
-            row = [identifier, quality_vector[identifier][KEY_TRUECLASS]]
-            for possible_class in possible_classes:
-                try:
-                    row.append(quality_vector[identifier][tnorm_name][possible_class])
-                except KeyError:
-                    row.append(0.0)
-            writer.writerow(row)
+    # Add rows
+    for identifier in vector_content.keys():
+        row = [identifier, vector_content[identifier][KEY_TRUECLASS]]
+        for possible_class in possible_classes:
+            try:
+                row.append(vector_content[identifier][tnorm][possible_class])
+            except KeyError:
+                row.append(0.0)
+
+    dump_content(path=vector_path, content=content, dialect=dialect)
 
 
 if __name__ == "__main__":

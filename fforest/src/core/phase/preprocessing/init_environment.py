@@ -42,7 +42,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.parent_dir = args[gpn.parent_dir()]
     env.preprocessed_database_name = args[gpn.preprocessed_database_name().split()[-1]]
     env.quality_threshold = args[gpn.quality_threshold().split()[-1]]
-    env.quality_vector_prefix = args[gpn.quality_vector_prefix().split()[-1]]
+    env.salammbo_vector_prefix = args[gpn.quality_vector_prefix().split()[-1]]
     env.quote_character_input = args[gpn.quote_char_input().split()[-1]]
     env.quote_character_output = args[gpn.quote_char_output().split()[-1]]
     env.quoting_input = args[gpn.quoting_input().split()[-1]]
@@ -104,7 +104,7 @@ def _init_paths(args: dict) -> None:
                                      tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
 
     env.quality_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
-                                                             env.quality_vector_prefix,
+                                                             env.salammbo_vector_prefix,
                                                              tnorm,
                                                              env.vector_file_extension) for
                                          tree_index in range(1, env.trees_in_forest + 1)] for

@@ -97,7 +97,7 @@ def cclassified_vector_prefix() -> str:
 
 
 def quality_vector_prefix() -> str:
-    return _get_value_from_file("quality_vector_prefix")
+    return _get_value_from_file("salammbo_vector_prefix")
 
 
 def difficulty_vector_prefix() -> str:
