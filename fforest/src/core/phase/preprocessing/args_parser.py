@@ -27,6 +27,7 @@ _FORMAT_DICTIONARY = dict(
     doc_initial_split_method=gpd.initial_split_method(),
     doc_reference_split_method=gpd.reference_split_method(),
     doc_subsubtrain_split_method=gpd.subsubtrain_split_method(),
+    doc_quality_computing_method=gpd.quality_computing_method(),
     doc_train_name=gpd.train_name(),
     doc_test_name=gpd.test_name(),
     doc_preprocessed_db_name=gpd.preprocessed_database_name(),
@@ -77,6 +78,7 @@ _FORMAT_DICTIONARY = dict(
     param_initial_split_method=gpn.initial_split_method(),
     param_reference_split_method=gpn.reference_split_method(),
     param_subsubtrain_split_method=gpn.subsubtrain_split_method(),
+    param_quality_computing_method=gpn.quality_computing_method(),
     param_train_name=gpn.train_name(),
     param_test_name=gpn.test_name(),
     param_preprocessed_db_name=gpn.preprocessed_database_name(),
@@ -125,6 +127,7 @@ _FORMAT_DICTIONARY = dict(
     default_initial_split_method=gdv.initial_split_method(),
     default_reference_split_method=gdv.reference_split_method(),
     default_subsubtrain_split_method=gdv.subsubtrain_split_method(),
+    default_quality_computing_method=gdv.quality_computing_method(),
     default_train_name=gdv.train_name(),
     default_test_name=gdv.test_name(),
     default_subtrain_name=gdv.subtrain_name(),
@@ -193,10 +196,11 @@ Options:
   {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
   {param_quality_threshold}=VALUE          {doc_quality_threshold}
 
-  # Splitting methods
+  # Processing methods
   {param_initial_split_method}=METHOD            {doc_initial_split_method}
   {param_reference_split_method}=METHOD           {doc_reference_split_method}
   {param_subsubtrain_split_method}=METHOD     {doc_subsubtrain_split_method}
+  {param_quality_computing_method}=METHOD     {doc_quality_computing_method}
 
   # File names
   {param_train_name}=NAME                     {doc_train_name}
@@ -241,8 +245,8 @@ Options:
   {param_quoting_output}=QUOTING              {doc_quoting_output}
   {param_quote_char_input}=CHAR          {doc_quote_char_input}
   {param_quote_char_output}=CHAR         {doc_quote_char_output}
-  {param_line_delimiter_input}=CHAR          {doc_line_delimiter_input}
-  {param_line_delimiter_output}=CHAR         {doc_line_delimiter_output}
+  {param_line_delimiter_input}=CHAR           {doc_line_delimiter_input}
+  {param_line_delimiter_output}=CHAR          {doc_line_delimiter_output}
   {param_verbosity}=LEVEL                     {doc_verbosity}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 

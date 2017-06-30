@@ -21,9 +21,10 @@ HERE = path.abspath(path.dirname(__file__))
 PATH_TO_SALAMMBO = HERE + "/../../../../bin/Salammbo"
 MANDATORY_OPTIONS = ["-R", "-L", "-M", "-N"]
 
+KEY_ID = "ID"
 KEY_TRUECLASS = "trueclass"
 KEY_CCLASSIFIED = "cclassified"
-KEY_ID = "ID"
+KEY_DIFFICULTY = "difficulty"
 
 
 def forest_construction():

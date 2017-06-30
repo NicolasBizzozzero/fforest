@@ -11,6 +11,7 @@
     "initial_split_method": "--init-split-method",
     "reference_split_method": "--refer-split-method",
     "subsubtrain_split_method": "--subsubtrain-split-method",
+    "quality_computing_method": "--quality-computing-method",
 
     "train_name": "--train-name",
     "test_name": "--test-name",

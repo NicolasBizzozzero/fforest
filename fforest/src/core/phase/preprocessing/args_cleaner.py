@@ -8,6 +8,8 @@ import sys
 import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropy_measure
+from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
+    str_to_qualitycomputingmethod
 from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bounds, \
     get_number_of_columns
@@ -87,6 +89,8 @@ def clean_args(args: dict) -> None:
             args[param_name] = str_to_splittingmethod(args[param_name])
             if args[param_name] == SplittingMethod.KEEP_DISTRIBUTION and args[gpn.class_name()] is None:
                 raise MissingClassificationAttribute()
+        elif param_name == gpn.quality_computing_method():
+            args[param_name] = str_to_qualitycomputingmethod(args[param_name])
         elif param_name == gpn.quoting_output():
             args[param_name] = str_to_quoting(args[param_name])
         elif param_name == gpn.main_directory():

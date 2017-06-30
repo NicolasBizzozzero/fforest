@@ -6,6 +6,7 @@ database. Theses difficulty vectors will be dumped into the subtrain directory.
 from typing import Dict, List
 
 import fforest.src.getters.environment as env
+from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_DIFFICULTY
 from fforest.src.file_tools.csv_tools import iter_rows, get_header, dump_csv_content
 from fforest.src.vrac.maths import round_float
 from fforest.src.file_tools.dialect import Dialect
@@ -96,6 +97,10 @@ def _dump_difficulty_vector(vector_path: str, difficulty_vector: Dict[str, float
     reference database.
     """
     content = [[identifier, difficulty_vector[identifier]] for identifier in difficulty_vector.keys()]
+
+    # Prepend header
+    content.insert(0, [KEY_ID, KEY_DIFFICULTY])
+
     dump_csv_content(path=vector_path, content=content, dialect=dialect)
 
 

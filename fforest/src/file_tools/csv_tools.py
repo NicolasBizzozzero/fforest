@@ -157,7 +157,7 @@ def select_all_rows_where(path: str, predicate: callable, dialect: Dialect) -> l
                                               skipinitialspace=dialect.skip_initial_space) if predicate(row)]
 
 
-def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[List, None]:
+def get_identified_row(path: str, identifier_name: str, row_id: str, dialect: Dialect) -> Union[Dict, None]:
     """ A wrapper for `select_all_rows_where`.
     Select the row identified at the column `identifier_name` with the value `row_id`.
 

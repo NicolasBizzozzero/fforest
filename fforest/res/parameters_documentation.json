@@ -10,6 +10,7 @@
     "initial_split_method": "The method to use with the initial split of the database into the train and test databases. Values can be `halfing` or `keepdistribution` [default: {default_initial_split_method}]",
     "reference_split_method": "The method to use with the split of the train database into the reference and subtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_reference_split_method}]",
     "subsubtrain_split_method": "The method to use with the split of the subtrain database into multiple subsubtrain databases. Values can be `halfing` or `keepdistribution`. [default: {default_subsubtrain_split_method}]",
+    "quality_computing_method": "The method used to compute the quality of a forest. Values can be `kapparifqimarsala` [default: {default_quality_computing_method}]",
 
     "train_name": "The name of the train database after the initial split. [default: {default_train_name}]",
     "test_name": "The name of the test database after the initial split. [default: {default_test_name}]",

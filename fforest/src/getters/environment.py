@@ -25,6 +25,7 @@ main_directory = None
 minimal_size_leaf = None
 parent_dir = None
 preprocessed_database_name = None
+quality_computing_method = None
 quality_threshold = None
 salammbo_vector_prefix = None
 quote_character_input = None

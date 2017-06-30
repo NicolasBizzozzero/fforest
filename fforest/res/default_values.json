@@ -7,6 +7,7 @@
     "initial_split_method": "keepdistribution",
     "reference_split_method": "keepdistribution",
     "subsubtrain_split_method": "keepdistribution",
+    "quality_computing_method": "kapparifqimarsala",
 
     "train_name": "train",
     "test_name": "test",
