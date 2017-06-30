@@ -73,9 +73,11 @@ def _get_salammbo_vector(vector_path: str, number_of_trees: int, dialect: Dialec
 
     # Extract classes from the header
     classes = get_header(path=vector_path, dialect=dialect)[2:]
+    print(classes)
 
     for row in iter_rows(path=vector_path, skip_header=True, dialect=dialect):
         identifier, true_class, *rest = row
+        print(identifier, true_class)
         membership = rest[classes.index(true_class)]
         salammbo_vector[identifier] = membership / number_of_trees
 

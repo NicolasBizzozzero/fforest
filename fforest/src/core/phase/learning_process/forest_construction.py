@@ -47,7 +47,7 @@ def forest_construction():
                                   "salammbo_vectors_paths": env.salammbo_vectors_paths,
                                   "possible_classes": env.possible_classes,
                                   "tree_index": tree_index,
-                                  "dialect_output": env.dialect_output,
+                                  "dialect": env.dialect_output,
                                   })
         processes.append(process)
 
@@ -147,10 +147,16 @@ def _parse_result(lines: str, number_of_tnorms: int) -> dict:
                                                                     grouper(2, rest)}
                 except KeyError:  # Will be triggered at the first instance for each chunk
                     result[identifier] = dict()
-                    result[identifier][KEY_TRUECLASS] = true_class.strip("\"")
                     result[identifier][tnorm_to_str(int(tnorm))] = {class_found.strip('"'): float(membership_degree)
                                                                     for class_found, membership_degree in
                                                                     grouper(2, rest)}
+                    # Try to cast the trueclass as float to reduce the trailing zeros
+                    # We need to do this because we compare them to other classes as string
+                    try:
+                        result[identifier][KEY_TRUECLASS] = str(float(true_class.strip("\"")))
+                    except ValueError:
+                        result[identifier][KEY_TRUECLASS] = str(true_class.strip("\""))
+
     except ValueError:  # For the last empty line
         pass
     return result
@@ -214,7 +220,7 @@ def _save_salammbo_vector(vector_path: str, vector_content: Dict, tnorm: str, po
     content = list()
 
     # Add header
-    content.append([KEY_ID, KEY_TRUECLASS, *(possible_class for possible_class in possible_classes)])
+    content.append([KEY_ID, KEY_TRUECLASS, *(str(possible_class) for possible_class in possible_classes)])
 
     # Add rows
     for identifier in vector_content.keys():
