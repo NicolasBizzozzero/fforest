@@ -224,6 +224,7 @@ def _save_salammbo_vector(vector_path: str, vector_content: Dict, tnorm: str, po
                 row.append(vector_content[identifier][tnorm][possible_class])
             except KeyError:
                 row.append(0.0)
+        content.append(row)
 
     dump_csv_content(path=vector_path, content=content, dialect=dialect)
 
