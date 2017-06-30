@@ -1,43 +1,54 @@
-""" Compute a quality's forest vector for each triangular norm chosed. A quality's forest vector map each tree of the
-forest to its quality. It exists many ways to compute the quality of a tree. The main one sum all instances' score then
-divide this sum by the number of instances to normalize the result. An instance score is the product of its difficult
-by the % of membership found by the tree. Theses quality's forest vectors will be dumped into the subtrain directory.
+""" Compute a quality's forest vector for each triangular norm chosen. A quality's forest vector map each tree of the
+forest to its quality. It exists many ways to compute the quality of a tree. Theses quality's forest vectors will be
+dumped into the subtrain directory.
 """
-
+from typing import Dict, List
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS
-from fforest.src.file_tools.csv_tools import get_identified_row
+from fforest.src.core.phase.performance_evaluation.quality_computing_method.askmarsala import askmarsala
+from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
+    QualityComputingMethod, UnknownQualityComputingMethod
+from fforest.src.file_tools.csv_tools import get_identified_row, dump_content
+from fforest.src.file_tools.dialect import Dialect
 
 
 def forest_quality() -> None:
-    difficulty_vectors = \
-        _compute_difficulty_vectors(number_of_trees=env.trees_in_forest,
-                                    quality_vectors_dict=env.quality_vectors_paths,
-                                    delimiter=env.delimiter_output,
-                                    quoting=env.quoting_output,
-                                    quote_char=env.quote_character_output,
-                                    encoding=env.encoding_output,
-                                    line_delimiter=env.line_delimiter_output)
+    forest_quality_dict = _get_forest_quality(method=env.quality_computing_method)
 
-    _dump_difficulty_vectors(difficulty_vectors=difficulty_vectors,
-                             difficulty_vectors_paths=env.difficulty_vectors_paths,
-                             delimiter=env.delimiter_output,
-                             quoting=env.quoting_output,
-                             quote_char=env.quote_character_output,
-                             encoding=env.encoding_output,
-                             line_delimiter=env.line_delimiter_output,
-                             skip_initial_space=True)
+    _dump_forest_quality_dict(forest_quality_dict=forest_quality_dict,
+                              forest_quality_vectors_path=env.subtrain_directory_path,
+                              dialect=env.dialect)
 
 
-def _get_instance_score(instance_identifier: str, difficulty_vector_path: str, quality_vector_path: str):
-    pass
+def _get_forest_quality(method: QualityComputingMethod) -> Dict[str, Dict[str, float]]:
+    """ Get a forest's quality with a defined method. A forest's quality content map each tree from the forest to its
+    quality.
+    """
+    if method == QualityComputingMethod.ASKMARSALA:
+        return askmarsala()
+    else:
+        raise UnknownQualityComputingMethod()
 
 
-def _get_instance_difficulty(instance_identifier: str, difficulty_vector_path: str) -> float:
-    row = get_identified_row(difficulty_vector_path, KEY_ID, instance_identifier, delimiter=";", quoting=2, quote_character= "\"", encoding="utf8")
-    trueclass = row[KEY_TRUECLASS]
-    return float(row[trueclass])
+def _dump_forest_quality_dict(forest_quality_dict: Dict[str, Dict[str, float]],
+                              forest_quality_vectors_path: Dict[str, str], dialect: Dialect) -> None:
+    """ Dump the forest's quality vector for all t-norms. A forest's quality content map each tree from the forest to
+    its quality.
+    """
+    for tnorm in forest_quality_dict.keys():
+        content = forest_quality_dict[tnorm]
+        _dump_forest_quality(content=content,
+                             forest_quality_vector_path=forest_quality_vectors_path[tnorm],
+                             dialect=dialect)
+
+
+def _dump_forest_quality(content: Dict[str, float], forest_quality_vector_path: str, dialect: Dialect) -> None:
+    """ Dump the forest's quality vector for one t-norm. A forest's quality content map each tree from the forest to
+    its quality.
+    """
+    content = [[tree, quality] for tree, quality in zip(content.keys(), content.values())]
+    dump_content(path=forest_quality_vector_path, content=content, dialect=dialect)
 
 
 if __name__ == "__main__":
