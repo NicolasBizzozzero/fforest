@@ -33,7 +33,6 @@ def main_entry_point() -> None:
     forest_reduction()
     forest_quality()
 
-
     dump_statistics_dictionary()
 
 

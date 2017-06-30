@@ -5,11 +5,10 @@ dumped into the subtrain directory.
 from typing import Dict, List
 
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import kappa_rifqi_marsala
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     QualityComputingMethod, UnknownQualityComputingMethod
-from fforest.src.file_tools.csv_tools import get_identified_row, dump_csv_content
+from fforest.src.file_tools.csv_tools import dump_csv_content
 from fforest.src.file_tools.dialect import Dialect
 
 

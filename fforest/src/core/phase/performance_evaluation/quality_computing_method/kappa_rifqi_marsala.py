@@ -63,8 +63,8 @@ def _get_instance_score(instance_identifier: str, difficulty_vector_path: str, s
 
 def _get_instance_trueclass(instance_identifier: str, salammbo_vector_path: str, dialect: Dialect) -> str:
     row = get_identified_row(path=salammbo_vector_path,
-                             identifier_name=instance_identifier,
-                             row_id=KEY_ID,
+                             identifier_name=KEY_ID,
+                             row_id=instance_identifier,
                              dialect=dialect)
     return row[KEY_TRUECLASS]
 
@@ -72,16 +72,16 @@ def _get_instance_trueclass(instance_identifier: str, salammbo_vector_path: str,
 def _get_instance_difficulty(instance_identifier: str, difficulty_vector_path: str, true_class: str,
                              dialect: Dialect) -> float:
     row = get_identified_row(path=difficulty_vector_path,
-                             identifier_name=instance_identifier,
-                             row_id=KEY_ID,
+                             identifier_name=KEY_ID,
+                             row_id=instance_identifier,
                              dialect=dialect)
-    return float(row[true_class])
+    return float(row[-1])
 
 
 def _get_instance_membership(instance_identifier: str, salammbo_vector_path: str, true_class: str,
                              dialect: Dialect) -> float:
-    row = get_identified_row(path=salammbo_vector_path,
-                             identifier_name=instance_identifier,
-                             row_id=KEY_ID,
-                             dialect=dialect)
+    row = get_identified_row_dict(path=salammbo_vector_path,
+                                  identifier_name=KEY_ID,
+                                  row_id=instance_identifier,
+                                  dialect=dialect)
     return float(row[true_class])
