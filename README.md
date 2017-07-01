@@ -23,7 +23,7 @@ $ fforest_reduction
 ## Usage
 
 ## Requirements
-* This software **doesn't work with Windows OSes**, this is due to the fact that reading CSV files with a Windows system does not operate correctly.
+* This software **doesn't work with Windows OSes**, this is due to the fact that Salammbo, the binary used to create Fuzzy-Trees only works with Linux distributions.
 * This software can be run with **Python 3.5** and above. I do not have tested it with other Python 3 versions, but due to type hints, I suppose that it can't works with Python 2.
 
 ## Dependencies
