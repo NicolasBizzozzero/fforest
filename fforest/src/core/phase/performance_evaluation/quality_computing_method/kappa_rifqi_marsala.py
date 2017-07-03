@@ -5,7 +5,7 @@ An instance's score is the product of its difficulty by the % of membership foun
 from typing import Dict, List
 
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS, KEY_DIFFICULTY
-from fforest.src.file_tools.csv_tools import get_identified_row, iter_rows, get_column
+from fforest.src.file_tools.csv_tools import get_identified_row, get_column
 from fforest.src.file_tools.dialect import Dialect
 import fforest.src.getters.environment as env
 
