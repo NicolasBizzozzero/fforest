@@ -1,5 +1,5 @@
 """ This QCM sum all instances' score, then divide this sum by the number of instances to normalize the result.
-An instance's score is the product of its difficulty by the % of membership found by the tree.
+An instance's score is the product of its difficulty by the % of membership found by the fuzzy tree.
 """
 
 from typing import Dict, List
