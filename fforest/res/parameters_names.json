@@ -25,12 +25,15 @@
     "salammbo_vector_prefix": "--salammbo-vector-prefix",
     "difficulty_vector_prefix": "--difficulty-vector-prefix",
     "quality_file_prefix": "--quality-file-prefix",
+    "class_matrix_prefix": "--class-matrix-prefix",
     "tree_file_extension": "--tree-file-extension",
     "vector_file_extension": "--vector-file-extension",
     "header_extension": "--header-extension",
 
     "main_directory": "--main-directory",
     "subtrain_directory": "--subtrain-directory",
+    "subsubtrain_directory": "--subsubtrain-directory",
+    "classes_matrices_directory": "--classes-matrices-directory",
     "subsubtrain_directory_pattern": "--subsubtrain-directory-pattern",
 
     "discretization_threshold": "--discretization-threshold",

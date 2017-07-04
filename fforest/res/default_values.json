@@ -23,8 +23,11 @@
     "salammbo_vector_prefix": "salammbo_",
     "difficulty_vector_prefix": "difficulty_",
     "quality_file_prefix": "quality_",
+    "class_matrix_prefix": "class_matrix_",
 
     "subtrain_directory": "subtrain",
+    "subsubtrain_directory": "subsubtrain",
+    "classes_matrices_directory": "classes_matrices",
     "subsubtrain_directory_pattern": "%s_sstrain",
 
     "discretization_threshold": 2,

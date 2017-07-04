@@ -3,6 +3,8 @@
 # Command-line parameters
 cclassified_vector_prefix = None
 class_name = None
+class_matrix_prefix = None
+classes_matrices_directory = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
@@ -37,6 +39,7 @@ reference_database_name = None
 reference_split_method = None
 reference_value = None
 statistics_file_name = None
+subsubtrain_directory = None
 subsubtrain_directory_pattern = None
 subsubtrain_name_pattern = None
 subsubtrain_split_method = None
@@ -54,7 +57,10 @@ verbosity = None
 # Directories paths
 main_directory_path = None
 subtrain_directory_path = None
+subsubtrain_directory_path = None
 subsubtrain_directories_path = None
+classes_matrices_directory_path = None
+classes_matrices_directories_path = None
 
 # Paths
 statistics_file_path = None
@@ -70,6 +76,7 @@ difficulty_vectors_paths = None
 cclassified_vectors_paths = None
 salammbo_vectors_paths = None
 quality_files_paths = None
+classes_matrices_files_paths = None
 
 # Names
 original_database_name = None

@@ -24,12 +24,15 @@
     "salammbo_vector_prefix": "The prefix of every 'salammbo' vector created in every subsubtrain directory. [default: {default_salammbo_vector_prefix}]",
     "difficulty_vector_prefix": "The prefix of every 'difficulty' vector created in the subtrain directory. [default: {default_difficulty_vector_prefix}]",
     "quality_file_prefix":  "The prefix of every 'quality' file created in the subtrain directory. [default: {default_quality_file_prefix}]",
+    "class_matrix_prefix": "The prefix of every 'class matrix' file created in the 'classes matrices' directory. [default: {default_class_matrix_prefix}]",
     "tree_file_extension": "The name of the extension for a tree file. [default: {default_tree_file_extension}]",
     "vector_file_extension": "The name of the extension for a vector file. [default: {default_vector_file_extension}]",
     "header_extension": "The extension of the header file, extracted from the original database if it contains one. [default: {default_header_extension}]",
 
     "main_directory": "The name of the main directory, where all the project will be dumped. It defaults to the name of the database.",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs of the subtrain split will be dumped. [default: {default_subtrain_directory}]",
+    "subsubtrain_directory": "The name of the subsubtrain directory, where all the subsubtrain databases' directories will be dumped. [default: {default_subsubtrain_directory}]",
+    "classes_matrices_directory": "The name of the classes matrices directory, where all the classes matrices will be dumped. [default: {default_classes_matrices_directory}]",
     "subsubtrain_directory_pattern": "The name of the subsubtrain directory pattern. Every subsubtrain database will be stored in this directory. You can indicate the number placement with a %s-style notation. [default: {default_subsubtrain_directory_pattern}]",
 
     "discretization_threshold": "Number of different values for an attribute to be discretized. [default: {default_discretization_threshold}]",

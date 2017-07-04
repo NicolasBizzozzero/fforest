@@ -112,8 +112,20 @@ def quality_file_prefix() -> str:
     return _get_value_from_file("quality_file_prefix")
 
 
+def class_matrix_prefix() -> str:
+    return _get_value_from_file("class_matrix_prefix")
+
+
 def subtrain_directory() -> str:
     return _get_value_from_file("subtrain_directory")
+
+
+def subsubtrain_directory() -> str:
+    return _get_value_from_file("subsubtrain_directory")
+
+
+def classes_matrices_directory() -> str:
+    return _get_value_from_file("classes_matrices_directory")
 
 
 def subsubtrain_directory_pattern() -> str:

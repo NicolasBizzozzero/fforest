@@ -19,6 +19,8 @@ def _init_command_line_parameters(args: dict) -> None:
     """ Initialize all the command-line-parameters-related variables located inside the `env` module. """
     env.cclassified_vector_prefix = args[gpn.cclassified_vector_prefix().split()[-1]]
     env.class_name = args[gpn.class_name().split()[-1]]
+    env.class_matrix_prefix = args[gpn.class_matrix_prefix().split()[-1]]
+    env.classes_matrices_directory = args[gpn.classes_matrices_directory().split()[-1]]
     env.delimiter_input = args[gpn.delimiter_input().split()[-1]]
     env.delimiter_output = args[gpn.delimiter_output().split()[-1]]
     env.difficulty_vector_prefix = args[gpn.difficulty_vector_prefix().split()[-1]]
@@ -53,6 +55,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.reference_split_method = args[gpn.reference_split_method().split()[-1]]
     env.reference_value = args[gpn.reference_value().split()[-1]]
     env.statistics_file_name = args[gpn.statistics_file_name().split()[-1]]
+    env.subsubtrain_directory = args[gpn.subsubtrain_directory().split()[-1]]
     env.subsubtrain_directory_pattern = args[gpn.subsubtrain_directory_pattern().split()[-1]]
     env.subsubtrain_name_pattern = args[gpn.subsubtrain_name_pattern().split()[-1]]
     env.subsubtrain_split_method = args[gpn.subsubtrain_split_method().split()[-1]]
@@ -72,10 +75,15 @@ def _init_dir_paths(args: dict) -> None:
     """ Initialize all the path-related directories variables inside the `env` module. """
     env.main_directory_path = "{}/{}".format(env.parent_dir, env.main_directory)
     env.subtrain_directory_path = "{}/{}".format(env.main_directory_path, env.subtrain_directory)
-    env.subsubtrain_directories_path = ["{}/{}".format(env.subtrain_directory_path,
+    env.subsubtrain_directory_path = "{}/{}".format(env.subtrain_directory_path, env.subsubtrain_directory)
+    env.subsubtrain_directories_path = ["{}/{}".format(env.subsubtrain_directory_path,
                                                        env.subsubtrain_directory_pattern %
                                                        str(tree_index).zfill(len(str(env.trees_in_forest))))
                                         for tree_index in range(1, env.trees_in_forest + 1)]
+    env.classes_matrices_directory_path = "{}/{}".format(env.subtrain_directory_path, env.classes_matrices_directory)
+    env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
+                                                                        class_name) for
+                                             class_name in env.possible_classes}
 
 
 def _init_paths(args: dict) -> None:
@@ -116,6 +124,13 @@ def _init_paths(args: dict) -> None:
                                                           tnorm,
                                                           format_to_string(args[gpn.format_output()])) for
                                tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+    env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}.{}".format(
+        env.classes_matrices_directories_path[class_name],
+        env.class_matrix_prefix,
+        tnorm,
+        format_to_string(args[gpn.format_output()])) for
+        tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+        for class_name in env.possible_classes}
 
 
 def _init_names(args: dict) -> None:
