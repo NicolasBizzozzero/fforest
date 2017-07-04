@@ -22,6 +22,7 @@
     "cclassified_vector_prefix": "cclassified_",
     "salammbo_vector_prefix": "salammbo_",
     "difficulty_vector_prefix": "difficulty_",
+    "quality_file_prefix": "quality_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory_pattern": "%s_sstrain",

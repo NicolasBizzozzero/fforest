@@ -28,6 +28,7 @@ preprocessed_database_name = None
 quality_computing_method = None
 quality_threshold = None
 salammbo_vector_prefix = None
+quality_file_prefix = None
 quote_character_input = None
 quote_character_output = None
 quoting_input = None

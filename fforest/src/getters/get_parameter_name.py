@@ -120,6 +120,10 @@ def difficulty_vector_prefix() -> str:
     return _get_name_from_file("difficulty_vector_prefix")
 
 
+def quality_file_prefix() -> str:
+    return _get_name_from_file("quality_file_prefix")
+
+
 def main_directory() -> str:
     return _get_name_from_file("main_directory")
 

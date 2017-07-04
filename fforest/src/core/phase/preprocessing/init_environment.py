@@ -44,6 +44,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.quality_threshold = args[gpn.quality_threshold().split()[-1]]
     env.salammbo_vector_prefix = args[gpn.salammbo_vector_prefix().split()[-1]]
     env.quality_computing_method = args[gpn.quality_computing_method().split()[-1]]
+    env.quality_file_prefix = args[gpn.quality_file_prefix().split()[-1]]
     env.quote_character_input = args[gpn.quote_char_input().split()[-1]]
     env.quote_character_output = args[gpn.quote_char_output().split()[-1]]
     env.quoting_input = args[gpn.quoting_input().split()[-1]]
