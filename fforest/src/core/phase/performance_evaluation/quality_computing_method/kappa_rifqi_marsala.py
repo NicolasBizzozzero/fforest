@@ -1,11 +1,11 @@
 """ This QCM sum all instances' score, then divide this sum by the number of instances to normalize the result.
-An instance's score is the product of its difficulty by the % of membership found by the tree.
+An instance's score is the product of its difficulty by the % of membership found by the fuzzy tree.
 """
 
 from typing import Dict, List
 
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS, KEY_DIFFICULTY
-from fforest.src.file_tools.csv_tools import get_identified_row, iter_rows, get_column
+from fforest.src.file_tools.csv_tools import get_identified_row, get_column
 from fforest.src.file_tools.dialect import Dialect
 import fforest.src.getters.environment as env
 from fforest.src.vrac.decorators import timeit
