@@ -47,7 +47,7 @@ def _dump_forest_quality(content: Dict[str, float], forest_quality_vector_path: 
     its quality.
     """
     content = [[tree, quality] for tree, quality in zip(content.keys(), content.values())]
-    content.sort(key=lambda x: x[-1])
+    content.sort(key=lambda x: x[-1], reverse=True)
     dump_csv_content(path=forest_quality_vector_path, content=content, dialect=dialect)
 
 
