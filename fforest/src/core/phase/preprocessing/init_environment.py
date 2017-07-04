@@ -135,4 +135,4 @@ def _init_miscellaneous(args: dict) -> None:
                                                column=args[gpn.class_name()],
                                                have_header=args[gpn.have_header()],
                                                dialect=env.dialect_input)))
-    env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()])]
+    env.t_norms_names = [tnorm_to_str(name) for name in range(args[gpn.number_of_tnorms()] + 1)]

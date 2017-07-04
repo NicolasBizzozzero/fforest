@@ -10,10 +10,14 @@ from fforest.src.core.phase.performance_evaluation.quality_computing_method.qual
     QualityComputingMethod, UnknownQualityComputingMethod
 from fforest.src.file_tools.csv_tools import dump_csv_content
 from fforest.src.file_tools.dialect import Dialect
+from fforest.src.vrac.decorators import timeit
 
 
 def forest_quality() -> None:
     forest_quality_dict = _get_forest_quality(method=env.quality_computing_method)
+
+    import pprint
+    pprint.pprint(forest_quality_dict)
 
     _dump_forest_quality_dict(forest_quality_dict=forest_quality_dict,
                               forest_quality_vectors_path=env.subtrain_directory_path,

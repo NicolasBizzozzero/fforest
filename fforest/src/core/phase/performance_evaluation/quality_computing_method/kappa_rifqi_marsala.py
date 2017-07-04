@@ -8,6 +8,7 @@ from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, 
 from fforest.src.file_tools.csv_tools import get_identified_row, iter_rows, get_column
 from fforest.src.file_tools.dialect import Dialect
 import fforest.src.getters.environment as env
+from fforest.src.vrac.decorators import timeit
 
 
 def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
