@@ -15,9 +15,6 @@ from fforest.src.file_tools.dialect import Dialect
 def forest_quality() -> None:
     forest_quality_dict = _get_forest_quality(method=env.quality_computing_method)
 
-    import pprint
-    pprint.pprint(forest_quality_dict)
-
     _dump_forest_quality_dict(forest_quality_dict=forest_quality_dict,
                               forest_quality_vectors_path=env.quality_files_paths,
                               dialect=env.dialect_output)
@@ -50,6 +47,7 @@ def _dump_forest_quality(content: Dict[str, float], forest_quality_vector_path: 
     its quality.
     """
     content = [[tree, quality] for tree, quality in zip(content.keys(), content.values())]
+    content.sort(key=lambda x: x[-1])
     dump_csv_content(path=forest_quality_vector_path, content=content, dialect=dialect)
 
 
