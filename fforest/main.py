@@ -8,6 +8,7 @@ from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_ent
 from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
 from fforest.src.core.phase.ending.ending import dump_statistics_dictionary
 from fforest.src.core.phase.performance_evaluation.forest_quality import forest_quality
+from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
 
 
 @failure_safe
@@ -31,7 +32,10 @@ def main_entry_point() -> None:
     # Construct forest and compute efficiency vectors
     forest_construction()
     forest_reduction()
+
+    # Compute forest quality and construct classes matrices
     forest_quality()
+    classes_matrices()
 
     dump_statistics_dictionary()
 

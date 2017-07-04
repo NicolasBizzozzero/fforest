@@ -10,14 +10,14 @@ import os
 
 
 def classes_matrices() -> None:
-    _create_directories(classes_matrices_directory_name=env.classes_matrices_directory_name,
+    _create_directories(classes_matrices_directory=env.classes_matrices_directory,
                         possibles_classes=env.possible_classes)
 
 
-def _create_directories(classes_matrices_directory_name: str, possibles_classes: List[str]) -> None:
+def _create_directories(classes_matrices_directory: str, possibles_classes: List[str]) -> None:
     """ Create the directories for the "class matrix" files, and one directory for each class. """
-    create_dir(classes_matrices_directory_name)
+    create_dir(classes_matrices_directory)
 
     for class_name in possibles_classes:
-        create_dir(os.path.join(classes_matrices_directory_name, class_name))
+        create_dir(os.path.join(classes_matrices_directory, class_name))
 

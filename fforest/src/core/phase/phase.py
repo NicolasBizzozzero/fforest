@@ -7,7 +7,9 @@ class Phase(enum.IntEnum):
     INITIALIZATION = 2
     LEARNING = 3
     REDUCTION = 4
-    ENDING = 5
+    QUALITY = 5
+    CLASSES_MATRICES = 6
+    ENDING = 7
 
 
 class UnknownPhase(Exception):
@@ -28,6 +30,10 @@ def str_to_phase(string: str) -> Phase:
         return Phase.LEARNING
     elif string == "reduction":
         return Phase.REDUCTION
+    elif string == "quality":
+        return Phase.QUALITY
+    elif string == "classes_matrices":
+        return Phase.CLASSES_MATRICES
     elif string == "ending":
         return Phase.ENDING
     else:
@@ -45,6 +51,10 @@ def phase_to_str(phase: Phase) -> str:
         return "learning"
     elif phase == Phase.REDUCTION:
         return "reduction"
+    elif phase == Phase.QUALITY:
+        return "quality"
+    elif phase == Phase.CLASSES_MATRICES:
+        return "classes_matrices"
     elif phase == Phase.ENDING:
         return "ending"
     else:
