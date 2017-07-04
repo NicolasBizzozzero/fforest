@@ -34,16 +34,14 @@ def _get_forest_quality(method: QualityComputingMethod) -> Dict[str, Dict[str, f
 
 
 def _dump_forest_quality_dict(forest_quality_dict: Dict[str, Dict[str, float]],
-                              forest_quality_vectors_path: List, dialect: Dialect) -> None:
+                              forest_quality_vectors_path: Dict[str, str], dialect: Dialect) -> None:
     """ Dump the forest's quality vector for all t-norms. A forest's quality content map each tree from the forest to
     its quality.
     """
     for tnorm in forest_quality_dict.keys():
         content = forest_quality_dict[tnorm]
-        print(forest_quality_vectors_path)
-        forest_quality_vector_path = forest_quality_vectors_path[forest_quality_vectors_path.index(tnorm)]
         _dump_forest_quality(content=content,
-                             forest_quality_vector_path=forest_quality_vector_path,
+                             forest_quality_vector_path=forest_quality_vectors_path[tnorm],
                              dialect=dialect)
 
 
