@@ -227,6 +227,7 @@ Options:
   {param_salammbo_vector_prefix}=PREFIX       {doc_salammbo_vector_prefix}
   {param_difficulty_vector_prefix}=PREFIX     {doc_difficulty_vector_prefix}
   {param_quality_file_prefix}=PREFIX          {doc_quality_file_prefix}
+  {param_class_matrix_prefix}=PREFIX          {doc_class_matrix_prefix}
   {param_tree_file_extension}=NAME            {doc_tree_file_extension}
   {param_vector_file_extension}=NAME          {doc_vector_file_extension}
   {param_header_extension}=NAME               {doc_header_extension}
@@ -234,6 +235,8 @@ Options:
   # Directories names
   {param_main_directory}=NAME                 {doc_main_directory}
   {param_subtrain_directory}=NAME             {doc_subtrain_directory}
+  {param_subsubtrain_directory}=NAME          {doc_subsubtrain_directory}
+  {param_classes_matrices_directory}=NAME             {doc_classes_matrices_directory}
   {param_subsubtrain_directory_pattern}=NAME  {doc_subsubtrain_directory_pattern}
   
   # Salammbô parameters
