@@ -110,6 +110,11 @@ def _init_paths(args: dict) -> None:
                                                               env.vector_file_extension) for
                                           tree_index in range(1, env.trees_in_forest + 1)] for
                                   tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+    env.quality_files_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
+                                                          env.quality_file_prefix,
+                                                          tnorm,
+                                                          format_to_string(args[gpn.format_output()])) for
+                               tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
 
 
 def _init_names(args: dict) -> None:
