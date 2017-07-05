@@ -34,7 +34,7 @@ def main_entry_point() -> None:
     forest_reduction()
 
     # Compute forest quality and construct classes matrices
-    forest_quality()
+    # forest_quality()
     classes_matrices()
 
     dump_statistics_dictionary()

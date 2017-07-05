@@ -145,9 +145,10 @@ def _init_paths(args: dict) -> None:
                                                           tnorm,
                                                           format_to_string(args[gpn.format_output()])) for
                                tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
-    env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}.{}".format(
+    env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
         env.classes_matrices_directories_path[class_name],
         env.class_matrix_prefix,
+        class_name,
         tnorm,
         format_to_string(args[gpn.format_output()])) for
         tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
