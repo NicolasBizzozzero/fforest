@@ -140,6 +140,22 @@ def get_column(path: str, column: Union[str, int], have_header: bool, dialect: D
     return [row[column] for row in iter_rows(path=path, skip_header=have_header, dialect=dialect) if row]
 
 
+def get_columns(path: str, columns: List[Union[str, int]], have_header: bool, dialect: Dialect) -> List:
+    """ Get columns from the CSV database with their index or their name. Remove the header if it's present. """
+    cleaned_columns = list()
+    for class_name in columns:
+        if type(class_name) == str:
+            if not have_header:
+                raise NamedAttributeButNoHeader()
+            else:
+                cleaned_columns.append(find_index_with_class(path=path, class_name=class_name, dialect=dialect))
+        else:
+            cleaned_columns.append(class_name)
+
+    return [[row[column] for column in columns] for row in iter_rows(path=path, skip_header=have_header,
+                                                                     dialect=dialect) if row]
+
+
 def select_all_rows_where(path: str, predicate: callable, dialect: Dialect) -> list:
     """ Return all rows from the CSV file at `path` with which the `predicate` return True.
     The rows are casted as a dictionary.
