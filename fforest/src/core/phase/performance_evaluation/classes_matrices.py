@@ -5,6 +5,7 @@ class.
 """
 from typing import List, Dict
 
+from fforest.src.core.phase.phase import increment_phase
 from fforest.src.file_tools.csv_tools import get_column, dump_csv_content, get_columns
 from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.file_system import create_dir
@@ -25,6 +26,8 @@ def classes_matrices() -> None:
                               classes_matrices_paths=env.classes_matrices_files_paths,
                               forest_paths=env.salammbo_vectors_paths,
                               dialect=env.dialect_output)
+
+    increment_phase()
 
 
 def _create_directories(classes_matrices_directories: Dict[str, str], possibles_classes: List[str]) -> None:

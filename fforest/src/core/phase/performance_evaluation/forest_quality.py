@@ -8,6 +8,7 @@ import fforest.src.getters.environment as env
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import kappa_rifqi_marsala
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     QualityComputingMethod, UnknownQualityComputingMethod
+from fforest.src.core.phase.phase import increment_phase
 from fforest.src.file_tools.csv_tools import dump_csv_content
 from fforest.src.file_tools.dialect import Dialect
 
@@ -18,6 +19,8 @@ def forest_quality() -> None:
     _dump_forest_quality_dict(forest_quality_dict=forest_quality_dict,
                               forest_quality_vectors_path=env.quality_files_paths,
                               dialect=env.dialect_output)
+
+    increment_phase()
 
 
 def _get_forest_quality(method: QualityComputingMethod) -> Dict[str, Dict[str, float]]:

@@ -1,4 +1,5 @@
 import enum
+import fforest.src.getters.environment as env
 
 
 @enum.unique
@@ -69,3 +70,7 @@ def get_next_phase(phase: Phase) -> Phase:
     for next_phase in Phase:
         if phase.value + 1 == next_phase.value:
             return next_phase
+
+
+def increment_phase() -> None:
+    env.current_phase = get_next_phase(env.current_phase)

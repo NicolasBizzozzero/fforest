@@ -9,6 +9,7 @@ from typing import List, Dict
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
+from fforest.src.core.phase.phase import increment_phase
 from fforest.src.file_tools.csv_tools import dump_csv_content
 from fforest.src.file_tools.format import format_to_string
 from fforest.src.vrac.file_system import get_path
@@ -59,6 +60,8 @@ def forest_construction():
     # Wait for all processes to finish
     for process in processes:
         process.join()
+
+    increment_phase()
 
 
 def _parameters_to_salammbo_options(discretization_threshold: str, entropy_measure: EntropyMeasure,
