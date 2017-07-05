@@ -1,6 +1,7 @@
 import enum
 
 
+@enum.unique
 class Phase(enum.IntEnum):
     NONE = 0
     PREPROCESSING = 1
@@ -59,3 +60,12 @@ def phase_to_str(phase: Phase) -> str:
         return "ending"
     else:
         return "unknown"
+
+
+def get_next_phase(phase: Phase) -> Phase:
+    if phase == Phase.ENDING:
+        return Phase.NONE
+
+    for next_phase in Phase:
+        if phase.value + 1 == next_phase.value:
+            return next_phase
