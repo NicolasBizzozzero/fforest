@@ -58,7 +58,7 @@ def _compute_class_matrix(class_name: str, tnorm: str, identifiers: List[str], c
     matrix = {identifier: list() for identifier in identifiers}
 
     # Construct header
-    content.append([KEY_IDENTIFIER] + [tree_path for tree_path in forest_paths[tnorm]])
+    content.append([KEY_IDENTIFIER] + [identifier for identifier in identifiers])
 
     # Construct matrix
     for tree_path in forest_paths[tnorm]:
@@ -67,8 +67,8 @@ def _compute_class_matrix(class_name: str, tnorm: str, identifiers: List[str], c
             matrix[identifier].append(membership)
 
     # Dump matrix
-    for identifier in matrix.keys():
-        content.append([identifier] + matrix[identifier])
+    for tree_index, tree_path in enumerate(forest_paths[tnorm]):
+        content.append([os.path.dirname(tree_path)] + [matrix[identifier][tree_index] for identifier in identifiers])
     dump_csv_content(path=class_matrix_path,
                      content=content,
                      dialect=dialect)
