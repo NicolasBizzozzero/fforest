@@ -176,7 +176,9 @@ _FORMAT_DICTIONARY = dict(
     default_verbosity=gdv.verbosity(),
 
     # Miscellaneous
-    global_name=ggv.name()
+    global_name=ggv.name(),
+    SPACE="  ",
+    LONG_SPACE="\n" + (25 * " "),
 )
 
 
@@ -203,67 +205,72 @@ Usage:
 
 Options:
   # Splitting values
-  {param_training_value}=VALUE                {doc_training_value}
-  {param_reference_value}=VALUE               {doc_reference_value}
-  {param_trees_in_forest}=VALUE               {doc_trees_in_forest}
-  {param_quality_threshold}=VALUE          {doc_quality_threshold}
+  {param_training_value}=VALUE{LONG_SPACE}{doc_training_value}
+  {param_reference_value}=VALUE{LONG_SPACE}{doc_reference_value}
+  {param_trees_in_forest}=VALUE{LONG_SPACE}{doc_trees_in_forest}
+  {param_quality_threshold}=VALUE{LONG_SPACE}{doc_quality_threshold}
+
 
   # Processing methods
-  {param_initial_split_method}=METHOD            {doc_initial_split_method}
-  {param_reference_split_method}=METHOD           {doc_reference_split_method}
-  {param_subsubtrain_split_method}=METHOD     {doc_subsubtrain_split_method}
-  {param_quality_computing_method}=METHOD     {doc_quality_computing_method}
+  {param_initial_split_method}=METHOD{LONG_SPACE}{doc_initial_split_method}
+  {param_reference_split_method}=METHOD{LONG_SPACE}{doc_reference_split_method}
+  {param_subsubtrain_split_method}=METHOD{LONG_SPACE}{doc_subsubtrain_split_method}
+  {param_quality_computing_method}=METHOD{LONG_SPACE}{doc_quality_computing_method}
+
 
   # File names
-  {param_train_name}=NAME                     {doc_train_name}
-  {param_test_name}=NAME                      {doc_test_name}
-  {param_preprocessed_db_name}=NAME           {doc_preprocessed_db_name}
-  {param_subtrain_name}=NAME                  {doc_subtrain_name}
-  {param_reference_name}=NAME                     {doc_reference_name}
-  {param_statistics_name}=NAME           {doc_statistics_name}
-  {param_header_name}=NAME                    {doc_header_name}
-  {param_subsubtrain_name_pattern}=NAME       {doc_subsubtrain_name_pattern}
-  {param_cclassified_vector_prefix}=PREFIX    {doc_cclassified_vector_prefix}
-  {param_salammbo_vector_prefix}=PREFIX       {doc_salammbo_vector_prefix}
-  {param_difficulty_vector_prefix}=PREFIX     {doc_difficulty_vector_prefix}
-  {param_quality_file_prefix}=PREFIX          {doc_quality_file_prefix}
-  {param_class_matrix_prefix}=PREFIX          {doc_class_matrix_prefix}
-  {param_tree_file_extension}=NAME            {doc_tree_file_extension}
-  {param_vector_file_extension}=NAME          {doc_vector_file_extension}
-  {param_header_extension}=NAME               {doc_header_extension}
+  {param_train_name}=NAME{LONG_SPACE}{doc_train_name}
+  {param_test_name}=NAME{LONG_SPACE}{doc_test_name}
+  {param_preprocessed_db_name}=NAME{LONG_SPACE}{doc_preprocessed_db_name}
+  {param_subtrain_name}=NAME{LONG_SPACE}{doc_subtrain_name}
+  {param_reference_name}=NAME{LONG_SPACE}{doc_reference_name}
+  {param_statistics_name}=NAME{LONG_SPACE}{doc_statistics_name}
+  {param_header_name}=NAME{LONG_SPACE}{doc_header_name}
+  {param_subsubtrain_name_pattern}=NAME{LONG_SPACE}{doc_subsubtrain_name_pattern}
+  {param_cclassified_vector_prefix}=PREFIX{LONG_SPACE}{doc_cclassified_vector_prefix}
+  {param_salammbo_vector_prefix}=PREFIX{LONG_SPACE}{doc_salammbo_vector_prefix}
+  {param_difficulty_vector_prefix}=PREFIX{LONG_SPACE}{doc_difficulty_vector_prefix}
+  {param_quality_file_prefix}=PREFIX{LONG_SPACE}{doc_quality_file_prefix}
+  {param_class_matrix_prefix}=PREFIX{LONG_SPACE}{doc_class_matrix_prefix}
+  {param_tree_file_extension}=NAME{LONG_SPACE}{doc_tree_file_extension}
+  {param_vector_file_extension}=NAME{LONG_SPACE}{doc_vector_file_extension}
+  {param_header_extension}=NAME{LONG_SPACE}{doc_header_extension}
+
 
   # Directories names
-  {param_main_directory}=NAME                 {doc_main_directory}
-  {param_subtrain_directory}=NAME             {doc_subtrain_directory}
-  {param_subsubtrain_directory}=NAME          {doc_subsubtrain_directory}
-  {param_classes_matrices_directory}=NAME             {doc_classes_matrices_directory}
-  {param_subsubtrain_directory_pattern}=NAME  {doc_subsubtrain_directory_pattern}
+  {param_main_directory}=NAME{LONG_SPACE}{doc_main_directory}
+  {param_subtrain_directory}=NAME{LONG_SPACE}{doc_subtrain_directory}
+  {param_subsubtrain_directory}=NAME{LONG_SPACE}{doc_subsubtrain_directory}
+  {param_classes_matrices_directory}=NAME{LONG_SPACE}{doc_classes_matrices_directory}
+  {param_subsubtrain_directory_pattern}=NAME{LONG_SPACE}{doc_subsubtrain_directory_pattern}
+  
   
   # Salammbô parameters
-  {param_discretization_threshold}=VALUE      {doc_discretization_threshold}
-  {param_entropy_threshold}=VALUE             {doc_entropy_threshold}
-  {param_min_size_leaf}=SIZE                  {doc_min_size_leaf}
-  {param_entropy_measure}=<measure>           {doc_entropy_measure}
-  {param_number_of_tnorms}=INT                         {doc_number_of_tnorms}
+  {param_discretization_threshold}=VALUE{LONG_SPACE}{doc_discretization_threshold}
+  {param_entropy_threshold}=VALUE{LONG_SPACE}{doc_entropy_threshold}
+  {param_min_size_leaf}=SIZE{LONG_SPACE}{doc_min_size_leaf}
+  {param_entropy_measure}=<measure>{LONG_SPACE}{doc_entropy_measure}
+  {param_number_of_tnorms}=INT{LONG_SPACE}{doc_number_of_tnorms}
+
 
   # Miscellaneous
-  {param_help}                          {doc_help}
-  {param_identifier}=ID                       {doc_identifier}
-  {param_class_name}=NAME                          {doc_class_name}
-  {param_have_header}                         {doc_have_header}
-  {param_encoding_input}=ENCODING             {doc_encoding_input}
-  {param_encoding_output}=ENCODING            {doc_encoding_output}
-  {param_format_input}=FORMAT                 {doc_format_input}
-  {param_format_output}=FORMAT                {doc_format_output}
-  {param_delimiter_input}=CHAR                {doc_delimiter_input}
-  {param_delimiter_output}=CHAR               {doc_delimiter_output}
-  {param_quoting_input}=QUOTING               {doc_quoting_input}
-  {param_quoting_output}=QUOTING              {doc_quoting_output}
-  {param_quote_char_input}=CHAR          {doc_quote_char_input}
-  {param_quote_char_output}=CHAR         {doc_quote_char_output}
-  {param_line_delimiter_input}=CHAR           {doc_line_delimiter_input}
-  {param_line_delimiter_output}=CHAR          {doc_line_delimiter_output}
-  {param_verbosity}=LEVEL                     {doc_verbosity}
+  {param_help}{LONG_SPACE}{doc_help}
+  {param_identifier}=ID{LONG_SPACE}{doc_identifier}
+  {param_class_name}=NAME{LONG_SPACE}{doc_class_name}
+  {param_have_header}{LONG_SPACE}{doc_have_header}
+  {param_encoding_input}=ENCODING{LONG_SPACE}{doc_encoding_input}
+  {param_encoding_output}=ENCODING{LONG_SPACE}{doc_encoding_output}
+  {param_format_input}=FORMAT{LONG_SPACE}{doc_format_input}
+  {param_format_output}=FORMAT{LONG_SPACE}{doc_format_output}
+  {param_delimiter_input}=CHAR{LONG_SPACE}{doc_delimiter_input}
+  {param_delimiter_output}=CHAR{LONG_SPACE}{doc_delimiter_output}
+  {param_quoting_input}=QUOTING{LONG_SPACE}{doc_quoting_input}
+  {param_quoting_output}=QUOTING{LONG_SPACE}{doc_quoting_output}
+  {param_quote_char_input}=CHAR{LONG_SPACE}{doc_quote_char_input}
+  {param_quote_char_output}=CHAR{LONG_SPACE}{doc_quote_char_output}
+  {param_line_delimiter_input}=CHAR{LONG_SPACE}{doc_line_delimiter_input}
+  {param_line_delimiter_output}=CHAR{LONG_SPACE}{doc_line_delimiter_output}
+  {param_verbosity}=LEVEL{LONG_SPACE}{doc_verbosity}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
