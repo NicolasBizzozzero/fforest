@@ -74,7 +74,7 @@ def _init_command_line_parameters(args: dict) -> None:
 
 def _init_miscellaneous(args: dict) -> None:
     """ Initialize all the others variables inside the `env` module. """
-    env.current_phase = Phase.NONE
+    env.current_phase = Phase.PREPROCESSING
     env.dialect_input = Dialect(encoding=env.encoding_input,
                                 delimiter=env.delimiter_input,
                                 quoting=env.quoting_input,

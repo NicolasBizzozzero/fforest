@@ -7,6 +7,10 @@ from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.file_system import dump_dict
 
 
+def ending() -> None:
+    dump_statistics_dictionary()
+
+
 def dump_statistics_dictionary():
     # Dump instances dictionary
     instances_dictionary = {
