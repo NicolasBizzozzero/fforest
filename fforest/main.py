@@ -16,26 +16,14 @@ def main_entry_point() -> None:
     # After calling this method, all variables defined in the `environment` module will be initialized
     parse_args_main_entry_point()
 
-    # Preprocessing of the database
     preprocessing()
-
-    # Split the initial database into the train and test database
     initial_split()
-
-    # Split the train database into the reference database and the subtrain database
     reference_split()
-
-    # Split the subtrain database into multiple subsubtrain databases
     subsubtrain_split()
-
-    # Construct forest and compute efficiency vectors
     forest_construction()
     forest_reduction()
-
-    # Compute forest quality and construct classes matrices
     forest_quality()
     classes_matrices()
-
     ending()
 
 
