@@ -152,8 +152,8 @@ def get_columns(path: str, columns: List[Union[str, int]], have_header: bool, di
         else:
             cleaned_columns.append(class_name)
 
-    return [[row[column] for column in columns] for row in iter_rows(path=path, skip_header=have_header,
-                                                                     dialect=dialect) if row]
+    return [[row[column] for column in cleaned_columns] for row in iter_rows(path=path, skip_header=have_header,
+                                                                             dialect=dialect) if row]
 
 
 def select_all_rows_where(path: str, predicate: callable, dialect: Dialect) -> list:

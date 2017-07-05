@@ -23,7 +23,7 @@ def classes_matrices() -> None:
     pprint.pprint(env.salammbo_vectors_paths)
 
     _compute_classes_matrices(possible_classes=env.possible_classes,
-                              tnorms=env.t_norms,
+                              tnorms=env.t_norms_names,
                               reference_database_path=env.reference_database_path,
                               classes_matrices_paths=env.classes_matrices_files_paths,
                               forest_paths=env.salammbo_vectors_paths,
