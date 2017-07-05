@@ -19,9 +19,6 @@ def classes_matrices() -> None:
     _create_directories(classes_matrices_directories=env.classes_matrices_directories_path,
                         possibles_classes=env.possible_classes)
 
-    import pprint
-    pprint.pprint(env.salammbo_vectors_paths)
-
     _compute_classes_matrices(possible_classes=env.possible_classes,
                               tnorms=env.t_norms_names,
                               reference_database_path=env.reference_database_path,
@@ -65,11 +62,8 @@ def _compute_class_matrix(class_name: str, tnorm: str, identifiers: List[str], c
 
     # Construct matrix
     for tree_path in forest_paths[tnorm]:
-        identifiers, membership = get_columns(path=tree_path,
-                                              columns=[0, class_name],
-                                              have_header=True,
-                                              dialect=dialect)
-        for identifier in identifiers:
+        columns = get_columns(path=tree_path, columns=[0, class_name], have_header=True, dialect=dialect)
+        for identifier, membership in columns:
             matrix[identifier].append(membership)
 
     # Dump matrix
