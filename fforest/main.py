@@ -1,4 +1,4 @@
-from fforest.src.core.phase.ending.ending import failure_safe
+from fforest.src.core.phase.ending.ending import failure_safe, ending
 from fforest.src.core.phase.initialization.initial_split import initial_split
 from fforest.src.core.phase.initialization.reference_split import reference_split
 from fforest.src.core.phase.learning_process.forest_construction import forest_construction
@@ -6,7 +6,6 @@ from fforest.src.core.phase.learning_process.forest_reduction import forest_redu
 from fforest.src.core.phase.learning_process.subsubtrain_split import subsubtrain_split
 from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_entry_point
 from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
-from fforest.src.core.phase.ending.ending import dump_statistics_dictionary
 from fforest.src.core.phase.performance_evaluation.forest_quality import forest_quality
 from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
 
@@ -37,7 +36,7 @@ def main_entry_point() -> None:
     forest_quality()
     classes_matrices()
 
-    dump_statistics_dictionary()
+    ending()
 
 
 def preprocessing_entry_point() -> None:
