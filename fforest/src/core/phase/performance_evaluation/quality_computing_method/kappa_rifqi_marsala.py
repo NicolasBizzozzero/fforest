@@ -17,7 +17,7 @@ KEY_MEMBERSHIP = "%membership"
 def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
 
     # Load instances information to limit the number of access to the files
-    instances = _get_instances_id_and_trueclass(
+    instances = _load_instances_id_and_trueclass(
         salammbo_vector_path=env.salammbo_vectors_paths.values()[0][0], # Get one salammbo vector path, the instances ID
                                                                         # and true_class are the same everywhere.
         dialect=env.dialect_output)
@@ -33,7 +33,7 @@ def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
     return forest_quality_all_tnorms
 
 
-def _get_instances_id_and_trueclass(salammbo_vector_path: str, dialect: Dialect) -> Dict[str, Dict[str, str]]:
+def _load_instances_id_and_trueclass(salammbo_vector_path: str, dialect: Dialect) -> Dict[str, Dict[str, str]]:
     """ Get the instances identifiers and true class from a salammbo vector.
     The vector in itself doesn't mater, as they all contains the same identifiers with the same true classes.
     """
