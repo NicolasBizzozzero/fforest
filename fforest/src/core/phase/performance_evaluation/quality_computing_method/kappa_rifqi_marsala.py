@@ -24,6 +24,10 @@ def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
 
     forest_quality_all_tnorms = dict()
     for tnorm in env.t_norms_names:
+        _load_instances_difficulty(difficulty_vector_path=env.difficulty_vectors_paths[tnorm],
+                                   instances=instances,
+                                   dialect=env.dialect_output)
+
         forest_quality_all_tnorms[tnorm] = \
             _get_forest_quality(reference_database_path=env.reference_database_path,
                                 subsubtrain_directories_path=env.subsubtrain_directories_path,
@@ -34,18 +38,28 @@ def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
 
 
 def _load_instances_id_and_trueclass(salammbo_vector_path: str, dialect: Dialect) -> Dict[str, Dict[str, str]]:
-    """ Get the instances identifiers and true class from a salammbo vector.
+    """ Get the instances' identifiers and true class from a salammbo vector.
     The vector in itself doesn't mater, as they all contains the same identifiers with the same true classes.
     """
     instances = dict()
     for identifier, true_class in get_columns(path=salammbo_vector_path,
-                                              columns=[0, 1],
+                                              columns=[KEY_ID, KEY_TRUECLASS],
                                               have_header=True,
                                               dialect=dialect):
         instances[identifier] = {KEY_TRUECLASS: true_class,
                                  KEY_DIFFICULTY: None,
                                  KEY_MEMBERSHIP: None}
     return instances
+
+
+def _load_instances_difficulty(difficulty_vector_path: str, instances: Dict[str, Dict[str, str]],
+                               dialect: Dialect) -> None:
+    """ Get the instances' difficulty from a their difficulty vector. """
+    for identifier, difficulty in get_columns(path=difficulty_vector_path,
+                                              columns=[KEY_ID, KEY_DIFFICULTY],
+                                              have_header=True,
+                                              dialect=dialect):
+        instances[identifier][KEY_DIFFICULTY] = float(difficulty)
 
 
 def _get_forest_quality(reference_database_path: str, subsubtrain_directories_path: str, difficulty_vector_path: str,
