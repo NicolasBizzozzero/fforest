@@ -2,16 +2,26 @@
 An instance's score is the product of its difficulty by the % of membership found by the fuzzy tree.
 """
 
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS, KEY_DIFFICULTY
-from fforest.src.file_tools.csv_tools import get_identified_row, get_column
+from fforest.src.file_tools.csv_tools import get_identified_row, get_column, get_columns
 from fforest.src.file_tools.dialect import Dialect
 import fforest.src.getters.environment as env
 from fforest.src.vrac.decorators import timeit
 
 
+KEY_MEMBERSHIP = "%membership"
+
+
 def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
+
+    # Load instances information to limit the number of access to the files
+    instances = _get_instances_id_and_trueclass(
+        salammbo_vector_path=env.salammbo_vectors_paths.values()[0][0], # Get one salammbo vector path, the instances ID
+                                                                        # and true_class are the same everywhere.
+        dialect=env.dialect_output)
+
     forest_quality_all_tnorms = dict()
     for tnorm in env.t_norms_names:
         forest_quality_all_tnorms[tnorm] = \
@@ -21,6 +31,21 @@ def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
                                 salammbo_vector_paths=env.salammbo_vectors_paths[tnorm],
                                 dialect=env.dialect_output)
     return forest_quality_all_tnorms
+
+
+def _get_instances_id_and_trueclass(salammbo_vector_path: str, dialect: Dialect) -> Dict[str, Dict[str, str]]:
+    """ Get the instances identifiers and true class from a salammbo vector.
+    The vector in itself doesn't mater, as they all contains the same identifiers with the same true classes.
+    """
+    instances = dict()
+    for identifier, true_class in get_columns(path=salammbo_vector_path,
+                                              columns=[0, 1],
+                                              have_header=True,
+                                              dialect=dialect):
+        instances[identifier] = {KEY_TRUECLASS: true_class,
+                                 KEY_DIFFICULTY: None,
+                                 KEY_MEMBERSHIP: None}
+    return instances
 
 
 def _get_forest_quality(reference_database_path: str, subsubtrain_directories_path: str, difficulty_vector_path: str,
