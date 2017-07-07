@@ -48,7 +48,6 @@ $ fforest_reduction
 * Add the parameter --last-phase which stop the software if the precised phase is completed.
 * Add the parameter --resume-phase which resume the software to precised phase.
 * All entry-points (except the main) should do one phase each instead of starting to a specific phase.
-* Improve the speed of the KRM algorithm. It's to slow (more than 2 hour for adult.data). Also maybe launch multiple processes (one for each tree).
 
 ## Acknowledgments
 I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from the <a href="https://www.lip6.fr/">LIP6 laboratory</a>, and specifically <a href="http://webia.lip6.fr/~marsala/christophe/Accueil.html">Mr. Marsala Christophe</a>, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
