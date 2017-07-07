@@ -29,7 +29,8 @@ def main_entry_point() -> None:
 
 
 def preprocessing_entry_point() -> None:
-    pass
+    preprocessing()
+    ending()
 
 
 def initialization_entry_point() -> None:
@@ -37,11 +38,13 @@ def initialization_entry_point() -> None:
 
 
 def learning_entry_point() -> None:
-    pass
+    forest_construction()
+    ending()
 
 
 def reduction_entry_point() -> None:
-    pass
+    forest_reduction()
+    ending()
 
 
 if __name__ == "__main__":
