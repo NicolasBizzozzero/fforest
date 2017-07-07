@@ -32,7 +32,7 @@ def preprocessing() -> None:
     """
     # Create the main directory of the application
     create_dir(env.main_directory_path)
-
+    print("prendant preprocessing", env.current_phase)
     # Change the encoding, delimiter, format, quoting behavior and quoting character of the original
     # database to initialize the preprocessed database. Once it's done, we can forget about the original database.
     vprint(Message.INITIAL_PREPROCESSING)

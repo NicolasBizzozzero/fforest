@@ -8,6 +8,7 @@ from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_ent
 from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
 from fforest.src.core.phase.performance_evaluation.forest_quality import forest_quality
 from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
+import fforest.src.getters.environment as env
 
 
 @failure_safe
