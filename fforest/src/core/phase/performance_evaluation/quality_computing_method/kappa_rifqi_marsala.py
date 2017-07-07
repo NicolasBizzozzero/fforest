@@ -13,9 +13,6 @@ import fforest.src.getters.environment as env
 KEY_MEMBERSHIP = "%membership"
 
 
-# TODO: Check if salammbo and difficulty vectors have headers
-
-
 def kappa_rifqi_marsala() -> Dict[str, Dict[str, float]]:
     forest_quality_all_tnorms = dict()
     for tnorm in env.t_norms_names:
