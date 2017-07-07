@@ -47,7 +47,7 @@
     "quoting_output": "nonnumeric",
     "quote_char_input": "\"",
     "quote_char_output": "\"",
-    "line_delimiter_input": "\n",
-    "line_delimiter_output": "\n",
+    "line_delimiter_input": "\\n",
+    "line_delimiter_output": "\\n",
     "verbosity": "normal"
 }

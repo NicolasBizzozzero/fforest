@@ -42,6 +42,11 @@ class InvalidParameter(Exception):
         Exception.__init__(self, "The \"{param}\" parameter doesn't exists.".format(param=invalid_parameter_name))
 
 
+class IllegalLineDelimiter(Exception):
+    def __init__(self, delimiter: str):
+        Exception.__init__(self, "The \"{param}\" parameter can't be used as a newline value.".format(param=delimiter))
+
+
 def clean_args(args: dict) -> None:
     """ Clean the command-line arguments parsed by the `docopt` package.
     It mainly convert string values to their numeric and enum counterpart. If a parameter requiring an index or a column
@@ -108,6 +113,12 @@ def clean_args(args: dict) -> None:
                                               args[gpn.header_extension()])
         elif param_name == gpn.verbosity():
             args[param_name] = string_to_verbosity(args[param_name])
+        elif param_name in (gpn.line_delimiter_input(), gpn.line_delimiter_output()):
+            if args[param_name] not in (None, "", "\n", "\r", "\r\n"):
+                if args[param_name] == "\\n":
+                    args[param_name] = "\n"
+                else:
+                    raise IllegalLineDelimiter(args[param_name])
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:

@@ -198,7 +198,7 @@ def parse_args_main_entry_point() -> None:
     # Format the string twice because all the "doc_" variables contains default variables which need to be formated too
     # TODO: We can (maybe) gain time by not formatting the helping message twice, but by directly formatting the
     # documentation from the format dictionary
-    documentation = """{global_name}
+    documentation = r"""{global_name}
 
 Usage:
   {doc_usage}
