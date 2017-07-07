@@ -2,10 +2,14 @@ import traceback
 from typing import Callable
 
 from fforest.src.core.phase.ending.environment_file import dump_environment_file
+import fforest.src.getters.environment as env
 
 
 def ending() -> None:
-    dump_environment_file()
+    if env.main_directory_path:
+        dump_environment_file(env.main_directory_path)
+    else:
+        dump_environment_file()
 
 
 def _function_post_failure():

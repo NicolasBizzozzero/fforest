@@ -1,16 +1,18 @@
 import enum
+import os
 from typing import List, Dict
 import fforest.src.getters.environment as env
 from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.file_system import dump_dict, load_dict
 
+
 _ENVIRONMENT_FILE_NAME = "environment.json"
 
 
-def dump_environment_file(path: str = _ENVIRONMENT_FILE_NAME) -> None:
+def dump_environment_file(directory: str = ".") -> None:
     content = _module_to_dict()
     _serialize_custom_classes(content)
-    dump_dict(d=content, path=path)
+    dump_dict(d=content, path=os.path.join(directory, _ENVIRONMENT_FILE_NAME))
 
 
 def load_environment_file(path: str = _ENVIRONMENT_FILE_NAME) -> None:
