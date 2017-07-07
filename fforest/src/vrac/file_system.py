@@ -89,13 +89,18 @@ def create_dir(directory: str) -> None:
     os.makedirs(directory, exist_ok=True)
 
 
-def dump_dict(d: dict, path: str, dialect: Dialect, indent: int = 4, sort_keys: bool = True) -> None:
+def dump_dict(d: dict, path: str, dialect: Dialect = Dialect(), indent: int = 4, sort_keys: bool = True) -> None:
     """ Dump the content of `d` into the path `path`.
     You can pass an optional encoding, used to open the file, the indent used by the JSON writer and a boolean, which
     makes you able to sort the keys into the file or not.
     """
     with open(path, 'w', encoding=dialect.encoding, newline=dialect.line_delimiter) as file:
-        return json.dump(d, file, indent=indent, sort_keys=sort_keys)
+        json.dump(d, file, indent=indent, sort_keys=sort_keys)
+
+
+def load_dict(path: str, dialect: Dialect = Dialect()) -> dict:
+    with open(path, "r", encoding=dialect.encoding, newline=dialect.line_delimiter) as file:
+        return json.load(file)
 
 
 def dump_string(path: str, string: str, dialect: Dialect, mode: str = "w") -> None:
