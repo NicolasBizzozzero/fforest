@@ -83,11 +83,11 @@ def get_next_phase(phase: Phase) -> Phase:
             return next_phase
 
 
-def exit_if_last_phase() -> None:
+def increment_phase() -> None:
+    _exit_if_last_phase()
+    env.current_phase = get_next_phase(env.current_phase)
+
+
+def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
         ending()
-
-
-def increment_phase() -> None:
-    exit_if_last_phase()
-    env.current_phase = get_next_phase(env.current_phase)
