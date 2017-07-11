@@ -1,6 +1,5 @@
 import enum
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.ending.ending import ending
 
 
 @enum.unique
@@ -90,4 +89,5 @@ def increment_phase() -> None:
 
 def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
+        from fforest.src.core.phase.ending.ending import ending
         ending()
