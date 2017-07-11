@@ -39,8 +39,6 @@ def forest_construction():
                                                      entropy_threshold=env.entropy_threshold,
                                                      min_size_leaf=env.minimal_size_leaf)
 
-    print("process creation")
-    print("path 0", env.subsubtrain_databases_paths[0])
     processes = list()
     for tree_index in range(1, env.trees_in_forest + 1):
         process = Process(target=_tree_construction,
@@ -62,9 +60,6 @@ def forest_construction():
     # Wait for all processes to finish
     for process in processes:
         process.join()
-
-
-    print("all processes ended")
 
     increment_phase()
 

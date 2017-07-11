@@ -21,7 +21,6 @@ def main_entry_point() -> None:
     initial_split()
     reference_split()
     subsubtrain_split()
-    print("main")
     forest_construction()
     forest_reduction()
     forest_quality()
