@@ -39,6 +39,7 @@ quoting_output = None
 reference_database_name = None
 reference_split_method = None
 reference_value = None
+resume_phase = None
 statistics_file_name = None
 subsubtrain_directory = None
 subsubtrain_directory_pattern = None

@@ -10,6 +10,7 @@ import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropymeasure
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     str_to_qualitycomputingmethod
+from fforest.src.core.phase.phase import str_to_phase
 from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bounds, \
     get_number_of_columns
@@ -119,6 +120,8 @@ def clean_args(args: dict) -> None:
                     args[param_name] = "\n"
                 else:
                     raise IllegalLineDelimiter(args[param_name])
+        elif param_name in (gpn.last_phase(), gpn.resume_phase()):
+            args[param_name] = str_to_phase(args[param_name])
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:

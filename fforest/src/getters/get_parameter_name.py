@@ -172,6 +172,14 @@ def help_param() -> str:
     return _get_name_from_file("help")
 
 
+def last_phase() -> str:
+    return _get_name_from_file("last_phase")
+
+
+def resume_phase() -> str:
+    return _get_name_from_file("resume_phase")
+
+
 def identifier() -> str:
     return _get_name_from_file("identifier")
 
