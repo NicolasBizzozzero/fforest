@@ -120,3 +120,18 @@ def extract_first_line(path: str, dialect: Dialect) -> str:
     dump_string(path, "\n".join(rest), dialect=dialect)
 
     return first_line
+
+
+def file_exists(file_path: str) -> bool:
+    """ Return `True` if the file ath links to a file.
+
+    Examples:
+        >>> file_exists("../vrac/file_system.py")
+        True
+        >>> file_exists("../vrac/file_system")
+        False
+        >>> file_exists("../vrac")
+        False
+
+    """
+    return os.path.isfile(file_path)

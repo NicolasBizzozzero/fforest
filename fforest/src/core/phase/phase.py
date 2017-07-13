@@ -87,6 +87,11 @@ def increment_phase() -> None:
     env.current_phase = get_next_phase(env.current_phase)
 
 
+def resume_phase(phase: Phase) -> None:
+    if phase == Phase.NONE:
+        # TODO: Complete
+        pass
+
 def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
         from fforest.src.core.phase.ending.ending import ending
