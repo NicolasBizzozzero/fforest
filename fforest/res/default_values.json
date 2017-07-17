@@ -36,8 +36,8 @@
     "entropy_measure": "shannon",
     "number_of_tnorms": 2,
 
-    "last_phase": "ending",
-    "resume_phase": "none",
+    "last_phase": "none",
+    "resume_phase": "parsing",
 
     "identifier": "_ID",
     "encoding_input": "utf8",

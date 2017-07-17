@@ -6,7 +6,7 @@ import fforest.src.getters.environment as env
 
 @enum.unique
 class Phase(enum.IntEnum):
-    NONE = 0
+    PARSING = 0
     PREPROCESSING = 1
     INITIAL_SPLIT = 2
     REFERENCE_SPLIT = 3
@@ -16,6 +16,7 @@ class Phase(enum.IntEnum):
     QUALITY = 7
     CLASSES_MATRICES = 8
     ENDING = 9
+    NONE = 10
 
 
 class UnknownPhase(Exception):
@@ -26,8 +27,8 @@ class UnknownPhase(Exception):
 
 def str_to_phase(string: str) -> Phase:
     string = string.lower()
-    if string == "none":
-        return Phase.NONE
+    if string == "parsing":
+        return Phase.PARSING
     elif string == "preprocessing":
         return Phase.PREPROCESSING
     elif string == "initial_split":
@@ -46,13 +47,15 @@ def str_to_phase(string: str) -> Phase:
         return Phase.CLASSES_MATRICES
     elif string == "ending":
         return Phase.ENDING
+    elif string == "none":
+        return Phase.NONE
     else:
         raise UnknownPhase(string)
 
 
 def phase_to_str(phase: Phase) -> str:
-    if phase == Phase.NONE:
-        return "none"
+    if phase == Phase.PARSING:
+        return "parsing"
     elif phase == Phase.PREPROCESSING:
         return "preprocessing"
     elif phase == Phase.INITIAL_SPLIT:
@@ -71,6 +74,8 @@ def phase_to_str(phase: Phase) -> str:
         return "classes_matrices"
     elif phase == Phase.ENDING:
         return "ending"
+    elif phase == Phase.NONE:
+        return "none"
     else:
         return "unknown"
 
@@ -94,9 +99,6 @@ def _exit_if_last_phase() -> None:
 
 
 def _get_next_phase(phase: Phase) -> Phase:
-    if phase == Phase.ENDING:
-        return Phase.NONE
-
     for next_phase in Phase:
         if phase.value + 1 == next_phase.value:
             return next_phase
