@@ -10,12 +10,9 @@ import fforest.src.getters.environment as env
 
 @failure_safe
 def main_entry_point() -> None:
-    # Parsing and cleaning command-line arguments.
-    # After calling this method, all variables defined in the `environment` module will be initialized
-    parse_args_main_entry_point()
-
     first_phase = compute_first_phase()
-    call_all_phases(starting_phase=first_phase)
+    call_all_phases(starting_phase=first_phase,
+                    parsing_function=parse_args_main_entry_point())
 
 
 def preprocessing_entry_point() -> None:
