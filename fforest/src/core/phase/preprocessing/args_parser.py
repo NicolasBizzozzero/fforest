@@ -16,7 +16,7 @@ import fforest.src.getters.get_parameter_documentation as gpd
 import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.preprocessing.args_cleaner import clean_args
 from fforest.src.core.phase.preprocessing.init_environment import init_environment
-from fforest.src.core.phase.preprocessing.preparsing import preparsing
+
 
 _FORMAT_DICTIONARY = dict(
     # Documentation
@@ -291,7 +291,6 @@ Options:
     clean_args(arguments)
 
     pprint(arguments)
-
 
     init_environment(arguments)
 

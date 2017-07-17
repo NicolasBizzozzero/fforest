@@ -81,9 +81,16 @@ def phase_to_str(phase: Phase) -> str:
         return "unknown"
 
 
+def phase_computable(phase_to_compute, last_phase_computed) -> bool:
+    return phase_to_compute.value <= last_phase_computed.value + 1
+
+
 def call_all_phases(starting_phase: Phase, parsing_function: Callable) -> None:
     phases_entry_points = _load_phases_entry_points(parsing_function)
+    print("phases entry points :", phases_entry_points)
     for phase_index in range(starting_phase.value, len(phases_entry_points)):
+        print("current function :", phases_entry_points[phase_index])
+        print("current phase :", env.current_phase)
         phases_entry_points[phase_index]()
         _increment_phase()
 

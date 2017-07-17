@@ -11,8 +11,9 @@ import fforest.src.getters.environment as env
 @failure_safe
 def main_entry_point() -> None:
     first_phase = compute_first_phase()
+    print("first phase :", first_phase)
     call_all_phases(starting_phase=first_phase,
-                    parsing_function=parse_args_main_entry_point())
+                    parsing_function=parse_args_main_entry_point)
 
 
 def preprocessing_entry_point() -> None:
