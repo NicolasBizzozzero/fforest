@@ -7,7 +7,6 @@ from typing import Dict, List
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_DIFFICULTY
-from fforest.src.core.phase.phase import increment_phase
 from fforest.src.file_tools.csv_tools import iter_rows, get_header, dump_csv_content
 from fforest.src.vrac.maths import round_float
 from fforest.src.file_tools.dialect import Dialect
@@ -26,8 +25,6 @@ def forest_reduction() -> None:
     _dump_difficulty_vectors(difficulty_vectors=difficulty_vectors,
                              difficulty_vectors_paths=env.difficulty_vectors_paths,
                              dialect=env.dialect_output)
-
-    increment_phase()
 
 
 def _compute_difficulty_vectors(number_of_trees: int, salammbo_vectors_dict: Dict[str, List],

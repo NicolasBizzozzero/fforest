@@ -1,4 +1,6 @@
 import enum
+from typing import Tuple, Callable, List
+
 import fforest.src.getters.environment as env
 
 
@@ -73,7 +75,31 @@ def phase_to_str(phase: Phase) -> str:
         return "unknown"
 
 
-def get_next_phase(phase: Phase) -> Phase:
+def resume_phase(phase: Phase) -> None:
+    if phase == Phase.NONE:
+        # TODO: Complete
+        pass
+
+
+def call_all_phases(starting_phase: Phase) -> None:
+    phases_entry_points = _load_phases_entry_points()
+    for phase_index in range(starting_phase.value, len(phases_entry_points)):
+        phases_entry_points[phase_index]()
+        _increment_phase()
+
+
+def _increment_phase() -> None:
+    _exit_if_last_phase()
+    env.current_phase = _get_next_phase(env.current_phase)
+
+
+def _exit_if_last_phase() -> None:
+    if env.current_phase == env.last_phase:
+        from fforest.src.core.phase.ending.ending import ending
+        ending()
+
+
+def _get_next_phase(phase: Phase) -> Phase:
     if phase == Phase.ENDING:
         return Phase.NONE
 
@@ -82,22 +108,16 @@ def get_next_phase(phase: Phase) -> Phase:
             return next_phase
 
 
-def increment_phase() -> None:
-    _exit_if_last_phase()
-    env.current_phase = get_next_phase(env.current_phase)
+def _load_phases_entry_points() -> List[Callable]:
+    from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
+    from fforest.src.core.phase.initialization.initial_split import initial_split
+    from fforest.src.core.phase.initialization.reference_split import reference_split
+    from fforest.src.core.phase.learning_process.subsubtrain_split import subsubtrain_split
+    from fforest.src.core.phase.learning_process.forest_construction import forest_construction
+    from fforest.src.core.phase.learning_process.forest_reduction import forest_reduction
+    from fforest.src.core.phase.performance_evaluation.forest_quality import forest_quality
+    from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
+    from fforest.src.core.phase.ending.ending import ending
 
-
-def resume_phase(phase: Phase) -> None:
-    if phase == Phase.NONE:
-        # TODO: Complete
-        pass
-
-
-def call_all_phases(starting_phase: Phase) -> None:
-    for phase_index in range(starting_phase.value, len(phases_entry_point))
-
-
-def _exit_if_last_phase() -> None:
-    if env.current_phase == env.last_phase:
-        from fforest.src.core.phase.ending.ending import ending
-        ending()
+    return [preprocessing, initial_split, reference_split, subsubtrain_split, forest_construction, forest_reduction,
+            forest_quality, classes_matrices, ending]
