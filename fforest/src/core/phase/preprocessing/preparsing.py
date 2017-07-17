@@ -2,7 +2,10 @@ from fforest.src.vrac.file_system import file_exists
 from fforest.src.core.phase.ending.environment_file import ENVIRONMENT_FILE_NAME, load_environment_file
 from fforest.src.core.phase.phase import resume_phase
 import fforest.src.getters.environment as env
+import fforest.src.getters.get_parameter_name as gpn
 import os
+import sys
+
 
 
 def preparsing() -> None:
@@ -14,8 +17,8 @@ def preparsing() -> None:
         resume_phase(env.current_phase)
 
 
-def _get_main_dir_name():
-    pass
+def _get_main_dir_name() -> str:
+    return sys.argv[sys.argv.index(gpn.main_directory()) + 1]
 
 
 def _env_file_exists(environment_file_path: str) -> bool:
@@ -23,4 +26,4 @@ def _env_file_exists(environment_file_path: str) -> bool:
 
 
 def _resume_phase_asked() -> bool:
-    pass
+    return bool(sys.argv[sys.argv.index(gpn.resume_phase()) + 1])

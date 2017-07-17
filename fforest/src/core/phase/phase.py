@@ -92,6 +92,11 @@ def resume_phase(phase: Phase) -> None:
         # TODO: Complete
         pass
 
+
+def call_all_phases(starting_phase: Phase) -> None:
+    for phase_index in range(starting_phase.value, len(phases_entry_point))
+
+
 def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
         from fforest.src.core.phase.ending.ending import ending
