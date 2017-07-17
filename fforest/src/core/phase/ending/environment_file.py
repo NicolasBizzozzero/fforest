@@ -2,14 +2,14 @@ import enum
 import os
 from typing import List, Dict
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropymeasure
+from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
-    str_to_qualitycomputingmethod
-from fforest.src.core.phase.phase import phase_to_str, str_to_phase
-from fforest.src.core.splitting_methods.split import str_to_splittingmethod
+    str_to_qualitycomputingmethod, QualityComputingMethod
+from fforest.src.core.phase.phase import str_to_phase, Phase
+from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from fforest.src.file_tools.dialect import Dialect
-from fforest.src.file_tools.format import string_to_format
-from fforest.src.getters.get_output_message import string_to_verbosity
+from fforest.src.file_tools.format import string_to_format, Format
+from fforest.src.getters.get_output_message import string_to_verbosity, Verbosity
 from fforest.src.vrac.file_system import dump_dict, load_dict
 
 
@@ -63,16 +63,16 @@ def _deserialize_custom_classes(content: dict) -> None:
 def _deserialize_enums(content: dict) -> None:
     for key, value in content.items():
         if key in ("current_phase", "last_phase"):
-            content[key] = str_to_phase(value)
+            print("key", key, "value", value, "type(value)", type(value), "Phase(value)", Phase(value))
+            content[key] = Phase(value)
+            print(content[key])
         elif key == "entropy_measure":
-            content[key] = str_to_entropymeasure(value)
+            content[key] = EntropyMeasure(value)
         elif key in ("format_input", "format_output"):
-            content[key] = string_to_format(value)
+            content[key] = Format(value)
         elif key in ("initial_split_method", "reference_split_method", "subsubtrain_split_method"):
-            content[key] = str_to_splittingmethod(value)
-        elif key in ("initial_split_method", "reference_split_method", "subsubtrain_split_method"):
-            content[key] = str_to_splittingmethod(value)
+            content[key] = SplittingMethod(value)
         elif key == "quality_computing_method":
-            content[key] = str_to_qualitycomputingmethod(value)
+            content[key] = QualityComputingMethod(value)
         elif key == "verbosity":
-            content[key] = string_to_verbosity(value)
+            content[key] = Verbosity(value)

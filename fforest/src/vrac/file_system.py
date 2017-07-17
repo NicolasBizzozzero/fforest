@@ -123,7 +123,7 @@ def extract_first_line(path: str, dialect: Dialect) -> str:
 
 
 def file_exists(file_path: str) -> bool:
-    """ Return `True` if the file ath links to a file.
+    """ Return `True` if the file path links to a file.
 
     Examples:
         >>> file_exists("../vrac/file_system.py")
