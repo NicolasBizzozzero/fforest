@@ -1,6 +1,6 @@
 from fforest.src.vrac.file_system import file_exists
 from fforest.src.core.phase.ending.environment_file import ENVIRONMENT_FILE_NAME, load_environment_file
-from fforest.src.core.phase.phase import resume_phase, Phase
+from fforest.src.core.phase.phase import Phase
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_parameter_name as gpn
 import os
