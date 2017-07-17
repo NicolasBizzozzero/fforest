@@ -75,14 +75,8 @@ def phase_to_str(phase: Phase) -> str:
         return "unknown"
 
 
-def resume_phase(phase: Phase) -> None:
-    if phase == Phase.NONE:
-        # TODO: Complete
-        pass
-
-
-def call_all_phases(starting_phase: Phase) -> None:
-    phases_entry_points = _load_phases_entry_points()
+def call_all_phases(starting_phase: Phase, parsing_function: Callable) -> None:
+    phases_entry_points = _load_phases_entry_points(parsing_function)
     for phase_index in range(starting_phase.value, len(phases_entry_points)):
         phases_entry_points[phase_index]()
         _increment_phase()
@@ -108,7 +102,7 @@ def _get_next_phase(phase: Phase) -> Phase:
             return next_phase
 
 
-def _load_phases_entry_points() -> List[Callable]:
+def _load_phases_entry_points(parsing_function: Callable) -> List[Callable]:
     from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
     from fforest.src.core.phase.initialization.initial_split import initial_split
     from fforest.src.core.phase.initialization.reference_split import reference_split
@@ -119,5 +113,5 @@ def _load_phases_entry_points() -> List[Callable]:
     from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
     from fforest.src.core.phase.ending.ending import ending
 
-    return [preprocessing, initial_split, reference_split, subsubtrain_split, forest_construction, forest_reduction,
-            forest_quality, classes_matrices, ending]
+    return [parsing_function, preprocessing, initial_split, reference_split, subsubtrain_split, forest_construction,
+            forest_reduction, forest_quality, classes_matrices, ending]
