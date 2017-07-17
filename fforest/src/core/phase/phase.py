@@ -2,6 +2,7 @@ import enum
 from typing import Tuple, Callable, List
 
 import fforest.src.getters.environment as env
+from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
 
 
 @enum.unique
@@ -94,8 +95,12 @@ def _increment_phase() -> None:
 
 def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
-        from fforest.src.core.phase.ending.ending import ending
-        ending()
+        if env.current_phase.value < Phase.ENDING.value:
+            # If the ending phase has not been processed
+            from fforest.src.core.phase.ending.ending import ending
+            ending()
+        else:
+            exit(EXIT_SUCCESS)
 
 
 def _get_next_phase(phase: Phase) -> Phase:

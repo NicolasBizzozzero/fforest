@@ -3,6 +3,7 @@ from typing import Callable
 
 from fforest.src.core.phase.ending.environment_file import dump_environment_file
 import fforest.src.getters.environment as env
+from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
 
 
 def ending() -> None:
@@ -10,6 +11,7 @@ def ending() -> None:
         dump_environment_file(env.main_directory_path)
     else:
         dump_environment_file()
+    exit(EXIT_SUCCESS)
 
 
 def _function_post_failure():
