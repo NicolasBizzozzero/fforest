@@ -76,13 +76,13 @@ def vprint(message: Message, **kwargs) -> None:
         if _is_a_normal_message(message_key):
             message = _get_message_from_file(message_key)
         else:
-            message = ""
+            return None
     elif env.verbosity == Verbosity.VERBOSE:
         message = _get_message_from_file(message_key)
     else:
         raise UnknownVerbosity(env.verbosity)
 
-    print(message.format(**kwargs), end="", sep="")
+    print(message.format(**kwargs), end="\n", sep="")
 
 
 if __name__ == '__main__':
