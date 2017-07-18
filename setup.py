@@ -79,10 +79,15 @@ setup(
     entry_points={
         'console_scripts': [
             ggv.main_entry_point() + ' = fforest.main:main_entry_point',
+            ggv.parsing_entry_point() + ' = fforest.main:parsing_entry_point',
             ggv.preprocessing_entry_point() + ' = fforest.main:preprocessing_entry_point',
-            ggv.initialization_entry_point() + ' = fforest.main:initialization_entry_point',
+            ggv.initial_split_entry_point() + ' = fforest.main:initial_split_entry_point',
+            ggv.reference_split_entry_point() + ' = fforest.main:reference_split_entry_point',
+            ggv.subsubtrain_split_entry_point() + ' = fforest.main:subsubtrain_split_entry_point',
             ggv.learning_entry_point() + ' = fforest.main:learning_entry_point',
             ggv.reduction_entry_point() + ' = fforest.main:reduction_entry_point',
+            ggv.quality_entry_point() + ' = fforest.main:quality_entry_point',
+            ggv.classes_matrices_entry_point() + ' = fforest.main:classes_matrices_entry_point',
         ],
     },
 )
