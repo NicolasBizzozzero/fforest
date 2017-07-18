@@ -284,14 +284,7 @@ Options:
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
-
-    from pprint import pprint
-    pprint(arguments)
-
     clean_args(arguments)
-
-    pprint(arguments)
-
     init_environment(arguments)
 
 

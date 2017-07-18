@@ -63,9 +63,7 @@ def _deserialize_custom_classes(content: dict) -> None:
 def _deserialize_enums(content: dict) -> None:
     for key, value in content.items():
         if key in ("current_phase", "last_phase"):
-            print("key", key, "value", value, "type(value)", type(value), "Phase(value)", Phase(value))
             content[key] = Phase(value)
-            print(content[key])
         elif key == "entropy_measure":
             content[key] = EntropyMeasure(value)
         elif key in ("format_input", "format_output"):
