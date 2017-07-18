@@ -6,6 +6,9 @@ import fforest.src.getters.environment as env
 from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
 
 
+_PARSING_FUNCTIONS_PREFIX = "parse_args_"
+
+
 def ending() -> None:
     if env.main_directory_path:
         dump_environment_file(env.main_directory_path)
@@ -14,9 +17,17 @@ def ending() -> None:
     exit(EXIT_SUCCESS)
 
 
-def _function_post_failure():
+def _function_post_failure(entry_point_name: str):
     """ This function is called if an exception is raised inside a failure_safe code. """
-    dump_environment_file()
+    global _PARSING_FUNCTIONS_PREFIX
+
+    try:
+        import fforest.src.core.phase.preprocessing.args_parser as parsing_module
+        parsing_function_name = "{}{}".format(_PARSING_FUNCTIONS_PREFIX, entry_point_name)
+        parsing_function = getattr(parsing_module, parsing_function_name)
+        parsing_function()
+    except Exception:
+        dump_environment_file()
 
 
 def failure_safe(func: Callable) -> Callable:
@@ -27,6 +38,6 @@ def failure_safe(func: Callable) -> Callable:
         try:
             return func(*args, **kwargs)
         except Exception:
-            _function_post_failure()
-            traceback.print_exc()
+            _function_post_failure(entry_point_name=func.__name__)
+            # traceback.print_exc()
     return wrapper
