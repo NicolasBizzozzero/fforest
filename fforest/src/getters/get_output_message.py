@@ -49,6 +49,7 @@ class Message(Enum):
     PREPEND_ID = "prepend_id"
     APPEND_CLASS = "append_class"
     EXTRACT_HEADER = "extract_header"
+    ENVIRONMENT_FILE_NOT_FOUND = "environment_file_not_found"
 
 
 def _is_a_normal_message(message_key: str) -> bool:

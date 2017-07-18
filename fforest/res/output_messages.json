@@ -3,5 +3,6 @@
     "prepend_id": "The ID column is not first, we preprend it to the database.\n",
     "append_class": "The Class column is not last, we append it to the database.\n",
     "extract_header": "The database contains a header, we extract it.\n",
-    "add_id": "The database doesn't contains an identifier column, we add it.\n"
+    "add_id": "The database doesn't contains an identifier column, we add it.\n",
+    "environment_file_not_found": "The environment file has not been found. Canceling the phase resuming process.\n"
 }

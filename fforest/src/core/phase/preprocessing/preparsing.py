@@ -1,3 +1,4 @@
+from fforest.src.getters.get_output_message import vprint, Message
 from fforest.src.vrac.file_system import file_exists
 from fforest.src.core.phase.ending.environment_file import ENVIRONMENT_FILE_NAME, load_environment_file
 from fforest.src.core.phase.phase import Phase, str_to_phase, phase_processable, phase_to_str
@@ -33,6 +34,8 @@ def compute_first_phase() -> Phase:
             return current_phase
     # User want to compute all phases, regarding of previous computations
     else:
+        if (not _env_file_exists(environment_file_path)) and _resume_phase_asked():
+            vprint(Message.ENVIRONMENT_FILE_NOT_FOUND)
         print("\n\nRESUME PHASE NOT ASKED\n\n")
         env.current_phase = Phase.PARSING
         return Phase.PARSING
