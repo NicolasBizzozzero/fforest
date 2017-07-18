@@ -28,8 +28,13 @@
   ],
 
   "main_entry_point": "fforest",
+  "parsing_entry_point": "fforest_parsing",
   "preprocessing_entry_point": "fforest_preprocessing",
-  "initialization_entry_point": "fforest_initialization",
+  "initial_split_entry_point": "fforest_initial_split",
+  "reference_split_entry_point": "fforest_reference_split",
+  "subsubtrain_split_entry_point": "fforest_subsubtrain_split",
   "learning_entry_point": "fforest_learning",
-  "reduction_entry_point": "fforest_reduction"
+  "reduction_entry_point": "fforest_reduction",
+  "quality_entry_point": "fforest_quality",
+  "classes_matrices_entry_point": "fforest_classes_matrices"
 }
