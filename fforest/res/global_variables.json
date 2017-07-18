@@ -28,7 +28,6 @@
   ],
 
   "main_entry_point": "fforest",
-  "parsing_entry_point": "fforest_parsing",
   "preprocessing_entry_point": "fforest_preprocessing",
   "initial_split_entry_point": "fforest_initial_split",
   "reference_split_entry_point": "fforest_reference_split",

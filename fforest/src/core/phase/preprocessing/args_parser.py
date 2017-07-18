@@ -288,5 +288,51 @@ Options:
     init_environment(arguments)
 
 
+def parse_args_preprocessing_entry_point() -> None:
+    global _FORMAT_DICTIONARY
+
+    # Format the string twice because all the "doc_" variables contains default variables which need to be formated too
+    # TODO: We can (maybe) gain time by not formatting the helping message twice, but by directly formatting the
+    # documentation from the format dictionary
+    documentation = r"""{global_name}
+
+    Usage:
+      {doc_usage}
+
+    Options:
+      # File names
+      {param_preprocessed_db_name}=NAME{LONG_SPACE}{doc_preprocessed_db_name}
+      {param_statistics_name}=NAME{LONG_SPACE}{doc_statistics_name}
+      {param_header_name}=NAME{LONG_SPACE}{doc_header_name}
+      {param_header_extension}=NAME{LONG_SPACE}{doc_header_extension}
+
+
+      # Directories names
+      {param_main_directory}=NAME{LONG_SPACE}{doc_main_directory}
+
+      # Miscellaneous
+      {param_help}{LONG_SPACE}{doc_help}
+      {param_identifier}=ID{LONG_SPACE}{doc_identifier}
+      {param_class_name}=NAME{LONG_SPACE}{doc_class_name}
+      {param_have_header}{LONG_SPACE}{doc_have_header}
+      {param_encoding_input}=ENCODING{LONG_SPACE}{doc_encoding_input}
+      {param_encoding_output}=ENCODING{LONG_SPACE}{doc_encoding_output}
+      {param_format_input}=FORMAT{LONG_SPACE}{doc_format_input}
+      {param_format_output}=FORMAT{LONG_SPACE}{doc_format_output}
+      {param_delimiter_input}=CHAR{LONG_SPACE}{doc_delimiter_input}
+      {param_delimiter_output}=CHAR{LONG_SPACE}{doc_delimiter_output}
+      {param_quoting_input}=QUOTING{LONG_SPACE}{doc_quoting_input}
+      {param_quoting_output}=QUOTING{LONG_SPACE}{doc_quoting_output}
+      {param_quote_char_input}=CHAR{LONG_SPACE}{doc_quote_char_input}
+      {param_quote_char_output}=CHAR{LONG_SPACE}{doc_quote_char_output}
+      {param_line_delimiter_input}=CHAR{LONG_SPACE}{doc_line_delimiter_input}
+      {param_line_delimiter_output}=CHAR{LONG_SPACE}{doc_line_delimiter_output}
+      {param_verbosity}=LEVEL{LONG_SPACE}{doc_verbosity}
+    """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
+
+    arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
+    clean_args(arguments)
+    init_environment(arguments)
+
 if __name__ == "__main__":
     pass

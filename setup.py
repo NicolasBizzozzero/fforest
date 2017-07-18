@@ -79,7 +79,6 @@ setup(
     entry_points={
         'console_scripts': [
             ggv.main_entry_point() + ' = fforest.main:main_entry_point',
-            ggv.parsing_entry_point() + ' = fforest.main:parsing_entry_point',
             ggv.preprocessing_entry_point() + ' = fforest.main:preprocessing_entry_point',
             ggv.initial_split_entry_point() + ' = fforest.main:initial_split_entry_point',
             ggv.reference_split_entry_point() + ' = fforest.main:reference_split_entry_point',

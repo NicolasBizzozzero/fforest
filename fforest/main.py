@@ -1,7 +1,9 @@
 from fforest.src.core.phase.ending.ending import failure_safe
 from fforest.src.core.phase.phase import call_all_phases
-from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_entry_point
+from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_entry_point, \
+    parse_args_preprocessing_entry_point
 from fforest.src.core.phase.preprocessing.preparsing import compute_first_phase
+from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
 
 
 @failure_safe
@@ -11,12 +13,9 @@ def main_entry_point() -> None:
                     parsing_function=parse_args_main_entry_point)
 
 
-def parsing_entry_point() -> None:
-    pass
-
-
 def preprocessing_entry_point() -> None:
-    pass
+    parse_args_preprocessing_entry_point()
+    preprocessing()
 
 
 def initial_split_entry_point() -> None:

@@ -88,10 +88,6 @@ def main_entry_point() -> str:
     return _get_value_from_file("main_entry_point")
 
 
-def parsing_entry_point() -> str:
-    return _get_value_from_file("parsing_entry_point")
-
-
 def preprocessing_entry_point() -> str:
     return _get_value_from_file("preprocessing_entry_point")
 
