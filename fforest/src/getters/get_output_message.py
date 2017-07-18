@@ -56,12 +56,14 @@ class Message(Enum):
 
 def vprint(message: Message, **kwargs) -> None:
     message_key = message.value
-    message = _get_message_with_verbosity(message_key, env.verbosity)
+    message = _get_message_with_verbosity(message_key, env.verbosity,
+                                          default_verbosity=string_to_verbosity(gdv.verbosity()))
     if message is not None:
         print(message.format(**kwargs), end="\n", sep="")
 
 
-def _get_message_with_verbosity(message_key: str, verbosity: Verbosity) -> Union[str, None]:
+def _get_message_with_verbosity(message_key: str, verbosity: Union[Verbosity, None],
+                                default_verbosity: Verbosity = Verbosity.NORMAL) -> Union[str, None]:
     if verbosity == Verbosity.QUIET:
         return None
     elif verbosity == Verbosity.NORMAL:
@@ -73,7 +75,7 @@ def _get_message_with_verbosity(message_key: str, verbosity: Verbosity) -> Union
         return _get_message_from_file(message_key)
     elif verbosity is None:
         # Verbosity level has not been initialized, we assume it's the default verbosity
-        return _get_message_with_verbosity(message_key, string_to_verbosity(gdv.verbosity()))
+        return _get_message_with_verbosity(message_key, default_verbosity)
     else:
         raise UnknownVerbosity(env.verbosity)
 
