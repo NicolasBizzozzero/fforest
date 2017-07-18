@@ -36,6 +36,9 @@
     "entropy_measure": "shannon",
     "number_of_tnorms": 2,
 
+    "last_phase": "none",
+    "resume_phase": "parsing",
+
     "identifier": "_ID",
     "encoding_input": "utf8",
     "encoding_output": "utf8",
@@ -47,7 +50,7 @@
     "quoting_output": "nonnumeric",
     "quote_char_input": "\"",
     "quote_char_output": "\"",
-    "line_delimiter_input": "\n",
-    "line_delimiter_output": "\n",
+    "line_delimiter_input": "\\n",
+    "line_delimiter_output": "\\n",
     "verbosity": "normal"
 }

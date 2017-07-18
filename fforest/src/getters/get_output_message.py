@@ -12,8 +12,10 @@ it's printable.
 import json
 import os
 from enum import IntEnum, Enum
+from typing import Union
 
 import fforest.src.getters.environment as env
+import fforest.src.getters.get_default_value as gdv
 
 _PATH_OUTPUT_MESSAGES = "../../res/output_messages.json"
 VERBOSE_KEY_PREFIX = "verbose_"
@@ -49,12 +51,31 @@ class Message(Enum):
     PREPEND_ID = "prepend_id"
     APPEND_CLASS = "append_class"
     EXTRACT_HEADER = "extract_header"
+    ENVIRONMENT_FILE_NOT_FOUND = "environment_file_not_found"
 
 
-def _is_a_normal_message(message_key: str) -> bool:
-    global VERBOSE_KEY_PREFIX
+def vprint(message: Message, **kwargs) -> None:
+    message_key = message.value
+    message = _get_message_with_verbosity(message_key, env.verbosity)
+    if message is not None:
+        print(message.format(**kwargs), end="\n", sep="")
 
-    return message_key[:len(VERBOSE_KEY_PREFIX)] != VERBOSE_KEY_PREFIX
+
+def _get_message_with_verbosity(message_key: str, verbosity: Verbosity) -> Union[str, None]:
+    if verbosity == Verbosity.QUIET:
+        return None
+    elif verbosity == Verbosity.NORMAL:
+        if _is_a_normal_message(message_key):
+            return _get_message_from_file(message_key)
+        else:
+            return None
+    elif verbosity == Verbosity.VERBOSE:
+        return _get_message_from_file(message_key)
+    elif verbosity is None:
+        # Verbosity level has not been initialized, we assume it's the default verbosity
+        return _get_message_with_verbosity(message_key, string_to_verbosity(gdv.verbosity()))
+    else:
+        raise UnknownVerbosity(env.verbosity)
 
 
 def _get_message_from_file(value):
@@ -66,22 +87,10 @@ def _get_message_from_file(value):
         return json.load(file)[value]
 
 
-def vprint(message: Message, **kwargs) -> None:
-    message_key = message.value
+def _is_a_normal_message(message_key: str) -> bool:
+    global VERBOSE_KEY_PREFIX
 
-    if env.verbosity == Verbosity.QUIET:
-        return None
-    elif env.verbosity == Verbosity.NORMAL:
-        if _is_a_normal_message(message_key):
-            message = _get_message_from_file(message_key)
-        else:
-            message = ""
-    elif env.verbosity == Verbosity.VERBOSE:
-        message = _get_message_from_file(message_key)
-    else:
-        raise UnknownVerbosity(env.verbosity)
-
-    print(message.format(**kwargs), end="", sep="")
+    return message_key[:len(VERBOSE_KEY_PREFIX)] != VERBOSE_KEY_PREFIX
 
 
 if __name__ == '__main__':

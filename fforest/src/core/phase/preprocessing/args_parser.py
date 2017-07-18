@@ -17,6 +17,7 @@ import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.preprocessing.args_cleaner import clean_args
 from fforest.src.core.phase.preprocessing.init_environment import init_environment
 
+
 _FORMAT_DICTIONARY = dict(
     # Documentation
     doc_usage=gpd.usage(),
@@ -56,6 +57,8 @@ _FORMAT_DICTIONARY = dict(
     doc_number_of_tnorms=gpd.number_of_tnorms(),
     doc_help=gpd.help_doc(),
     doc_identifier=gpd.identifier(),
+    doc_last_phase=gpd.last_phase(),
+    doc_resume_phase=gpd.resume_phase(),
     doc_class_name=gpd.class_name(),
     doc_have_header=gpd.have_header(),
     doc_encoding_input=gpd.encoding_input(),
@@ -109,6 +112,8 @@ _FORMAT_DICTIONARY = dict(
     param_min_size_leaf=gpn.min_size_leaf(),
     param_entropy_measure=gpn.entropy_measure(),
     param_number_of_tnorms=gpn.number_of_tnorms(),
+    param_last_phase=gpn.last_phase(),
+    param_resume_phase=gpn.resume_phase(),
     param_help=gpn.help_param(),
     param_identifier=gpn.identifier(),
     param_class_name=gpn.class_name(),
@@ -160,6 +165,8 @@ _FORMAT_DICTIONARY = dict(
     default_min_size_leaf=gdv.min_size_leaf(),
     default_entropy_measure=gdv.entropy_measure(),
     default_number_of_tnorms=gdv.number_of_tnorms(),
+    default_last_phase=gdv.last_phase(),
+    default_resume_phase=gdv.resume_phase(),
     default_identifier=gdv.identifier(),
     default_encoding_input=gdv.encoding_input(),
     default_encoding_output=gdv.encoding_output(),
@@ -198,7 +205,7 @@ def parse_args_main_entry_point() -> None:
     # Format the string twice because all the "doc_" variables contains default variables which need to be formated too
     # TODO: We can (maybe) gain time by not formatting the helping message twice, but by directly formatting the
     # documentation from the format dictionary
-    documentation = """{global_name}
+    documentation = r"""{global_name}
 
 Usage:
   {doc_usage}
@@ -252,6 +259,9 @@ Options:
   {param_entropy_measure}=<measure>{LONG_SPACE}{doc_entropy_measure}
   {param_number_of_tnorms}=INT{LONG_SPACE}{doc_number_of_tnorms}
 
+  # Phases parameters
+  {param_last_phase}=PHASE{LONG_SPACE}{doc_last_phase}
+  {param_resume_phase}=PHASE{LONG_SPACE}{doc_resume_phase}
 
   # Miscellaneous
   {param_help}{LONG_SPACE}{doc_help}

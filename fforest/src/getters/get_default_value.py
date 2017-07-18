@@ -152,6 +152,14 @@ def number_of_tnorms() -> str:
     return _get_value_from_file("number_of_tnorms")
 
 
+def last_phase() -> str:
+    return _get_value_from_file("last_phase")
+
+
+def resume_phase() -> str:
+    return _get_value_from_file("resume_phase")
+
+
 def identifier() -> str:
     return _get_value_from_file("identifier")
 

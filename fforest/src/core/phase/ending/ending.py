@@ -1,37 +1,22 @@
 import traceback
 from typing import Callable
 
+from fforest.src.core.phase.ending.environment_file import dump_environment_file
 import fforest.src.getters.environment as env
-import fforest.src.getters.get_statistic_name as gsn
-from fforest.src.file_tools.dialect import Dialect
-from fforest.src.vrac.file_system import dump_dict
+from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
 
 
 def ending() -> None:
-    dump_statistics_dictionary()
-
-
-def dump_statistics_dictionary():
-    # Dump instances dictionary
-    instances_dictionary = {
-        gsn.instances_in_database(): env.original_database_instances,
-        gsn.instances_in_train(): env.train_database_instances,
-        gsn.instances_in_test(): env.test_database_instances,
-        gsn.instances_in_reference(): env.reference_database_instances,
-        gsn.instances_in_subtrain(): env.subtrain_database_instances,
-        gsn.instances_in_subsubtrain(): env.subsubtrain_databases_instances
-    }
-
-    if not env.statistics_file_path:
-        filepath = "."
+    if env.main_directory_path:
+        dump_environment_file(env.main_directory_path)
     else:
-        filepath = env.statistics_file_path
-    dump_dict(instances_dictionary, filepath, dialect=Dialect())
+        dump_environment_file()
+    exit(EXIT_SUCCESS)
 
 
 def _function_post_failure():
     """ This function is called if an exception is raised inside a failure_safe code. """
-    dump_statistics_dictionary()
+    dump_environment_file()
 
 
 def failure_safe(func: Callable) -> Callable:

@@ -2,8 +2,8 @@
 """
 # Command-line parameters
 cclassified_vector_prefix = None
-class_name = None
 class_matrix_prefix = None
+class_name = None
 classes_matrices_directory = None
 delimiter_input = None
 delimiter_output = None
@@ -39,6 +39,7 @@ quoting_output = None
 reference_database_name = None
 reference_split_method = None
 reference_value = None
+resume_phase = None
 statistics_file_name = None
 subsubtrain_directory = None
 subsubtrain_directory_pattern = None
@@ -64,6 +65,9 @@ classes_matrices_directory_path = None
 classes_matrices_directories_path = None
 
 # Paths
+cclassified_vectors_paths = None
+classes_matrices_files_paths = None
+difficulty_vectors_paths = None
 statistics_file_path = None
 original_database_path = None
 preprocessed_database_path = None
@@ -73,11 +77,8 @@ train_database_path = None
 reference_database_path = None
 subtrain_database_path = None
 subsubtrain_databases_paths = None
-difficulty_vectors_paths = None
-cclassified_vectors_paths = None
 salammbo_vectors_paths = None
 quality_files_paths = None
-classes_matrices_files_paths = None
 
 # Names
 original_database_name = None

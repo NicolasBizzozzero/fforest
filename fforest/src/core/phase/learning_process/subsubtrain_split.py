@@ -5,7 +5,6 @@ module.
 from typing import List
 
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.phase import increment_phase
 from fforest.src.core.splitting_methods.split import split
 from fforest.src.vrac.file_system import create_dir
 
@@ -31,8 +30,6 @@ def subsubtrain_split() -> None:
 
     # Store the number of instances of each tree along with its name in the `env` module
     env.subsubtrain_databases_instances = dict(zip(env.subsubtrain_directories_path, list_instances))
-
-    increment_phase()
 
 
 def _create_subsubtrain_directories(subsubtrain_directories: List[str]) -> None:

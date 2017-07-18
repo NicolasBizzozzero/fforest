@@ -11,7 +11,6 @@ import csv
 
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_default_value as gdv
-from fforest.src.core.phase.phase import increment_phase
 from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_column, append_column,\
     NamedAttributeButNoHeader, EmptyHeader, dump_csv_content, get_header
 from fforest.src.getters.get_output_message import Message, vprint
@@ -32,7 +31,6 @@ def preprocessing() -> None:
     """
     # Create the main directory of the application
     create_dir(env.main_directory_path)
-
     # Change the encoding, delimiter, format, quoting behavior and quoting character of the original
     # database to initialize the preprocessed database. Once it's done, we can forget about the original database.
     vprint(Message.INITIAL_PREPROCESSING)
@@ -105,8 +103,6 @@ def preprocessing() -> None:
 
         # The header have been extracted, we remove the boolean value attesting for its presence
         env.have_header = False
-
-    increment_phase()
 
 
 # TODO: Change also the format of the database

@@ -7,9 +7,10 @@ import sys
 
 import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_parameter_name as gpn
-from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropy_measure
+from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropymeasure
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     str_to_qualitycomputingmethod
+from fforest.src.core.phase.phase import str_to_phase
 from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
 from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bounds, \
     get_number_of_columns
@@ -40,6 +41,11 @@ class IndexOutOfBounds(Exception):
 class InvalidParameter(Exception):
     def __init__(self, invalid_parameter_name: str):
         Exception.__init__(self, "The \"{param}\" parameter doesn't exists.".format(param=invalid_parameter_name))
+
+
+class IllegalLineDelimiter(Exception):
+    def __init__(self, delimiter: str):
+        Exception.__init__(self, "The \"{param}\" parameter can't be used as a newline value.".format(param=delimiter))
 
 
 def clean_args(args: dict) -> None:
@@ -75,7 +81,7 @@ def clean_args(args: dict) -> None:
         elif param_name in (gpn.format_input(), gpn.format_output()):
             args[param_name] = string_to_format(args[param_name])
         elif param_name == gpn.entropy_measure():
-            args[param_name] = str_to_entropy_measure(args[param_name])
+            args[param_name] = str_to_entropymeasure(args[param_name])
         elif param_name in (gpn.entropy_threshold(), gpn.quality_threshold()):
             if not is_a_percentage(args[param_name]):
                 raise InvalidPercentage(args[param_name])
@@ -108,6 +114,14 @@ def clean_args(args: dict) -> None:
                                               args[gpn.header_extension()])
         elif param_name == gpn.verbosity():
             args[param_name] = string_to_verbosity(args[param_name])
+        elif param_name in (gpn.line_delimiter_input(), gpn.line_delimiter_output()):
+            if args[param_name] not in (None, "", "\n", "\r", "\r\n"):
+                if args[param_name] == "\\n":
+                    args[param_name] = "\n"
+                else:
+                    raise IllegalLineDelimiter(args[param_name])
+        elif param_name in (gpn.last_phase(), gpn.resume_phase()):
+            args[param_name] = str_to_phase(args[param_name])
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:

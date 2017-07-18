@@ -42,6 +42,9 @@
     "entropy_measure": "--entropy-measure",
     "number_of_tnorms": "--t-norms",
 
+    "last_phase": "--last-phase",
+    "resume_phase": "--resume-phase",
+
     "identifier": "--identifier",
     "class": "--class",
     "have_header": "--have-header",

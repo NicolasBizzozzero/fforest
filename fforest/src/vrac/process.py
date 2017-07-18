@@ -22,5 +22,8 @@ def execute_and_get_stdout(command: str, *parameters: str, stdin=None, stderr=No
             >>> execute_and_get_stdout("printf", "Hello World !")
             'Hello World !'
     """
-    return subprocess.check_output([command, *parameters], stdin=stdin, stderr=stderr, shell=False,
-                                   timeout=None).decode(encoding)
+    try:
+        return subprocess.check_output([command, *parameters], stdin=stdin, stderr=stderr, shell=False,
+                                       timeout=None).decode(encoding)
+    except subprocess.CalledProcessError as error:
+        print(error.output)
