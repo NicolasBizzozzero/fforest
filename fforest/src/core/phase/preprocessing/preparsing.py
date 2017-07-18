@@ -18,13 +18,8 @@ def compute_first_phase() -> Phase:
     main_dir_name = _get_main_dir_name()
     environment_file_path = os.path.join(os.getcwd(), main_dir_name, ENVIRONMENT_FILE_NAME)
 
-    print("env file exists :", _env_file_exists(environment_file_path))
-    print(environment_file_path)
-    print(os.path.isfile(environment_file_path))
-    #print("resumephaseasked :", _resume_phase_asked())
     # User wants to resume where he stopped last time
     if _env_file_exists(environment_file_path) and _resume_phase_asked():
-        print("\n\nRESUME PHASE ASKED\n\n")
         load_environment_file(path=environment_file_path)
         current_phase = str_to_phase(sys.argv[sys.argv.index(gpn.resume_phase()) + 1])
         if not phase_processable(phase_to_compute=current_phase, last_phase_computed=env.last_phase):
@@ -36,7 +31,6 @@ def compute_first_phase() -> Phase:
     else:
         if (not _env_file_exists(environment_file_path)) and _resume_phase_asked():
             vprint(Message.ENVIRONMENT_FILE_NOT_FOUND)
-        print("\n\nRESUME PHASE NOT ASKED\n\n")
         env.current_phase = Phase.PARSING
         return Phase.PARSING
 
