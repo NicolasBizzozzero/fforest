@@ -16,8 +16,9 @@ class Phase(enum.IntEnum):
     REDUCTION = 6
     QUALITY = 7
     CLASSES_MATRICES = 8
-    ENDING = 9
-    NONE = 10
+    CLUSTERING_TREES = 9
+    ENDING = 10
+    NONE = 11
 
 
 class UnknownPhase(Exception):
@@ -46,6 +47,8 @@ def str_to_phase(string: str) -> Phase:
         return Phase.QUALITY
     elif string == "classes_matrices":
         return Phase.CLASSES_MATRICES
+    elif string == "clustering_trees":
+        return Phase.CLUSTERING_TREES
     elif string == "ending":
         return Phase.ENDING
     elif string == "none":
@@ -73,6 +76,8 @@ def phase_to_str(phase: Phase) -> str:
         return "quality"
     elif phase == Phase.CLASSES_MATRICES:
         return "classes_matrices"
+    elif phase == Phase.CLUSTERING_TREES:
+        return "clustering_trees"
     elif phase == Phase.ENDING:
         return "ending"
     elif phase == Phase.NONE:
@@ -122,7 +127,8 @@ def _load_phases_entry_points(parsing_function: Callable) -> List[Callable]:
     from fforest.src.core.phase.learning_process.forest_reduction import forest_reduction
     from fforest.src.core.phase.performance_evaluation.forest_quality import forest_quality
     from fforest.src.core.phase.performance_evaluation.classes_matrices import classes_matrices
+    from fforest.src.core.phase.performance_evaluation.clustering_trees import clustering_trees
     from fforest.src.core.phase.ending.ending import ending
 
     return [parsing_function, preprocessing, initial_split, reference_split, subsubtrain_split, forest_construction,
-            forest_reduction, forest_quality, classes_matrices, ending]
+            forest_reduction, forest_quality, classes_matrices, clustering_trees, ending]
