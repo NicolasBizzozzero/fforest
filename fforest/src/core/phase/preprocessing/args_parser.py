@@ -306,6 +306,7 @@ Options:
   {param_line_delimiter_output}=CHAR{LONG_SPACE}{doc_line_delimiter_output}
   {param_verbosity}=LEVEL{LONG_SPACE}{doc_verbosity}
 """
+    print(documentation)
     _parse_args(documentation)
 
 
