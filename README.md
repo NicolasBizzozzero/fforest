@@ -11,13 +11,9 @@ A set of tools useful for doing experiments with **fuzzy forests**.
 $ pip install fforest
 ```
 in a shell to install the software.
-The package creates **5** new commands :
+The package creates **1** new commands :
 ```shell
 $ fforest
-$ fforest_preprocessing
-$ fforest_initialization
-$ fforest_learning
-$ fforest_reduction
 ```
 
 ## Usage
