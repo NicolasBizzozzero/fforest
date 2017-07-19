@@ -4,11 +4,11 @@
   "keywords": "",
   "main_homepage": "",
   "download_url":"",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Bizzozzéro Nicolas",
   "maintainer": "Bizzozzéro Nicolas",
   "email": "nicolasbizzozzero@gmail.com",
-  "status": "Alpha",
+  "status": "Production/Stable",
   "copyright": "Copyright 2017, LIP6 - Pierre et Marie Curie University",
   "credits": [
     "Bizzozzéro Nicolas",
@@ -16,7 +16,7 @@
   ],
   "license": "GPL-3.0",
   "classifiers": [
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Natural Language :: French",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -29,7 +29,11 @@
 
   "main_entry_point": "fforest",
   "preprocessing_entry_point": "fforest_preprocessing",
-  "initialization_entry_point": "fforest_initialization",
+  "initial_split_entry_point": "fforest_initial_split",
+  "reference_split_entry_point": "fforest_reference_split",
+  "subsubtrain_split_entry_point": "fforest_subsubtrain_split",
   "learning_entry_point": "fforest_learning",
-  "reduction_entry_point": "fforest_reduction"
+  "reduction_entry_point": "fforest_reduction",
+  "quality_entry_point": "fforest_quality",
+  "classes_matrices_entry_point": "fforest_classes_matrices"
 }

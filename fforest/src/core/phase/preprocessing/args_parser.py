@@ -14,6 +14,7 @@ import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_global_variable as ggv
 import fforest.src.getters.get_parameter_documentation as gpd
 import fforest.src.getters.get_parameter_name as gpn
+import fforest.src.getters.get_entry_point_documentation as gepd
 from fforest.src.core.phase.preprocessing.args_cleaner import clean_args
 from fforest.src.core.phase.preprocessing.init_environment import init_environment
 
@@ -190,99 +191,20 @@ _FORMAT_DICTIONARY = dict(
 
 
 def parse_args_main_entry_point() -> None:
-    """ This method used the `docopt` package (listed as a dependency) to easily combine the tedious task of writing
-    documentation and parsing arguments.
-    It contains a very long documentation string which will be the string displayed with the --help parameter. This
-    string contains a lot of format-style parameters and has for purpose to organize them into the best way possible for
-    reading the documentation. Each of these format-style parameters are defined inside the `_FORMAT_DICTIONARY`
-    variable at the beginning of the module. This dictionary link theses variables with their respective value in the
-    files located in the `res` directory at the root of the software. This complex parsing method allows to have the
-    arguments, their documentation and default values to be defined in only one location (the `res` folder) for a
-    quicker and easier maintenance.
-    """
+    documentation = gepd.main_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_preprocessing_entry_point() -> None:
+    documentation = gepd.preprocessing_entry_point()
+    _parse_args(documentation)
+
+
+def _parse_args(documentation: str) -> None:
     global _FORMAT_DICTIONARY
 
-    # Format the string twice because all the "doc_" variables contains default variables which need to be formated too
-    # TODO: We can (maybe) gain time by not formatting the helping message twice, but by directly formatting the
-    # documentation from the format dictionary
-    documentation = r"""{global_name}
-
-Usage:
-  {doc_usage}
-
-Options:
-  # Splitting values
-  {param_training_value}=VALUE{LONG_SPACE}{doc_training_value}
-  {param_reference_value}=VALUE{LONG_SPACE}{doc_reference_value}
-  {param_trees_in_forest}=VALUE{LONG_SPACE}{doc_trees_in_forest}
-  {param_quality_threshold}=VALUE{LONG_SPACE}{doc_quality_threshold}
-
-
-  # Processing methods
-  {param_initial_split_method}=METHOD{LONG_SPACE}{doc_initial_split_method}
-  {param_reference_split_method}=METHOD{LONG_SPACE}{doc_reference_split_method}
-  {param_subsubtrain_split_method}=METHOD{LONG_SPACE}{doc_subsubtrain_split_method}
-  {param_quality_computing_method}=METHOD{LONG_SPACE}{doc_quality_computing_method}
-
-
-  # File names
-  {param_train_name}=NAME{LONG_SPACE}{doc_train_name}
-  {param_test_name}=NAME{LONG_SPACE}{doc_test_name}
-  {param_preprocessed_db_name}=NAME{LONG_SPACE}{doc_preprocessed_db_name}
-  {param_subtrain_name}=NAME{LONG_SPACE}{doc_subtrain_name}
-  {param_reference_name}=NAME{LONG_SPACE}{doc_reference_name}
-  {param_statistics_name}=NAME{LONG_SPACE}{doc_statistics_name}
-  {param_header_name}=NAME{LONG_SPACE}{doc_header_name}
-  {param_subsubtrain_name_pattern}=NAME{LONG_SPACE}{doc_subsubtrain_name_pattern}
-  {param_cclassified_vector_prefix}=PREFIX{LONG_SPACE}{doc_cclassified_vector_prefix}
-  {param_salammbo_vector_prefix}=PREFIX{LONG_SPACE}{doc_salammbo_vector_prefix}
-  {param_difficulty_vector_prefix}=PREFIX{LONG_SPACE}{doc_difficulty_vector_prefix}
-  {param_quality_file_prefix}=PREFIX{LONG_SPACE}{doc_quality_file_prefix}
-  {param_class_matrix_prefix}=PREFIX{LONG_SPACE}{doc_class_matrix_prefix}
-  {param_tree_file_extension}=NAME{LONG_SPACE}{doc_tree_file_extension}
-  {param_vector_file_extension}=NAME{LONG_SPACE}{doc_vector_file_extension}
-  {param_header_extension}=NAME{LONG_SPACE}{doc_header_extension}
-
-
-  # Directories names
-  {param_main_directory}=NAME{LONG_SPACE}{doc_main_directory}
-  {param_subtrain_directory}=NAME{LONG_SPACE}{doc_subtrain_directory}
-  {param_subsubtrain_directory}=NAME{LONG_SPACE}{doc_subsubtrain_directory}
-  {param_classes_matrices_directory}=NAME{LONG_SPACE}{doc_classes_matrices_directory}
-  {param_subsubtrain_directory_pattern}=NAME{LONG_SPACE}{doc_subsubtrain_directory_pattern}
-  
-  
-  # Salammbô parameters
-  {param_discretization_threshold}=VALUE{LONG_SPACE}{doc_discretization_threshold}
-  {param_entropy_threshold}=VALUE{LONG_SPACE}{doc_entropy_threshold}
-  {param_min_size_leaf}=SIZE{LONG_SPACE}{doc_min_size_leaf}
-  {param_entropy_measure}=<measure>{LONG_SPACE}{doc_entropy_measure}
-  {param_number_of_tnorms}=INT{LONG_SPACE}{doc_number_of_tnorms}
-
-  # Phases parameters
-  {param_last_phase}=PHASE{LONG_SPACE}{doc_last_phase}
-  {param_resume_phase}=PHASE{LONG_SPACE}{doc_resume_phase}
-
-  # Miscellaneous
-  {param_help}{LONG_SPACE}{doc_help}
-  {param_identifier}=ID{LONG_SPACE}{doc_identifier}
-  {param_class_name}=NAME{LONG_SPACE}{doc_class_name}
-  {param_have_header}{LONG_SPACE}{doc_have_header}
-  {param_encoding_input}=ENCODING{LONG_SPACE}{doc_encoding_input}
-  {param_encoding_output}=ENCODING{LONG_SPACE}{doc_encoding_output}
-  {param_format_input}=FORMAT{LONG_SPACE}{doc_format_input}
-  {param_format_output}=FORMAT{LONG_SPACE}{doc_format_output}
-  {param_delimiter_input}=CHAR{LONG_SPACE}{doc_delimiter_input}
-  {param_delimiter_output}=CHAR{LONG_SPACE}{doc_delimiter_output}
-  {param_quoting_input}=QUOTING{LONG_SPACE}{doc_quoting_input}
-  {param_quoting_output}=QUOTING{LONG_SPACE}{doc_quoting_output}
-  {param_quote_char_input}=CHAR{LONG_SPACE}{doc_quote_char_input}
-  {param_quote_char_output}=CHAR{LONG_SPACE}{doc_quote_char_output}
-  {param_line_delimiter_input}=CHAR{LONG_SPACE}{doc_line_delimiter_input}
-  {param_line_delimiter_output}=CHAR{LONG_SPACE}{doc_line_delimiter_output}
-  {param_verbosity}=LEVEL{LONG_SPACE}{doc_verbosity}
-""".format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
-
+    # Format the string twice because all the "doc_" variables contains default variables which need to be formatted too
+    documentation = documentation.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     clean_args(arguments)
     init_environment(arguments)
