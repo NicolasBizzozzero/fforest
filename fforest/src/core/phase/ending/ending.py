@@ -22,6 +22,7 @@ def _function_post_failure(entry_point_name: str):
     global _PARSING_FUNCTIONS_PREFIX
 
     try:
+        # In case the entry point has been wrongly called before the parsing phase
         import fforest.src.core.phase.preprocessing.args_parser as parsing_module
         parsing_function_name = "{}{}".format(_PARSING_FUNCTIONS_PREFIX, entry_point_name)
         parsing_function = getattr(parsing_module, parsing_function_name)

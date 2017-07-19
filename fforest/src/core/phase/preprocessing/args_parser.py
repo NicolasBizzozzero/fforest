@@ -197,7 +197,6 @@ def parse_args_main_entry_point() -> None:
 
 def parse_args_preprocessing_entry_point() -> None:
     documentation = gepd.preprocessing_entry_point()
-    print(documentation)
     _parse_args(documentation)
 
 
@@ -205,7 +204,7 @@ def _parse_args(documentation: str) -> None:
     global _FORMAT_DICTIONARY
 
     # Format the string twice because all the "doc_" variables contains default variables which need to be formatted too
-    documentation.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
+    documentation = documentation.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     clean_args(arguments)
     init_environment(arguments)

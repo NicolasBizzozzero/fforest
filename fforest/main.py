@@ -14,8 +14,7 @@ def main_entry_point() -> None:
 
 
 def preprocessing_entry_point() -> None:
-    parse_args_preprocessing_entry_point()
-    preprocessing()
+    pass
 
 
 def initial_split_entry_point() -> None:
