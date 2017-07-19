@@ -93,7 +93,8 @@ def _init_miscellaneous(args: dict) -> None:
                                                column=args.get(gpn.class_name()),
                                                have_header=args.get(gpn.have_header()),
                                                dialect=env.dialect_input)))
-    env.t_norms_names = [tnorm_to_str(name) for name in range(args.get(gpn.number_of_tnorms()) + 1)]
+    if args.get(gpn.number_of_tnorms()):
+        env.t_norms_names = [tnorm_to_str(name) for name in range(args.get(gpn.number_of_tnorms()) + 1)]
 
 
 def _init_dir_paths(args: dict) -> None:
@@ -101,14 +102,18 @@ def _init_dir_paths(args: dict) -> None:
     env.main_directory_path = "{}/{}".format(env.parent_dir, env.main_directory)
     env.subtrain_directory_path = "{}/{}".format(env.main_directory_path, env.subtrain_directory)
     env.subsubtrain_directory_path = "{}/{}".format(env.subtrain_directory_path, env.subsubtrain_directory)
-    env.subsubtrain_directories_path = ["{}/{}".format(env.subsubtrain_directory_path,
-                                                       env.subsubtrain_directory_pattern %
-                                                       str(tree_index).zfill(len(str(env.trees_in_forest))))
-                                        for tree_index in range(1, env.trees_in_forest + 1)]
-    env.classes_matrices_directory_path = "{}/{}".format(env.subtrain_directory_path, env.classes_matrices_directory)
-    env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
-                                                                        class_name) for
-                                             class_name in env.possible_classes}
+
+    if env.trees_in_forest :
+        env.subsubtrain_directories_path = ["{}/{}".format(env.subsubtrain_directory_path,
+                                                           env.subsubtrain_directory_pattern %
+                                                           str(tree_index).zfill(len(str(env.trees_in_forest))))
+                                            for tree_index in range(1, env.trees_in_forest + 1)]
+    if env.classes_matrices_directory:
+        env.classes_matrices_directory_path = "{}/{}".format(env.subtrain_directory_path,
+                                                             env.classes_matrices_directory)
+        env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
+                                                                            class_name) for
+                                                 class_name in env.possible_classes}
 
 
 def _init_paths(args: dict) -> None:
@@ -121,42 +126,44 @@ def _init_paths(args: dict) -> None:
     env.train_database_path = "{}/{}".format(env.main_directory_path, args.get(gpn.train_name()))
     env.reference_database_path = "{}/{}".format(env.subtrain_directory_path, args.get(gpn.reference_name()))
     env.subtrain_database_path = "{}/{}".format(env.subtrain_directory_path, args.get(gpn.subtrain_name()))
-    env.subsubtrain_databases_paths = ["{}/{}.{}".format(env.subsubtrain_directories_path[tree_index],
-                                                         env.subsubtrain_directory_pattern %
-                                                         str(tree_index + 1).zfill(len(str(env.trees_in_forest))),
-                                                         format_to_string(args.get(gpn.format_output())).lower()) for
-                                       tree_index in range(env.trees_in_forest)]
-    env.difficulty_vectors_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
-                                                               env.difficulty_vector_prefix,
-                                                               tnorm,
-                                                               env.vector_file_extension) for
-                                    tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
-    env.cclassified_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
-                                                                 env.cclassified_vector_prefix,
-                                                                 tnorm,
-                                                                 env.vector_file_extension) for
-                                             tree_index in range(1, env.trees_in_forest + 1)] for
-                                     tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+    if env.trees_in_forest:
+        env.subsubtrain_databases_paths = ["{}/{}.{}".format(env.subsubtrain_directories_path[tree_index],
+                                                             env.subsubtrain_directory_pattern %
+                                                             str(tree_index + 1).zfill(len(str(env.trees_in_forest))),
+                                                             format_to_string(args.get(gpn.format_output())).lower()) for
+                                           tree_index in range(env.trees_in_forest)]
+        env.cclassified_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
+                                                                     env.cclassified_vector_prefix,
+                                                                     tnorm,
+                                                                     env.vector_file_extension) for
+                                                 tree_index in range(1, env.trees_in_forest + 1)] for
+                                         tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
 
-    env.salammbo_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
-                                                              env.salammbo_vector_prefix,
+        env.salammbo_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
+                                                                  env.salammbo_vector_prefix,
+                                                                  tnorm,
+                                                                  env.vector_file_extension) for
+                                              tree_index in range(1, env.trees_in_forest + 1)] for
+                                      tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+    if env.t_norms:
+        env.difficulty_vectors_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
+                                                                   env.difficulty_vector_prefix,
+                                                                   tnorm,
+                                                                   env.vector_file_extension) for
+                                        tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+        env.quality_files_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
+                                                              env.quality_file_prefix,
                                                               tnorm,
-                                                              env.vector_file_extension) for
-                                          tree_index in range(1, env.trees_in_forest + 1)] for
-                                  tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
-    env.quality_files_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
-                                                          env.quality_file_prefix,
-                                                          tnorm,
-                                                          format_to_string(args.get(gpn.format_output()))) for
-                               tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
-    env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
-        env.classes_matrices_directories_path[class_name],
-        env.class_matrix_prefix,
-        class_name,
-        tnorm,
-        format_to_string(args.get(gpn.format_output()))) for
-        tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
-        for class_name in env.possible_classes}
+                                                              format_to_string(args.get(gpn.format_output()))) for
+                                   tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+        env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
+            env.classes_matrices_directories_path[class_name],
+            env.class_matrix_prefix,
+            class_name,
+            tnorm,
+            format_to_string(args.get(gpn.format_output()))) for
+            tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+            for class_name in env.possible_classes}
 
 
 def _init_names(args: dict) -> None:
