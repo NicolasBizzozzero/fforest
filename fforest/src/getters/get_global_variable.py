@@ -92,8 +92,16 @@ def preprocessing_entry_point() -> str:
     return _get_value_from_file("preprocessing_entry_point")
 
 
-def initialization_entry_point() -> str:
-    return _get_value_from_file("initialization_entry_point")
+def initial_split_entry_point() -> str:
+    return _get_value_from_file("initial_split_entry_point")
+
+
+def reference_split_entry_point() -> str:
+    return _get_value_from_file("reference_split_entry_point")
+
+
+def subsubtrain_split_entry_point() -> str:
+    return _get_value_from_file("subsubtrain_split_entry_point")
 
 
 def learning_entry_point() -> str:
@@ -102,6 +110,14 @@ def learning_entry_point() -> str:
 
 def reduction_entry_point() -> str:
     return _get_value_from_file("reduction_entry_point")
+
+
+def quality_entry_point() -> str:
+    return _get_value_from_file("quality_entry_point")
+
+
+def classes_matrices_entry_point() -> str:
+    return _get_value_from_file("classes_matrices_entry_point")
 
 
 if __name__ == '__main__':
