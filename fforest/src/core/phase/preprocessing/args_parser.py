@@ -14,6 +14,7 @@ import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_global_variable as ggv
 import fforest.src.getters.get_parameter_documentation as gpd
 import fforest.src.getters.get_parameter_name as gpn
+import fforest.src.getters.get_entry_point_documentation as gepd
 from fforest.src.core.phase.preprocessing.args_cleaner import clean_args
 from fforest.src.core.phase.preprocessing.init_environment import init_environment
 
@@ -271,41 +272,7 @@ Options:
 
 
 def parse_args_preprocessing_entry_point() -> None:
-    documentation = r"""{global_name}
-
-Usage:
-  {doc_usage}
-
-Options:
-  # File names
-  {param_preprocessed_db_name}=NAME{LONG_SPACE}{doc_preprocessed_db_name}
-  {param_statistics_name}=NAME{LONG_SPACE}{doc_statistics_name}
-  {param_header_name}=NAME{LONG_SPACE}{doc_header_name}
-  {param_header_extension}=NAME{LONG_SPACE}{doc_header_extension}
-
-
-  # Directories names
-  {param_main_directory}=NAME{LONG_SPACE}{doc_main_directory}
-
-  # Miscellaneous
-  {param_help}{LONG_SPACE}{doc_help}
-  {param_identifier}=ID{LONG_SPACE}{doc_identifier}
-  {param_class_name}=NAME{LONG_SPACE}{doc_class_name}
-  {param_have_header}{LONG_SPACE}{doc_have_header}
-  {param_encoding_input}=ENCODING{LONG_SPACE}{doc_encoding_input}
-  {param_encoding_output}=ENCODING{LONG_SPACE}{doc_encoding_output}
-  {param_format_input}=FORMAT{LONG_SPACE}{doc_format_input}
-  {param_format_output}=FORMAT{LONG_SPACE}{doc_format_output}
-  {param_delimiter_input}=CHAR{LONG_SPACE}{doc_delimiter_input}
-  {param_delimiter_output}=CHAR{LONG_SPACE}{doc_delimiter_output}
-  {param_quoting_input}=QUOTING{LONG_SPACE}{doc_quoting_input}
-  {param_quoting_output}=QUOTING{LONG_SPACE}{doc_quoting_output}
-  {param_quote_char_input}=CHAR{LONG_SPACE}{doc_quote_char_input}
-  {param_quote_char_output}=CHAR{LONG_SPACE}{doc_quote_char_output}
-  {param_line_delimiter_input}=CHAR{LONG_SPACE}{doc_line_delimiter_input}
-  {param_line_delimiter_output}=CHAR{LONG_SPACE}{doc_line_delimiter_output}
-  {param_verbosity}=LEVEL{LONG_SPACE}{doc_verbosity}
-"""
+    documentation = gepd.preprocessing_entry_point()
     print(documentation)
     _parse_args(documentation)
 

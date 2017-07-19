@@ -6,4 +6,5 @@ include fforest/res/global_variables.json
 include fforest/res/statistics_names.json
 include fforest/res/parameters_documentation.json
 include fforest/res/output_messages.json
+include fforest/res/entry_points_documentation.xml
 include fforest/bin/Salammbo

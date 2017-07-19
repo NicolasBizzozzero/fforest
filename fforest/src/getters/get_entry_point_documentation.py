@@ -1,7 +1,8 @@
 from xml.etree.ElementTree import parse as xml_parse
+import os
 
 
-_FILE_PATH = "../../res/entry_points.xml"
+_FILE_PATH = "../../res/entry_points_documentation.xml"
 _KEY_NAME = "name"
 _KEY_DOCUMENTATION = "documentation"
 
@@ -9,7 +10,8 @@ _KEY_DOCUMENTATION = "documentation"
 def _get_root():
     global _FILE_PATH
 
-    tree = xml_parse(_FILE_PATH)
+    path = os.path.join(os.path.dirname(__file__), _FILE_PATH)
+    tree = xml_parse(path)
     return tree.getroot()
 
 
