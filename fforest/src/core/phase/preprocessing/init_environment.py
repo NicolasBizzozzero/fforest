@@ -22,6 +22,8 @@ def _init_command_line_parameters(args: dict) -> None:
     env.class_name = args.get(gpn.class_name().split()[-1])
     env.class_matrix_prefix = args.get(gpn.class_matrix_prefix().split()[-1])
     env.classes_matrices_directory = args.get(gpn.classes_matrices_directory().split()[-1])
+    env.clustering_trees_directory = args.get(gpn.clustering_trees_directory().split()[-1])
+    env.clustering_trees_method = args.get(gpn.clustering_trees_method().split()[-1])
     env.delimiter_input = args.get(gpn.delimiter_input().split()[-1])
     env.delimiter_output = args.get(gpn.delimiter_output().split()[-1])
     env.difficulty_vector_prefix = args.get(gpn.difficulty_vector_prefix().split()[-1])
@@ -70,6 +72,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.training_value = args.get(gpn.training_value().split()[-1])
     env.tree_file_extension = args.get(gpn.tree_file_extension().split()[-1])
     env.trees_in_forest = args.get(gpn.trees_in_forest().split()[-1])
+    env.true_class_directory_name = args.get(gpn.true_class_directory_name().split()[-1])
     env.vector_file_extension = args.get(gpn.vector_file_extension().split()[-1])
     env.verbosity = args.get(gpn.verbosity().split()[-1])
 
@@ -112,6 +115,12 @@ def _init_dir_paths(args: dict) -> None:
         env.classes_matrices_directory_path = "{}/{}".format(env.subtrain_directory_path,
                                                              env.classes_matrices_directory)
         env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
+                                                                            class_name) for
+                                                 class_name in env.possible_classes}
+    if env.clustering_trees_directory:
+        env.clustering_trees_directory_path = "{}/{}".format(env.subtrain_directory_path,
+                                                             env.clustering_trees_directory)
+        env.clustering_trees_directories_path = {class_name: "{}/{}".format(env.clustering_trees_directory_path,
                                                                             class_name) for
                                                  class_name in env.possible_classes}
 

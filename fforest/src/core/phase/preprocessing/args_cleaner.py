@@ -8,6 +8,8 @@ import sys
 import fforest.src.getters.get_default_value as gdv
 import fforest.src.getters.get_parameter_name as gpn
 from fforest.src.core.phase.learning_process.entropy_measures import str_to_entropymeasure
+from fforest.src.core.phase.performance_evaluation.clustering_trees_method.clustering_trees_method import \
+    str_to_clusteringtreesmethod
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     str_to_qualitycomputingmethod
 from fforest.src.core.phase.phase import str_to_phase
@@ -97,6 +99,8 @@ def clean_args(args: dict) -> None:
                 raise MissingClassificationAttribute()
         elif param_name == gpn.quality_computing_method():
             args[param_name] = str_to_qualitycomputingmethod(args[param_name])
+        elif param_name == gpn.clustering_trees_method():
+            args[param_name] = str_to_clusteringtreesmethod(args[param_name])
         elif param_name == gpn.quoting_output():
             args[param_name] = str_to_quoting(args[param_name])
         elif param_name == gpn.main_directory():

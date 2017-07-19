@@ -5,6 +5,8 @@ cclassified_vector_prefix = None
 class_matrix_prefix = None
 class_name = None
 classes_matrices_directory = None
+clustering_trees_directory = None
+clustering_trees_method = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
@@ -53,6 +55,7 @@ train_database_name = None
 training_value = None
 tree_file_extension = None
 trees_in_forest = None
+true_class_directory_name = None
 vector_file_extension = None
 verbosity = None
 
@@ -63,6 +66,8 @@ subsubtrain_directory_path = None
 subsubtrain_directories_path = None
 classes_matrices_directory_path = None
 classes_matrices_directories_path = None
+clustering_trees_directory_path = None
+clustering_trees_directories_path = None
 
 # Paths
 cclassified_vectors_paths = None
