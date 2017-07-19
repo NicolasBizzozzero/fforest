@@ -4,7 +4,6 @@ See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
-
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
@@ -12,10 +11,32 @@ from codecs import open
 from os import path
 import fforest.src.getters.get_global_variable as ggv
 
-here = path.abspath(path.dirname(__file__))
+
+# TODO: Implement one entry-point for each phase :
+"""
+    entry_points={
+        'console_scripts': [
+            ggv.main_entry_point() + ' = fforest.main:main_entry_point',
+            ggv.preprocessing_entry_point() + ' = fforest.main:preprocessing_entry_point',
+            ggv.initial_split_entry_point() + ' = fforest.main:initial_split_entry_point',
+            ggv.reference_split_entry_point() + ' = fforest.main:reference_split_entry_point',
+            ggv.subsubtrain_split_entry_point() + ' = fforest.main:subsubtrain_split_entry_point',
+            ggv.learning_entry_point() + ' = fforest.main:learning_entry_point',
+            ggv.reduction_entry_point() + ' = fforest.main:reduction_entry_point',
+            ggv.quality_entry_point() + ' = fforest.main:quality_entry_point',
+            ggv.classes_matrices_entry_point() + ' = fforest.main:classes_matrices_entry_point',
+        ],
+    },
+"""
+
+
+_HERE = path.abspath(path.dirname(__file__))
+_README_FILE_NAME = "README.md"
+_README_FILE_ENCODING = "utf8"
+
 
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as file:
+with open(path.join(_HERE, _README_FILE_NAME), encoding=_README_FILE_ENCODING) as file:
     long_description = file.read()
 
 setup(
@@ -79,14 +100,6 @@ setup(
     entry_points={
         'console_scripts': [
             ggv.main_entry_point() + ' = fforest.main:main_entry_point',
-            ggv.preprocessing_entry_point() + ' = fforest.main:preprocessing_entry_point',
-            ggv.initial_split_entry_point() + ' = fforest.main:initial_split_entry_point',
-            ggv.reference_split_entry_point() + ' = fforest.main:reference_split_entry_point',
-            ggv.subsubtrain_split_entry_point() + ' = fforest.main:subsubtrain_split_entry_point',
-            ggv.learning_entry_point() + ' = fforest.main:learning_entry_point',
-            ggv.reduction_entry_point() + ' = fforest.main:reduction_entry_point',
-            ggv.quality_entry_point() + ' = fforest.main:quality_entry_point',
-            ggv.classes_matrices_entry_point() + ' = fforest.main:classes_matrices_entry_point',
         ],
     },
 )
