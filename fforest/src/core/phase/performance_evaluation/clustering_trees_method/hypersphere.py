@@ -9,7 +9,7 @@ class HyperSphere:
     """ An HyperSphere, or n-Sphere is a mathematical generalization of the ordinary sphere in spaces of arbitrary
     dimension.
 
-    Inspirations :
+    Sources :
         https://en.wikipedia.org/wiki/N-sphere
         http://www.sciencedirect.com/science/article/pii/S0019995862906411
 
