@@ -1,4 +1,4 @@
-""" This module contains utilities to load and save the environment file. """
+""" This module contains utilities to load/save the environment file from/into the `environment` module. """
 import enum
 import os
 from typing import List, Dict
