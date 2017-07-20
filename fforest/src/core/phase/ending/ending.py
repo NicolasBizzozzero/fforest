@@ -1,3 +1,6 @@
+"""
+
+"""
 import traceback
 from typing import Callable
 
@@ -10,6 +13,8 @@ _PARSING_FUNCTIONS_PREFIX = "parse_args_"
 
 
 def ending() -> None:
+    # Makes sure that the environment file is dumped somewhere, even if the `main_directory_path` variable hasn't been
+    # initialized inside the `environment` module.
     if env.main_directory_path:
         dump_environment_file(env.main_directory_path)
     else:
