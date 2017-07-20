@@ -1,15 +1,18 @@
+""" This module contains utilities to load and save the environment file.
+
+"""
 import enum
 import os
 from typing import List, Dict
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
-    str_to_qualitycomputingmethod, QualityComputingMethod
-from fforest.src.core.phase.phase import str_to_phase, Phase
-from fforest.src.core.splitting_methods.split import str_to_splittingmethod, SplittingMethod
+    QualityComputingMethod
+from fforest.src.core.phase.phase import Phase
+from fforest.src.core.splitting_methods.split import SplittingMethod
 from fforest.src.file_tools.dialect import Dialect
-from fforest.src.file_tools.format import string_to_format, Format
-from fforest.src.getters.get_output_message import string_to_verbosity, Verbosity
+from fforest.src.file_tools.format import Format
+from fforest.src.getters.get_output_message import Verbosity
 from fforest.src.vrac.file_system import dump_dict, load_dict
 
 
@@ -30,6 +33,7 @@ def load_environment_file(path: str = ENVIRONMENT_FILE_NAME) -> None:
 
 
 def _get_all_environment_variables() -> List[str]:
+    """ Retrieve all variables user-created inside the `environment` module. """
     return [variable for variable in dir(env) if not variable.startswith("__")]
 
 
