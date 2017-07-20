@@ -24,7 +24,8 @@
         "Programming Language :: Python :: 3.5"
   ],
   "dependencies": [
-    "docopt >= 0.6.2"
+    "docopt >= 0.6.2",
+    "numpy >= 1.12.1"
   ],
 
   "main_entry_point": "fforest",
