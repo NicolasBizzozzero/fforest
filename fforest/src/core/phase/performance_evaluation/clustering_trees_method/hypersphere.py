@@ -1,5 +1,6 @@
 from typing import Iterable, Tuple, Callable, Sized
 
+from fforest.src.vrac.maths.maths import gamma
 from fforest.src.vrac.maths.norms import euclidean
 import numpy as np
 
@@ -17,11 +18,15 @@ class HyperSphere:
         - dimension: int
         - radius: float
         - norm: Callable, The norm used to compute distances. Default: euclidean
+        - volume: float
+        - surface: float
     """
     def __init__(self, center, radius: float, norm: Callable = euclidean):
         self.center = np.array(center)
         self.dimension = len(center)
         self.radius = radius
+        self.volume = (np.power(np.pi, self.dimension / 2) / gamma((self.dimension / 2) + 1)) * self.radius
+        self.surface = (np.power(2 * np.pi, (self.dimension + 1) / 2) / gamma((self.dimension + 1) / 2)) * self.radius
         self.norm = norm
 
     def __contains__(self, item):

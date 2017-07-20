@@ -1,4 +1,5 @@
 from typing import Union
+import numpy as np
 
 Number = Union[int, float, complex]
 
@@ -13,6 +14,16 @@ def delta(n1: Number, n2: Number) -> Number:
         1
     """
     return abs(n2 - n1)
+
+
+def gamma(n: Number) -> Number:
+    """ In mathematics, the gamma function (represented by the capital Greek alphabet letter Γ) is an extension of the
+    factorial function, with its argument shifted down by 1, to real and complex numbers.
+
+        Source :
+        https://en.wikipedia.org/wiki/Gamma_function
+    """
+    return np.math.factorial(n - 1)
 
 
 def round_float(f: float, epsilon: float = 0.0000000000000002) -> Union[float, int]:
