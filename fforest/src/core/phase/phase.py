@@ -1,5 +1,8 @@
+""" This module contains all functions related to phases.
+
+"""
 import enum
-from typing import Tuple, Callable, List
+from typing import Callable, List
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
@@ -58,32 +61,8 @@ def str_to_phase(string: str) -> Phase:
 
 
 def phase_to_str(phase: Phase) -> str:
-    if phase == Phase.PARSING:
-        return "parsing"
-    elif phase == Phase.PREPROCESSING:
-        return "preprocessing"
-    elif phase == Phase.INITIAL_SPLIT:
-        return "initial_split"
-    elif phase == Phase.REFERENCE_SPLIT:
-        return "reference_split"
-    elif phase == Phase.SUBSUBTRAIN_SPLIT:
-        return "subsubtrain_split"
-    elif phase == Phase.LEARNING:
-        return "learning"
-    elif phase == Phase.REDUCTION:
-        return "reduction"
-    elif phase == Phase.QUALITY:
-        return "quality"
-    elif phase == Phase.CLASSES_MATRICES:
-        return "classes_matrices"
-    elif phase == Phase.CLUSTERING_TREES:
-        return "clustering_trees"
-    elif phase == Phase.ENDING:
-        return "ending"
-    elif phase == Phase.NONE:
-        return "none"
-    else:
-        return "unknown"
+    """ Return the name of a phase as a lowercase str. """
+    return phase.name.lower()
 
 
 def phase_processable(phase_to_compute, last_phase_computed) -> bool:
