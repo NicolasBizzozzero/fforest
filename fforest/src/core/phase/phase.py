@@ -46,7 +46,7 @@ def phase_to_str(phase: Phase) -> str:
 
 def phase_processable(phase_to_compute, last_phase_computed) -> bool:
     """ Check if a phase can be processed. A phase is processable if at least the phase preceding it has been completed,
-    thus the values of the `Phase` enums and their unicity are important.
+    thus the values of the `Phase` enums and their uniqueness are important.
     """
     return phase_to_compute.value <= last_phase_computed.value + 1
 
@@ -63,6 +63,13 @@ def _increment_phase() -> None:
     env.current_phase = _get_next_phase(env.current_phase)
 
 
+def _get_next_phase(phase: Phase) -> Phase:
+    """ Return the phase immediately following `phase`. """
+    for next_phase in Phase.__members__.values():
+        if phase.value + 1 == next_phase.value:
+            return next_phase
+
+
 def _exit_if_last_phase() -> None:
     if env.current_phase == env.last_phase:
         if env.current_phase.value < Phase.ENDING.value:
@@ -73,15 +80,10 @@ def _exit_if_last_phase() -> None:
             exit(EXIT_SUCCESS)
 
 
-def _get_next_phase(phase: Phase) -> Phase:
-    for next_phase in Phase.__members__.values():
-        if phase.value + 1 == next_phase.value:
-            return next_phase
-
-
 def _load_phases_entry_points(parsing_function: Callable) -> List[Callable]:
-    """ Return a list containing all entry point for each phase in the exact same order of the phases' values. The
-    parsing function is
+    """ Return a list containing one entry point for each phase in the exact same order of the phases' values. The
+    parsing function depends of the initial entry point used to start the software, thus it should be passed as an
+    argument.
     """
     from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
     from fforest.src.core.phase.initialization.initial_split import initial_split
