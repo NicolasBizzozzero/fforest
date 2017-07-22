@@ -1,5 +1,6 @@
 """ This module contains all functions related to phases.
-
+The `Phase` class is central to the module.
+If a phase is added
 """
 import enum
 from typing import Callable, List
@@ -46,20 +47,28 @@ def phase_to_str(phase: Phase) -> str:
 
 def phase_processable(phase_to_compute, last_phase_computed) -> bool:
     """ Check if a phase can be processed. A phase is processable if at least the phase preceding it has been completed,
-    thus the values of the `Phase` enums and their uniqueness are important.
+    thus the order of the values of the `Phase` enums and their uniqueness are crucial.
     """
     return phase_to_compute.value <= last_phase_computed.value + 1
 
 
 def call_all_phases(starting_phase: Phase, parsing_function: Callable) -> None:
+    """ Call successively all phases requested by the user. """
     phases_entry_points = _load_phases_entry_points(parsing_function)
     for phase_index in range(starting_phase.value, len(phases_entry_points)):
         phases_entry_points[phase_index]()
-        _increment_phase()
+        _increment_phase(last_phase=env.last_phase)
 
 
-def _increment_phase() -> None:
-    _exit_if_last_phase()
+def _increment_phase(last_phase: Phase) -> None:
+    """ Check if the `current_phase` variable from the `environment` module is the last phase asked by the user. If
+    that's the case, exit the process. Otherwise, change its value to the next phase. This method must be called right
+    after a phase has been completed.
+    ⚠ This method depends entirely of the `current_phase` variable from the `environment` module. Thus, the variable
+    must be correctly initialized before calling the method, and will have side-effects outside its scope. Furthermore,
+    if the variable or the module happens to be renamed or deleted, this method and its effects should also be updated.
+    """
+    _exit_if_last_phase(current_phase=env.current_phase, last_phase=last_phase)
     env.current_phase = _get_next_phase(env.current_phase)
 
 
@@ -70,9 +79,10 @@ def _get_next_phase(phase: Phase) -> Phase:
             return next_phase
 
 
-def _exit_if_last_phase() -> None:
-    if env.current_phase == env.last_phase:
-        if env.current_phase.value < Phase.ENDING.value:
+def _exit_if_last_phase(current_phase: Phase, last_phase: Phase) -> None:
+    """ Exit the process if the last phase has been completed. """
+    if current_phase == last_phase:
+        if current_phase.value < Phase.ENDING.value:
             # If the ending phase has not been processed
             from fforest.src.core.phase.ending.ending import ending
             ending()
@@ -83,7 +93,8 @@ def _exit_if_last_phase() -> None:
 def _load_phases_entry_points(parsing_function: Callable) -> List[Callable]:
     """ Return a list containing one entry point for each phase in the exact same order of the phases' values. The
     parsing function depends of the initial entry point used to start the software, thus it should be passed as an
-    argument.
+    argument. The other phases are loaded locally into the method to prevent cyclic dependencies between the `phase`
+    module and the loaded modules.
     """
     from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
     from fforest.src.core.phase.initialization.initial_split import initial_split
