@@ -31,33 +31,12 @@ class UnknownPhase(Exception):
 
 
 def str_to_phase(string: str) -> Phase:
+    """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    if string == "parsing":
-        return Phase.PARSING
-    elif string == "preprocessing":
-        return Phase.PREPROCESSING
-    elif string == "initial_split":
-        return Phase.INITIAL_SPLIT
-    elif string == "reference_split":
-        return Phase.REFERENCE_SPLIT
-    elif string == "subsubtrain_split":
-        return Phase.SUBSUBTRAIN_SPLIT
-    elif string == "learning":
-        return Phase.LEARNING
-    elif string == "reduction":
-        return Phase.REDUCTION
-    elif string == "quality":
-        return Phase.QUALITY
-    elif string == "classes_matrices":
-        return Phase.CLASSES_MATRICES
-    elif string == "clustering_trees":
-        return Phase.CLUSTERING_TREES
-    elif string == "ending":
-        return Phase.ENDING
-    elif string == "none":
-        return Phase.NONE
-    else:
-        raise UnknownPhase(string)
+    for phase_name, phase_value in zip(Phase.__members__.keys(), Phase.__members__.values()):
+        if string == phase_name.lower():
+            return phase_value
+    raise UnknownPhase(string)
 
 
 def phase_to_str(phase: Phase) -> str:
@@ -66,6 +45,9 @@ def phase_to_str(phase: Phase) -> str:
 
 
 def phase_processable(phase_to_compute, last_phase_computed) -> bool:
+    """ Check if a phase can be processed. A phase is processable if at least the phase preceding it has been completed,
+    thus the values of the `Phase` enums and their unicity are important.
+    """
     return phase_to_compute.value <= last_phase_computed.value + 1
 
 
@@ -92,12 +74,15 @@ def _exit_if_last_phase() -> None:
 
 
 def _get_next_phase(phase: Phase) -> Phase:
-    for next_phase in Phase:
+    for next_phase in Phase.__members__.values():
         if phase.value + 1 == next_phase.value:
             return next_phase
 
 
 def _load_phases_entry_points(parsing_function: Callable) -> List[Callable]:
+    """ Return a list containing all entry point for each phase in the exact same order of the phases' values. The
+    parsing function is
+    """
     from fforest.src.core.phase.preprocessing.preprocessing import preprocessing
     from fforest.src.core.phase.initialization.initial_split import initial_split
     from fforest.src.core.phase.initialization.reference_split import reference_split
