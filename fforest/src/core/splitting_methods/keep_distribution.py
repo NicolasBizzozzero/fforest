@@ -1,6 +1,10 @@
+""" Contains tools to splits a CSV file into multiple pieces with the `keep_distribution` method.
+The keep_distribution method regroup the database content into its class subgroup. then redistribute each instance
+with the same proportion as the initial content.
+"""
 from typing import Tuple, List, Union
 
-from fforest.src.vrac.maths import is_an_int
+from fforest.src.vrac.maths.maths import is_an_int
 
 
 class TooManyTreesToSplit(Exception):

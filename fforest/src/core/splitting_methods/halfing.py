@@ -1,3 +1,6 @@
+""" Contains tools to splits a CSV file into multiple pieces with the `halfing` method.
+The halfing method slice the database in `number_of_trees` parts, then redistribute them.
+"""
 from math import floor
 from typing import Tuple, List
 
