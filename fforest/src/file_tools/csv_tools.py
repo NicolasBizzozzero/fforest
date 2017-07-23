@@ -5,8 +5,8 @@ If you're unfamiliar with the CSV format, the document 'csv.pdf' located at
 import csv
 from typing import Union, List, Iterable, Dict
 
-from fforest.src.vrac.maths.maths import is_an_int
 from fforest.src.file_tools.dialect import Dialect
+from fforest.src.vrac.maths.maths import is_an_int
 
 
 class NamedAttributeButNoHeader(Exception):

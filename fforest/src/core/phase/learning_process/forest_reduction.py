@@ -8,8 +8,8 @@ from typing import Dict, List
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_DIFFICULTY
 from fforest.src.file_tools.csv_tools import iter_rows, get_header, dump_csv_content
-from fforest.src.vrac.maths import round_float
 from fforest.src.file_tools.dialect import Dialect
+from fforest.src.vrac.maths import round_float
 
 
 def forest_reduction() -> None:

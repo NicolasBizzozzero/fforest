@@ -2,14 +2,15 @@
 `compute_first_phase` method first. It shouldn't be used anywhere in the software but before any form of parsing
 has been made. It also shouldn't be needed by any entry point but the `main_entry_point`.
 """
-from fforest.src.getters.get_output_message import vprint, Message
-from fforest.src.vrac.file_system import file_exists
-from fforest.src.core.phase.ending.environment_file import ENVIRONMENT_FILE_NAME, load_environment_file
-from fforest.src.core.phase.phase import Phase, str_to_phase, phase_processable, phase_to_str
-import fforest.src.getters.environment as env
-import fforest.src.getters.get_parameter_name as gpn
 import os
 import sys
+
+import fforest.src.getters.environment as env
+import fforest.src.getters.get_parameter_name as gpn
+from fforest.src.core.phase.ending.environment_file import ENVIRONMENT_FILE_NAME, load_environment_file
+from fforest.src.core.phase.phase import Phase, str_to_phase, phase_processable, phase_to_str
+from fforest.src.getters.get_output_message import vprint, Message
+from fforest.src.vrac.file_system import file_exists
 
 
 class UnprocessablePhase(Exception):

@@ -3,14 +3,13 @@ triangular norm.
 A class matrix depends of a specific class and link one instance to the % of membership a fuzzy tree gave it for this
 class.
 """
+import os
 from typing import List, Dict
 
+import fforest.src.getters.environment as env
 from fforest.src.file_tools.csv_tools import get_column, dump_csv_content, get_columns
 from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.file_system import create_dir
-import fforest.src.getters.environment as env
-import os
-
 
 KEY_IDENTIFIER = "ID"
 

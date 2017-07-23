@@ -2,10 +2,11 @@
 forest to its quality. It exists many ways to compute the quality of a tree. Theses quality's forest vectors will be
 dumped into the subtrain directory.
 """
-from typing import Dict, List
+from typing import Dict
 
 import fforest.src.getters.environment as env
-from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import kappa_rifqi_marsala
+from fforest.src.core.phase.performance_evaluation.quality_computing_method.kappa_rifqi_marsala import \
+    kappa_rifqi_marsala
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
     QualityComputingMethod, UnknownQualityComputingMethod
 from fforest.src.file_tools.csv_tools import dump_csv_content

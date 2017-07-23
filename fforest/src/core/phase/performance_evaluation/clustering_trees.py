@@ -1,5 +1,5 @@
-from typing import Dict, List, Union
 import enum
+from typing import Dict, List, Union
 
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.performance_evaluation.clustering_trees_method.clustering_trees_method import \
@@ -7,7 +7,6 @@ from fforest.src.core.phase.performance_evaluation.clustering_trees_method.clust
 from fforest.src.core.phase.performance_evaluation.clustering_trees_method.hypersphere import hypersphere
 from fforest.src.core.phase.performance_evaluation.clustering_trees_method.jason_forest import jason_forest
 from fforest.src.vrac.file_system import create_dir
-
 
 _KEY_ID_TREE = "ID_tree"
 _KEY_ID_CLUSTER = "ID_cluster"

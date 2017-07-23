@@ -18,7 +18,8 @@ class UnknownEntropyMeasure(Exception):
 def str_to_entropymeasure(string: str) -> EntropyMeasure:
     """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    for entropymeasure_name, entropymeasure_value in zip(EntropyMeasure.__members__.keys(), EntropyMeasure.__members__.values()):
+    for entropymeasure_name, entropymeasure_value in zip(EntropyMeasure.__members__.keys(),
+                                                         EntropyMeasure.__members__.values()):
         if string == entropymeasure_name.lower():
             return entropymeasure_value
     raise UnknownEntropyMeasure(string)

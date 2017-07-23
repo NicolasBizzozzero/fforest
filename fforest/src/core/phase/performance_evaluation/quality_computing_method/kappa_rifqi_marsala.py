@@ -4,11 +4,10 @@ An instance's score is the product of its difficulty by the % of membership foun
 
 from typing import Dict, Union
 
+import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.forest_construction import KEY_ID, KEY_TRUECLASS, KEY_DIFFICULTY
 from fforest.src.file_tools.csv_tools import get_columns, iter_rows_dict
 from fforest.src.file_tools.dialect import Dialect
-import fforest.src.getters.environment as env
-
 
 KEY_MEMBERSHIP = "%membership"
 

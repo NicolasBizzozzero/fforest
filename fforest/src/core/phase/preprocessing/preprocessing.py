@@ -11,12 +11,12 @@ import csv
 
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_default_value as gdv
-from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_column, append_column,\
+from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_column, append_column, \
     NamedAttributeButNoHeader, EmptyHeader, dump_csv_content, get_header
+from fforest.src.file_tools.dialect import Dialect
 from fforest.src.getters.get_output_message import Message, vprint
 from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
 from fforest.src.vrac.maths import is_an_int
-from fforest.src.file_tools.dialect import Dialect
 
 
 def preprocessing() -> None:

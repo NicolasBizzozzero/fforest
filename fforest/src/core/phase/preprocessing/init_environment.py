@@ -1,11 +1,11 @@
 """ Initialize the variables contained in the `environment` module. """
+from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.phase import Phase
 from fforest.src.file_tools.csv_tools import get_column
 from fforest.src.file_tools.dialect import Dialect
+from fforest.src.file_tools.format import format_to_str
 from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
-from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
-from fforest.src.file_tools.format import format_to_str
 
 
 def init_environment(args: dict) -> None:

@@ -5,8 +5,9 @@ https://en.wikipedia.org/wiki/Norm_(mathematics)
 
 from typing import Iterable
 
-from fforest.src.vrac.maths.maths import Number
 import numpy as np
+
+from fforest.src.vrac.maths.maths import Number
 
 
 def euclidean(vector: Iterable[Number]) -> float:

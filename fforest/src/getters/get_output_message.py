@@ -18,14 +18,13 @@ Moreover, if a message needs a dynamic argument, store it in the file like this 
 Add it in the `Message` class, then call the `vprint` function like this :
 vprint(Message.PRINT_NAME, name="Christophe")
 """
+import enum
 import json
 import os
-import enum
 from typing import Union
 
 import fforest.src.getters.environment as env
 import fforest.src.getters.get_default_value as gdv
-
 
 _PATH_OUTPUT_MESSAGES = "../../res/output_messages.json"
 VERBOSE_KEY_PREFIX = "verbose_"

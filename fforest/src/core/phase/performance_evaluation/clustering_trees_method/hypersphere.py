@@ -1,8 +1,9 @@
-from typing import Iterable, Tuple, Callable, Sized
+from typing import Callable
+
+import numpy as np
 
 from fforest.src.vrac.maths.maths import gamma
 from fforest.src.vrac.maths.norms import euclidean
-import numpy as np
 
 
 class HyperSphere:

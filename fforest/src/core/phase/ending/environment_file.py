@@ -2,6 +2,7 @@
 import enum
 import os
 from typing import List, Dict
+
 import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from fforest.src.core.phase.performance_evaluation.quality_computing_method.quality_computing_method import \
@@ -12,7 +13,6 @@ from fforest.src.file_tools.dialect import Dialect
 from fforest.src.file_tools.format import Format
 from fforest.src.getters.get_output_message import Verbosity
 from fforest.src.vrac.file_system import dump_dict, load_dict
-
 
 ENVIRONMENT_FILE_NAME = "environment.json"
 

@@ -20,9 +20,8 @@ If you want to add an entry point to the file, add it inside the `<entry_points>
         </documentation>
 </entry_point>
 """
-from xml.etree.ElementTree import parse as xml_parse
 import os
-
+from xml.etree.ElementTree import parse as xml_parse
 
 _FILE_PATH = "../../res/entry_points_documentation.xml"
 _KEY_NAME = "name"

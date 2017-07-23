@@ -3,9 +3,9 @@ Store the number of instances of the original, train and test databases into the
 `instances_train_database` and `instances_test_database` variables in the `env` module.
 """
 import fforest.src.getters.environment as env
+from fforest.src.core.splitting_methods.split import convert_row_limit
 from fforest.src.core.splitting_methods.split import split2
 from fforest.src.file_tools.csv_tools import get_number_of_rows
-from fforest.src.core.splitting_methods.split import convert_row_limit
 
 
 def initial_split() -> None:

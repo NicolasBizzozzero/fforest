@@ -11,13 +11,12 @@ one location (the `res` folder) for a quicker and easier maintenance.
 import docopt
 
 import fforest.src.getters.get_default_value as gdv
+import fforest.src.getters.get_entry_point_documentation as gepd
 import fforest.src.getters.get_global_variable as ggv
 import fforest.src.getters.get_parameter_documentation as gpd
 import fforest.src.getters.get_parameter_name as gpn
-import fforest.src.getters.get_entry_point_documentation as gepd
 from fforest.src.core.phase.preprocessing.args_cleaner import clean_args
 from fforest.src.core.phase.preprocessing.init_environment import init_environment
-
 
 _FORMAT_DICTIONARY = dict(
     # Documentation

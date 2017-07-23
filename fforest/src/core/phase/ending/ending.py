@@ -8,10 +8,9 @@ a last resort the `_function_post_failure` method.
 import traceback
 from typing import Callable
 
-from fforest.src.core.phase.ending.environment_file import dump_environment_file
 import fforest.src.getters.environment as env
+from fforest.src.core.phase.ending.environment_file import dump_environment_file
 from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS, EXIT_FAILURE, EXIT_CRITICAL_FAILURE
-
 
 _PARSING_FUNCTIONS_PREFIX = "parse_args_"
 
@@ -71,6 +70,5 @@ def _retrieve_parsing_function(entry_point_name: str) -> Callable:
     """
     global _PARSING_FUNCTIONS_PREFIX
 
-    import fforest.src.core.phase.preprocessing.args_parser as parsing_module
     parsing_function_name = "{}{}".format(_PARSING_FUNCTIONS_PREFIX, entry_point_name)
     return getattr(parsing_module, parsing_function_name)
