@@ -1,13 +1,13 @@
 """ This module defines functions to easily access values stored in the file `output_messages.json`, located in the
-`res` folder at the root of the program's package.
-This file contains messages which will be outputed in the standard output stream.
-
+`res` folder at the root of the program's package. This file contains messages which will be outputed in the standard
+output stream.
 To print an output message, for example the one outputed if we need to put the class column at the end of the database
-during the preprocessing, simply call:
->>> vprint(Message.APPEND_CLASS)
+during the preprocessing phase, simply call:
+vprint(Message.APPEND_CLASS)
 
 The module will check if the current verbosity level match the verbosity of the message, and automatically print it if
 it's printable.
+
 """
 import json
 import os
