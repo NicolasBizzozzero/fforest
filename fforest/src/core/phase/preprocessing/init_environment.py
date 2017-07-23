@@ -5,7 +5,7 @@ from fforest.src.file_tools.dialect import Dialect
 from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
-from fforest.src.file_tools.format import format_to_string
+from fforest.src.file_tools.format import format_to_str
 
 
 def init_environment(args: dict) -> None:
@@ -139,7 +139,7 @@ def _init_paths(args: dict) -> None:
         env.subsubtrain_databases_paths = ["{}/{}.{}".format(env.subsubtrain_directories_path[tree_index],
                                                              env.subsubtrain_directory_pattern %
                                                              str(tree_index + 1).zfill(len(str(env.trees_in_forest))),
-                                                             format_to_string(args.get(gpn.format_output())).lower()) for
+                                                             format_to_str(args.get(gpn.format_output())).lower()) for
                                            tree_index in range(env.trees_in_forest)]
         env.cclassified_vectors_paths = {tnorm: ["{}/{}{}.{}".format(env.subsubtrain_directories_path[tree_index - 1],
                                                                      env.cclassified_vector_prefix,
@@ -163,14 +163,14 @@ def _init_paths(args: dict) -> None:
         env.quality_files_paths = {tnorm: "{}/{}{}.{}".format(env.subtrain_directory_path,
                                                               env.quality_file_prefix,
                                                               tnorm,
-                                                              format_to_string(args.get(gpn.format_output()))) for
+                                                              format_to_str(args.get(gpn.format_output()))) for
                                    tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
         env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
             env.classes_matrices_directories_path[class_name],
             env.class_matrix_prefix,
             class_name,
             tnorm,
-            format_to_string(args.get(gpn.format_output()))) for
+            format_to_str(args.get(gpn.format_output()))) for
             tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
             for class_name in env.possible_classes}
 

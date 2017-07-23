@@ -11,6 +11,7 @@ class Format(enum.IntEnum):
     JSON = 1
     XML = 2
     YAML = 3
+    SYLK = 4
 
 
 class UnknownFormat(Exception):
@@ -28,8 +29,6 @@ def str_to_format(string: str) -> Format:
     raise UnknownFormat(string)
 
 
-def format_to_string(form: Format) -> str:
-    if form == Format.CSV:
-        return "csv"
-    else:
-        return ""
+def format_to_str(form: Format) -> str:
+    """ Return the name of a format as a lowercase str. """
+    return form.name.lower()
