@@ -5,7 +5,7 @@ Store the number of instances of the reference and subtrain databases into the `
 import fforest.src.getters.environment as env
 from fforest.src.core.splitting_methods.split import split2
 from fforest.src.vrac.file_system import create_dir
-from fforest.src.vrac.maths import convert_row_limit
+from fforest.src.core.splitting_methods.split import convert_row_limit
 
 
 def reference_split():

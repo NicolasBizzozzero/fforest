@@ -16,37 +16,37 @@ from fforest.src.file_tools.dialect import Dialect
 from fforest.src.vrac.maths.maths import is_a_percentage
 
 
-class SplittingMethod(enum.IntEnum):
-    UNKNOWN = 0
-    HALFING = 1
-    KEEP_DISTRIBUTION = 2
-
-
 class UnknownSplittingMethod(Exception):
     def __init__(self, method_name: str):
         Exception.__init__(self, "The splitting method : \"{method_name}\" doesn't"
                                  " exists".format(method_name=method_name))
 
 
+class InvalidValue(Exception):
+    def __init__(self, row_limit: str):
+        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
+                                 " a number of rows.".format(row_limit=row_limit))
+
+
+@enum.unique
+class SplittingMethod(enum.IntEnum):
+    UNKNOWN = 0
+    HALFING = 1
+    KEEP_DISTRIBUTION = 2
+
+
 def str_to_splittingmethod(string: str) -> SplittingMethod:
-    """ Convert a String into its respective SplittingMethod enum. """
+    """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    if string == "halfing":
-        return SplittingMethod.HALFING
-    elif string == "keepdistribution":
-        return SplittingMethod.KEEP_DISTRIBUTION
-    else:
-        raise UnknownSplittingMethod(string)
+    for method_name, method_value in zip(SplittingMethod.__members__.keys(), SplittingMethod.__members__.values()):
+        if string == method_name.lower():
+            return method_value
+    raise UnknownSplittingMethod(string)
 
 
 def splittingmethod_to_str(splitting_method: SplittingMethod) -> str:
-    """ Convert a SplittingMethod enum into its respective String. """
-    if splitting_method == SplittingMethod.HALFING:
-        return "halfing"
-    elif splitting_method == SplittingMethod.KEEP_DISTRIBUTION:
-        return "keepdistribution"
-    else:
-        return splitting_method.__str__()
+    """ Return the name of a splitting method as a lowercase str. """
+    return splitting_method.name.lower()
 
 
 def split2(*, class_name: int, input_path: str, method: SplittingMethod, number_of_rows: int, output_name_test: str,
@@ -56,8 +56,10 @@ def split2(*, class_name: int, input_path: str, method: SplittingMethod, number_
     You must pass each argument along with its name.
     """
     with open(input_path, mode="r", encoding=dialect.encoding, newline=dialect.line_delimiter) as input_file,\
-            open(output_name_train, mode='w', encoding=dialect.encoding, newline=dialect.line_delimiter) as output_train,\
-            open(output_name_test, mode='w', encoding=dialect.encoding, newline=dialect.line_delimiter) as output_test:
+            open(output_name_train, mode='w', encoding=dialect.encoding,
+                 newline=dialect.line_delimiter) as output_train,\
+            open(output_name_test, mode='w', encoding=dialect.encoding,
+                 newline=dialect.line_delimiter) as output_test:
 
         input_reader = csv.reader(input_file, delimiter=dialect.delimiter, quoting=dialect.quoting,
                                   quotechar=dialect.quote_char, skipinitialspace=dialect.skip_initial_space)
@@ -126,9 +128,3 @@ def convert_row_limit(row_limit: str, number_of_rows: int) -> int:
         raise InvalidValue(row_limit)
     percentage = float(row_limit)
     return int(round(percentage * number_of_rows))
-
-
-class InvalidValue(Exception):
-    def __init__(self, row_limit: str):
-        Exception.__init__(self, "The value \"{row_limit}\" is neither a percentage nor"
-                                 " a number of rows.".format(row_limit=row_limit))
