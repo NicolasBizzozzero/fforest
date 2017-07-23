@@ -1,7 +1,7 @@
 """ This module contains all functions related to parsing command-line arguments for all entry points of the software.
 It uses the `docopt` package (listed as a dependency) to easily combine the tedious task of writing documentation
-and parsing arguments. Each parsing function contains a very long documentation string which will be the string
-displayed with the --help parameter. This string contains a lot of format-style parameters and has for purpose to
+and parsing arguments. Each parsing function retrieve a very long documentation string from a file which will be the
+string displayed with the --help parameter. This string contains a lot of format-style parameters and has for purpose to
 organize them into the best way possible for reading the documentation. Each of these format-style parameters are
 defined inside the `_FORMAT_DICTIONARY` variable at the beginning of the module. This dictionary link theses variables
 with their respective value in the files located in the `res` directory at the root of the software.
@@ -197,6 +197,41 @@ def parse_args_main_entry_point() -> None:
 
 def parse_args_preprocessing_entry_point() -> None:
     documentation = gepd.preprocessing_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_initial_split_entry_point() -> None:
+    documentation = gepd.initial_split_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_reference_split_entry_point() -> None:
+    documentation = gepd.reference_split_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_subsubtrain_split_entry_point() -> None:
+    documentation = gepd.subsubtrain_split_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_learning_entry_point() -> None:
+    documentation = gepd.learning_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_reduction_entry_point() -> None:
+    documentation = gepd.reduction_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_quality_entry_point() -> None:
+    documentation = gepd.quality_entry_point()
+    _parse_args(documentation)
+
+
+def parse_args_classes_matrices_entry_point() -> None:
+    documentation = gepd.classes_matrices_entry_point()
     _parse_args(documentation)
 
 
