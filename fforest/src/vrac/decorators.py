@@ -3,7 +3,7 @@ from typing import Callable
 
 
 def timeit(func: Callable) -> Callable:
-    """ Decorator who calculate and print execution time of a function into the standard output. """
+    """ Decorator which calculate and print execution time of a function into the standard output. """
     def wrapper(*args, **kwargs):
         start = time.time()
         result = func(*args, **kwargs)
