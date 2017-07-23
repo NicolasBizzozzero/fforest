@@ -1,4 +1,5 @@
-""" This module defines environment variables which'll be used globally by all the modules and packages of the program.
+""" This module defines environment variables which'll be used globally by all the modules and packages of the
+software.
 """
 # Command-line parameters
 cclassified_vector_prefix = None
