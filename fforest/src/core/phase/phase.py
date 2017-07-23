@@ -11,6 +11,12 @@ import fforest.src.getters.environment as env
 from fforest.src.core.phase.ending.exit_code import EXIT_SUCCESS
 
 
+class UnknownPhase(Exception):
+    def __init__(self, phase_name: str):
+        Exception.__init__(self, "The phase \"{phase_name}\" doesn't"
+                                 " exists".format(phase_name=phase_name))
+
+
 @enum.unique
 class Phase(enum.IntEnum):
     PARSING = 0
@@ -25,12 +31,6 @@ class Phase(enum.IntEnum):
     CLUSTERING_TREES = 9
     ENDING = 10
     NONE = 11
-
-
-class UnknownPhase(Exception):
-    def __init__(self, phase_name: str):
-        Exception.__init__(self, "The phase \"{phase_name}\" doesn't"
-                                 " exists".format(phase_name=phase_name))
 
 
 def str_to_phase(string: str) -> Phase:
