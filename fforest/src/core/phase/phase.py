@@ -1,6 +1,8 @@
 """ This module contains all functions related to phases.
-The `Phase` class is central to the module.
-If a phase is added
+The `Phase` class is central to the module. The name of its enums are the names the user needs to pass to the
+command-line for parameters needing a phase. If a new phase needs to be implemented, one must add the phase at its
+proper place in the `Phase` class (with a unique value), and add the entry point of the phase inside the
+`_load_phases_entry_points` method.
 """
 import enum
 from typing import Callable, List
