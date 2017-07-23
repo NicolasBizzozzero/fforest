@@ -1,7 +1,11 @@
+""" This module contains useful tools to manipulate files in the CSV format.
+If you're unfamiliar with the CSV format, the document 'rfc4180.pdf' located at 'fforest/res/documents' describe it
+rigorously.
+"""
 import csv
 from typing import Union, List, Iterable, Dict
 
-from fforest.src.vrac.maths import is_an_int
+from fforest.src.vrac.maths.maths import is_an_int
 from fforest.src.file_tools.dialect import Dialect
 
 
