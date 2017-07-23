@@ -1,3 +1,6 @@
+""" This module contains useful tools to manipulate the `Format` class.
+This class enumerate methods to produce cluster of fuzzy trees.
+"""
 import enum
 
 
@@ -14,10 +17,10 @@ class UnknownClusteringTreesMethod(Exception):
 
 
 def str_to_clusteringtreesmethod(string: str):
+    """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    if string == "hypersphere":
-        return ClusteringTreesMethod.HYPERSPHERE
-    elif string == "jason_forest":
-        return ClusteringTreesMethod.JASON_FOREST
-    else:
-        raise UnknownClusteringTreesMethod(string)
+    for clustering_method_name, clustering_method_value in zip(ClusteringTreesMethod.__members__.keys(),
+                                                               ClusteringTreesMethod.__members__.values()):
+        if string == clustering_method_name.lower():
+            return clustering_method_value
+    raise UnknownClusteringTreesMethod(string)
