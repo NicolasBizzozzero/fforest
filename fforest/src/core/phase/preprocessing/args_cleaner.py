@@ -21,7 +21,7 @@ from fforest.src.file_tools.dialect import Dialect
 from fforest.src.file_tools.format import str_to_format
 from fforest.src.getters.get_output_message import str_to_verbosity
 from fforest.src.vrac.file_system import get_filename, get_absolute_path
-from fforest.src.vrac.maths import is_a_percentage, is_an_int
+from fforest.src.vrac.maths.maths import is_a_percentage, is_an_int
 
 
 class MissingClassificationAttribute(Exception):
