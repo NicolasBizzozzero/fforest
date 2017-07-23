@@ -1,6 +1,10 @@
+""" This module contains useful tools to manipulate the `QualityComputingMethod` class.
+This class enumerate methods used to compute the quality of a fuzzy forest.
+"""
 import enum
 
 
+@enum.unique
 class QualityComputingMethod(enum.IntEnum):
     KAPPARIFQIMARSALA = 0
 
@@ -12,8 +16,10 @@ class UnknownQualityComputingMethod(Exception):
 
 
 def str_to_qualitycomputingmethod(string: str):
+    """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    if string == "kapparifqimarsala":
-        return QualityComputingMethod.KAPPARIFQIMARSALA
-    else:
-        raise UnknownQualityComputingMethod(string)
+    for computing_method_name, computing_method_value in zip(QualityComputingMethod.__members__.keys(),
+                                                             QualityComputingMethod.__members__.values()):
+        if string == computing_method_name.lower():
+            return computing_method_value
+    raise UnknownQualityComputingMethod(string)
