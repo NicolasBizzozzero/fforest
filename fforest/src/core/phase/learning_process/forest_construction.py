@@ -10,8 +10,6 @@ import fforest.src.getters.environment as env
 from fforest.src.core.phase.learning_process.triangular_norms import tnorm_to_str
 from fforest.src.core.phase.learning_process.entropy_measures import EntropyMeasure
 from fforest.src.file_tools.csv_tools import dump_csv_content
-from fforest.src.file_tools.format import format_to_string
-from fforest.src.vrac.file_system import get_path
 from fforest.src.vrac.iterators import grouper
 from fforest.src.vrac.process import execute_and_get_stdout
 from fforest.src.file_tools.csv_tools import Dialect

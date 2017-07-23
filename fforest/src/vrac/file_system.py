@@ -43,36 +43,6 @@ def get_filename(path: str, with_extension: bool = False) -> str:
         return result
 
 
-def get_path(path: str) -> str:
-    """ Extract the path from a path with a filename.
-
-    Examples:
-        >>> get_path("")
-        ''
-        >>> get_path("file.txt")
-        ''
-        >>> get_path("directory")
-        'directory'
-        >>> get_path("dir/file.txt")
-        'dir'
-        >>> get_path("dir/subdir/file.txt")
-        'dir/subdir'
-        >>> get_path("dir/subdir/file")
-        'dir/subdir'
-        >>> get_path("dir/subdir/file.txt.txt")
-        'dir/subdir'
-        >>> get_path("dir/subdir/file.txt.txt/")
-        'dir/subdir/file.txt.txt'
-        >>> get_path("/dir/subdir/file.txt.txt/")
-        '/dir/subdir/file.txt.txt'
-        >>> get_path("/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt")
-        '/dir/subdir'
-        >>> get_path("/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt/")
-        '/dir/subdir/file.txt.txt.txt.txt.txt.txt.txt.txt'
-    """
-    return os.path.dirname(path)
-
-
 def get_absolute_path(path: str) -> str:
     """ Give the absolute path of a file or directory. """
     return os.path.abspath(path)
@@ -85,7 +55,7 @@ def get_file_content(path: str, dialect: Dialect) -> str:
 
 
 def create_dir(directory: str) -> None:
-    """ Create a directory if it doesn't exists. Otherwise, do nothing"""
+    """ Create a directory if it doesn't exists. Otherwise, do nothing. """
     os.makedirs(directory, exist_ok=True)
 
 
@@ -99,6 +69,7 @@ def dump_dict(d: dict, path: str, dialect: Dialect = Dialect(), indent: int = 4,
 
 
 def load_dict(path: str, dialect: Dialect = Dialect()) -> dict:
+    """ Open a JSON file and load its entire content inside a `dict` object. Finally, return it. """
     with open(path, "r", encoding=dialect.encoding, newline=dialect.line_delimiter) as file:
         return json.load(file)
 
