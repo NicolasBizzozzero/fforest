@@ -18,6 +18,8 @@ _PATH_DEFAULT_VALUES = "../../res/default_values.json"
 
 
 def _get_value_from_file(value):
+    global _PATH_DEFAULT_VALUES
+
     path = os.path.join(os.path.dirname(__file__),
                         _PATH_DEFAULT_VALUES)
     with open(path) as file:
