@@ -40,16 +40,5 @@ def repeat_cycle(iterable: iter, count: int):
             yield item
 
 
-def subsubtrain_dir_path(number_of_names: int, main_dir_name: str, subtrain_dir_name: str,
-                         subsubtrain_directory_pattern: str) -> iter:
-    """ Generate subsubtrain directories names with a pattern and a number of names to generate.
-    It automatically prepend '0' to the name if it's not the same size as the longest name generated.
-    """
-    counter_size = len(str(number_of_names))
-    for tree_index in range(1, number_of_names + 1):
-        yield main_dir_name + "/" + subtrain_dir_name + "/" +\
-              (subsubtrain_directory_pattern % str(tree_index).zfill(counter_size))
-
-
 if __name__ == '__main__':
     pass
