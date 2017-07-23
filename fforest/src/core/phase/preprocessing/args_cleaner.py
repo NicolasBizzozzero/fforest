@@ -19,7 +19,7 @@ from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bou
 from fforest.src.file_tools.csv_tools import str_to_quoting
 from fforest.src.file_tools.dialect import Dialect
 from fforest.src.file_tools.format import str_to_format
-from fforest.src.getters.get_output_message import string_to_verbosity
+from fforest.src.getters.get_output_message import str_to_verbosity
 from fforest.src.vrac.file_system import get_filename, get_absolute_path
 from fforest.src.vrac.maths import is_a_percentage, is_an_int
 
@@ -117,7 +117,7 @@ def clean_args(args: dict) -> None:
             args[param_name] = "{}.{}".format(get_filename(args[param_name], with_extension=False),
                                               args[gpn.header_extension()])
         elif param_name == gpn.verbosity():
-            args[param_name] = string_to_verbosity(args[param_name])
+            args[param_name] = str_to_verbosity(args[param_name])
         elif param_name in (gpn.line_delimiter_input(), gpn.line_delimiter_output()):
             if args[param_name] not in (None, "", "\n", "\r", "\r\n"):
                 if args[param_name] == "\\n":
