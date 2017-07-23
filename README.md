@@ -39,11 +39,8 @@ $ fforest
 * Add some progress bars with the package : https://pypi.python.org/pypi/progressbar2
 * Implement other format for the input database (each format must be changed to the CSV format during the preprocessing phase)
 * Round floating values with https://stackoverflow.com/a/1317578
-* Add the file `environment.json` at the root of the main directory, which will contains infos about the database, and must be created right after the preprocessing phase. This file'll then be loaded by each entry point thereafter.
-* Add the --max-instances-at-once parameter, which force certains functions which loads entire databases in memory to only loads a precise amount of instances at once.
-* Add the parameter --last-phase which stop the software if the precised phase is completed.
-* Add the parameter --resume-phase which resume the software to precised phase.
-* All entry-points (except the main) should do one phase each instead of starting to a specific phase.
+* Add the --max-instances-at-once parameter, which force some functions which loads entire databases in memory to only loads a precise amount of instances at once.
+* Clean all the non-main entry points documentation inside the entry_points_documentation.xml file.
 
 ## Acknowledgments
 I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from the <a href="https://www.lip6.fr/">LIP6 laboratory</a>, and specifically <a href="http://webia.lip6.fr/~marsala/christophe/Accueil.html">Mr. Marsala Christophe</a>, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
