@@ -16,7 +16,7 @@ from fforest.src.file_tools.csv_tools import get_number_of_columns, preprend_col
 from fforest.src.file_tools.dialect import Dialect
 from fforest.src.getters.get_output_message import Message, vprint
 from fforest.src.vrac.file_system import create_dir, extract_first_line, dump_string
-from fforest.src.vrac.maths import is_an_int
+from fforest.src.vrac.maths.maths import is_an_int
 
 
 def preprocessing() -> None:
