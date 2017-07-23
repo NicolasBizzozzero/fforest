@@ -1,13 +1,13 @@
 """ This module defines functions to easily access values stored in the file `default_values.json`, located in the
 `res` folder at the root of the program's package.
-This file contains values defaulting the parameters for the command-line arguments of the program.
+This file contains values defaulting the parameters for the command-line arguments of the software.
 
 It follows the following strict guidelines:
-- All values stored in the files must have its own access function.
+- Any value stored in the file must have its own access function.
 - All access functions must have the same name as its respective key in the file. The only exception is a key is named
 after a built-in function or variable. In this case, the programmer is free to prepend a word to its access function
 name.
-- Except for the access functions, this module mustn't have any side effect to the program's namespace nor the files it
+- Except for the access functions, this module mustn't have any side-effect to the program's namespace nor the files it
 tries to access.
 """
 import json
