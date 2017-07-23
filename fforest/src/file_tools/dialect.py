@@ -1,4 +1,4 @@
-""" this module contains useful tools to manipulate the `Dialect` class.
+""" This module contains useful tools to manipulate the `Dialect` class.
 This class regroup multiple parameters related to the CSV format, reducing drastically the number of parameters
 contained inside CSV-related functions.
 """
