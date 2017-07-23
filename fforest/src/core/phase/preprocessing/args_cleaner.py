@@ -18,7 +18,7 @@ from fforest.src.file_tools.csv_tools import find_index_with_class, index_in_bou
     get_number_of_columns
 from fforest.src.file_tools.csv_tools import str_to_quoting
 from fforest.src.file_tools.dialect import Dialect
-from fforest.src.file_tools.format import string_to_format
+from fforest.src.file_tools.format import str_to_format
 from fforest.src.getters.get_output_message import string_to_verbosity
 from fforest.src.vrac.file_system import get_filename, get_absolute_path
 from fforest.src.vrac.maths import is_a_percentage, is_an_int
@@ -81,7 +81,7 @@ def clean_args(args: dict) -> None:
         elif param_name in (gpn.discretization_threshold(), gpn.number_of_tnorms(), gpn.trees_in_forest()):
             args[param_name] = int(args[param_name])
         elif param_name in (gpn.format_input(), gpn.format_output()):
-            args[param_name] = string_to_format(args[param_name])
+            args[param_name] = str_to_format(args[param_name])
         elif param_name == gpn.entropy_measure():
             args[param_name] = str_to_entropymeasure(args[param_name])
         elif param_name in (gpn.entropy_threshold(), gpn.quality_threshold()):
