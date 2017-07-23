@@ -106,7 +106,7 @@ def _init_dir_paths(args: dict) -> None:
     env.subtrain_directory_path = "{}/{}".format(env.main_directory_path, env.subtrain_directory)
     env.subsubtrain_directory_path = "{}/{}".format(env.subtrain_directory_path, env.subsubtrain_directory)
 
-    if env.trees_in_forest :
+    if env.trees_in_forest:
         env.subsubtrain_directories_path = ["{}/{}".format(env.subsubtrain_directory_path,
                                                            env.subsubtrain_directory_pattern %
                                                            str(tree_index).zfill(len(str(env.trees_in_forest))))
