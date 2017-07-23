@@ -3,11 +3,11 @@ in the `res` folder at the root of the program's package.
 This file contains the name of the command-line documentation, which will be parsed by the `docopt` program.
 
 It follows the following strict guidelines:
-- All values stored in the files must have its own access function.
+- Any value stored in the file must have its own access function.
 - All access functions must have the same name as its respective key in the file. The only exception is a key is named
 after a built-in function or variable. In this case, the programmer is free to prepend a word to its access function
 name.
-- Except for the access functions, this module mustn't have any side effect to the program's namespace nor the files it
+- Except for the access functions, this module mustn't have any side-effect to the program's namespace nor the files it
 tries to access.
 """
 import json
@@ -18,6 +18,8 @@ _PATH_PARAMS_DOC = "../../res/parameters_documentation.json"
 
 
 def _get_doc_from_file(value):
+    global _PATH_PARAMS_DOC
+
     path = os.path.join(os.path.dirname(__file__),
                         _PATH_PARAMS_DOC)
     with open(path) as file:
