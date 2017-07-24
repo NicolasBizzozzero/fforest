@@ -7,9 +7,9 @@
     "trees_in_forest": "Number of trees to create in the forest. [default: {default_trees_in_forest}]\n",
     "quality_threshold": "All trees with a quality strictly inferior than this thre\n                         shold is a Low Quality Tree, else it's an High Quality Tr\n                         ee. [default: {default_quality_threshold}]\n",
 
-    "initial_split_method": "The method to use with the initial split of the database\n                         into the train and test databases. Values can be `halfing\n                         ` or `keepdistribution` [default: {default_initial_split_method}]\n",
-    "reference_split_method": "The method to use with the split of the train database in\n                         to the reference and subtrain databases. Values can be `h\n                         alfing` or `keepdistribution`. [default: {default_reference_split_method}]\n",
-    "subsubtrain_split_method": "The method to use with the split of the subtrain database\n                         into multiple subsubtrain databases. Values can be `halfi\n                         ng` or `keepdistribution`. [default: {default_subsubtrain_split_method}]\n",
+    "initial_split_method": "The method to use with the initial split of the database\n                         into the train and test databases. Values can be `halfing\n                         ` or `keep_distribution` [default: {default_initial_split_method}]\n",
+    "reference_split_method": "The method to use with the split of the train database in\n                         to the reference and subtrain databases. Values can be `h\n                         alfing` or `keep_distribution`. [default: {default_reference_split_method}]\n",
+    "subsubtrain_split_method": "The method to use with the split of the subtrain database\n                         into multiple subsubtrain databases. Values can be `halfi\n                         ng` or `keep_distribution`. [default: {default_subsubtrain_split_method}]\n",
     "quality_computing_method": "The method used to compute the quality of a forest. Value\n                         s can be `kapparifqimarsala` [default: {default_quality_computing_method}]\n",
     "clustering_trees_method": "The method used to regroup the resulting trees constructed into multiple heterogeneous fuzzy forest. Values can be `hypersphere` or `jason_forest`. [default: {default_clustering_trees_method}]",
 

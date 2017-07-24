@@ -4,9 +4,9 @@
     "trees_in_forest": 10,
     "quality_threshold": 0.5,
 
-    "initial_split_method": "keepdistribution",
-    "reference_split_method": "keepdistribution",
-    "subsubtrain_split_method": "keepdistribution",
+    "initial_split_method": "keep_distribution",
+    "reference_split_method": "keep_distribution",
+    "subsubtrain_split_method": "keep_distribution",
     "quality_computing_method": "kapparifqimarsala",
     "clustering_trees_method": "hypersphere",
 
