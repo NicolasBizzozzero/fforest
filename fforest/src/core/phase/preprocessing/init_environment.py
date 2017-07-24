@@ -8,6 +8,14 @@ from fforest.src.getters import environment as env, get_parameter_name as gpn
 from fforest.src.vrac.file_system import get_filename
 
 
+class TrueClassNameOverrideOneClass(Exception):
+    def __init__(self, class_name: str):
+        Exception.__init__(self, "The name used for the 'true_class' directory, \"{class_name}\" is used as a class "
+                                 "name in the database. Try to use the parameter \"{param_name}\" to change the name "
+                                 "used for the 'true_class' directory.".format(class_name=class_name,
+                                                                               param_name=gpn.true_class_directory()))
+
+
 def init_environment(args: dict) -> None:
     _init_command_line_parameters(args)
     _init_miscellaneous(args)
@@ -96,6 +104,9 @@ def _init_miscellaneous(args: dict) -> None:
                                                column=args.get(gpn.class_name()),
                                                have_header=args.get(gpn.have_header()),
                                                dialect=env.dialect_input)))
+    if env.true_class_directory in env.possible_classes:
+        raise TrueClassNameOverrideOneClass(env.true_class_directory)
+
     if args.get(gpn.number_of_tnorms()):
         env.t_norms_names = [tnorm_to_str(name) for name in range(args.get(gpn.number_of_tnorms()) + 1)]
 
