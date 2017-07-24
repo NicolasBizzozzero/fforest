@@ -1,6 +1,4 @@
 # fforest
-A set of tools useful for doing experiments with **fuzzy forests**.
-
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/diagram_fforest.png?raw=true" alt="diagram_fforest"/>
     <br> Your database is split into multiple sub-databases. This configuration is the one mainly used by Data-Scientists and Researchers in Machine-Learning.
