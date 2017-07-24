@@ -3,7 +3,11 @@ A set of tools useful for doing experiments with **fuzzy forests**.
 
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/diagram_fforest.png?raw=true" alt="diagram_fforest"/>
+    <br> Your database is split into multiple sub-databases. This configuration is the one mainly used by Data-Scientists and Researchers in Machine-Learning.
 </p>
+
+With the help of the <a href="http://webia.lip6.fr/~marsala/Salammbo/">Salammbô</a> software, **fforest** construct Decision Trees and Fuzzy Decision Trees from the sub-sub-train databases, using a handful of Triangular Norms.
+
 
 ## Installation
 `fforest` is available on <a href="https://pypi.python.org/pypi/fforest">PyPI</a>, just run
@@ -24,6 +28,7 @@ $ fforest
 
 ## Dependencies
 * docopt >= 0.6.2
+* numpy >= 1.12.1
 
 ## Contributing
 1. Fork the project.
