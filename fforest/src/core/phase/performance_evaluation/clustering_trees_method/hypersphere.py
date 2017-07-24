@@ -41,11 +41,7 @@ class HyperSphere:
             >>> vector in sphere
             True
         """
-        self._assert_dimension(item)
         return self.norm(np.array(item) - self.center) <= self.radius
-
-    def _assert_dimension(self, instance):
-        assert self.dimension == len(instance)
 
 
 def hypersphere():
