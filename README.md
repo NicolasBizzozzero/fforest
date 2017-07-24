@@ -21,8 +21,8 @@ $ fforest
 ## Usage
 
 ## Requirements
-* This software **doesn't work with Windows OSes**, this is due to the fact that Salammbo, the binary used to create Fuzzy-Trees only works with Linux distributions.
-* This software can be run with **Python 3.5** and above. I do not have tested it with other Python 3 versions, but due to type hints, I suppose that it can't works with Python 2.
+* This software **doesn't work with Windows OSes**, this is due to the fact that Salammbô, the binary used to create Fuzzy-Trees only works with GNU/Linux distributions.
+* This software can be run with **Python 3.5** and above. It hasn't been tested with other Python 3 versions, but due to type hints, it should works with Python 3.4.
 
 ## Dependencies
 * docopt >= 0.6.2
