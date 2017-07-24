@@ -126,6 +126,8 @@ def clean_args(args: dict) -> None:
                     raise IllegalLineDelimiter(args[param_name])
         elif param_name in (gpn.last_phase(), gpn.resume_phase()):
             args[param_name] = str_to_phase(args[param_name])
+        elif param_name == gpn.clustering_trees_method():
+            args[param_name] = str_to_clusteringtreesmethod(args[param_name])
 
 
 def _check_key_exists(d: dict, key: object, custom_exception=None) -> None:
