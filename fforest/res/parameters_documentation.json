@@ -11,6 +11,7 @@
     "reference_split_method": "The method to use with the split of the train database in\n                         to the reference and subtrain databases. Values can be `h\n                         alfing` or `keepdistribution`. [default: {default_reference_split_method}]\n",
     "subsubtrain_split_method": "The method to use with the split of the subtrain database\n                         into multiple subsubtrain databases. Values can be `halfi\n                         ng` or `keepdistribution`. [default: {default_subsubtrain_split_method}]\n",
     "quality_computing_method": "The method used to compute the quality of a forest. Value\n                         s can be `kapparifqimarsala` [default: {default_quality_computing_method}]\n",
+    "clustering_trees_method": "The method used to regroup the resulting trees constructed into multiple heterogeneous fuzzy forest. Values can be `hypersphere` or `jason_forest`. [default: {default_clustering_trees_method}]",
 
     "train_name": "The name of the train database after the initial split.\n                         [default: {default_train_name}]\n",
     "test_name": "The name of the test database after the initial split.\n                         [default: {default_test_name}]\n",
@@ -32,7 +33,9 @@
     "main_directory": "The name of the main directory, where all the project wil\n                         l be dumped. It defaults to the name of the database.\n",
     "subtrain_directory": "The name of the subtrain directory, where all the outputs\n                         of the subtrain split will be dumped. [default: {default_subtrain_directory}]\n",
     "subsubtrain_directory": "The name of the subsubtrain directory, where all the subs\n                         ubtrain databases' directories will be dumped.\n                         [default: {default_subsubtrain_directory}]\n",
+    "true_class_directory": "The name of the directory containing info about the true class of each instance. It's computed during the 'classes_matrices' and the 'clustering_trees' phases. [default: {default_true_class_directory}]",
     "classes_matrices_directory": "The name of the classes matrices directory, where all the\n                         classes matrices will be dumped.\n                         [default: {default_classes_matrices_directory}]\n",
+    "clustering_trees_directory": "The name of directory containing all results of the 'clustering_trees' phase. [default: {default_clustering_trees_directory}]",
     "subsubtrain_directory_pattern": "The name of the subsubtrain directory pattern. Every subs\n                         ubtrain database will be stored in this directory. You ca\n                         n indicate the number placement with a %s-style notation.\n                         [default: {default_subsubtrain_directory_pattern}]\n",
 
     "discretization_threshold": "Number of different values for an attribute to be discret\n                         ized. [default: {default_discretization_threshold}]\n",

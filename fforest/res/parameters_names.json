@@ -12,6 +12,7 @@
     "reference_split_method": "--refer-split-method",
     "subsubtrain_split_method": "--subsubtrain-split-method",
     "quality_computing_method": "--quality-computing-method",
+    "clustering_trees_method": "--clustering-trees-method",
 
     "train_name": "--train-name",
     "test_name": "--test-name",
@@ -33,7 +34,9 @@
     "main_directory": "--main-directory",
     "subtrain_directory": "--subtrain-directory",
     "subsubtrain_directory": "--subsubtrain-directory",
+    "true_class_directory": "--true-class-directory",
     "classes_matrices_directory": "--classes-matrices-directory",
+    "clustering_trees_directory": "--clustering-trees-directory",
     "subsubtrain_directory_pattern": "--subsubtrain-directory-pattern",
 
     "discretization_threshold": "--discretization-threshold",

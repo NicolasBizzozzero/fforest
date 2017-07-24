@@ -8,6 +8,7 @@
     "reference_split_method": "keepdistribution",
     "subsubtrain_split_method": "keepdistribution",
     "quality_computing_method": "kapparifqimarsala",
+    "clustering_trees_method": "hypersphere",
 
     "train_name": "train",
     "test_name": "test",
@@ -27,7 +28,9 @@
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory": "subsubtrain",
+    "true_class_directory": "true_class",
     "classes_matrices_directory": "classes_matrices",
+    "clustering_trees_directory": "clustering_trees",
     "subsubtrain_directory_pattern": "%s_sstrain",
 
     "discretization_threshold": 2,

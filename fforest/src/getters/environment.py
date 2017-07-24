@@ -57,7 +57,7 @@ train_database_name = None
 training_value = None
 tree_file_extension = None
 trees_in_forest = None
-true_class_directory_name = None
+true_class_directory = None
 vector_file_extension = None
 verbosity = None
 

@@ -38,10 +38,6 @@ def trees_in_forest() -> int:
     return _get_value_from_file("trees_in_forest")
 
 
-def quality_computing_method() -> str:
-    return _get_value_from_file("quality_computing_method")
-
-
 def quality_threshold() -> str:
     return _get_value_from_file("quality_threshold")
 
@@ -56,6 +52,14 @@ def reference_split_method() -> str:
 
 def subsubtrain_split_method() -> str:
     return _get_value_from_file("subsubtrain_split_method")
+
+
+def quality_computing_method() -> str:
+    return _get_value_from_file("quality_computing_method")
+
+
+def clustering_trees_method() -> str:
+    return _get_value_from_file("clustering_trees_method")
 
 
 def train_name() -> str:
@@ -126,8 +130,16 @@ def subsubtrain_directory() -> str:
     return _get_value_from_file("subsubtrain_directory")
 
 
+def true_class_directory() -> str:
+    return _get_value_from_file("true_class_directory")
+
+
 def classes_matrices_directory() -> str:
     return _get_value_from_file("classes_matrices_directory")
+
+
+def clustering_trees_directory() -> str:
+    return _get_value_from_file("clustering_trees_directory")
 
 
 def subsubtrain_directory_pattern() -> str:

@@ -72,7 +72,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.training_value = args.get(gpn.training_value().split()[-1])
     env.tree_file_extension = args.get(gpn.tree_file_extension().split()[-1])
     env.trees_in_forest = args.get(gpn.trees_in_forest().split()[-1])
-    env.true_class_directory_name = args.get(gpn.true_class_directory_name().split()[-1])
+    env.true_class_directory = args.get(gpn.true_class_directory().split()[-1])
     env.vector_file_extension = args.get(gpn.vector_file_extension().split()[-1])
     env.verbosity = args.get(gpn.verbosity().split()[-1])
 

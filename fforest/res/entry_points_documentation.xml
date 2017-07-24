@@ -19,6 +19,7 @@ Options:
   {param_reference_split_method}=METHOD{LONG_SPACE}{doc_reference_split_method}
   {param_subsubtrain_split_method}=METHOD{LONG_SPACE}{doc_subsubtrain_split_method}
   {param_quality_computing_method}=METHOD{LONG_SPACE}{doc_quality_computing_method}
+  {param_clustering_trees_method}=METHOD{LONG_SPACE}{doc_clustering_trees_method}
 
 
   # File names
@@ -44,7 +45,9 @@ Options:
   {param_main_directory}=NAME{LONG_SPACE}{doc_main_directory}
   {param_subtrain_directory}=NAME{LONG_SPACE}{doc_subtrain_directory}
   {param_subsubtrain_directory}=NAME{LONG_SPACE}{doc_subsubtrain_directory}
+  {param_true_class_directory}=NAME{LONG_SPACE}{doc_true_class_directory}
   {param_classes_matrices_directory}=NAME{LONG_SPACE}{doc_classes_matrices_directory}
+  {param_clustering_trees_directory}=NAME{LONG_SPACE}{doc_clustering_trees_directory}
   {param_subsubtrain_directory_pattern}=NAME{LONG_SPACE}{doc_subsubtrain_directory_pattern}
 
 
