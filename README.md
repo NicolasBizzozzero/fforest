@@ -5,7 +5,10 @@
 </p>
 
 With the help of the <a href="http://webia.lip6.fr/~marsala/Salammbo/">Salammbô</a> software, **fforest** construct Decision Trees and Fuzzy Decision Trees from the sub-sub-train databases, using a handful of Triangular Norms.
-
+Then **fforest** compute different information about the databases, such as :
+* If a tree has correctly classified your instance.
+* The quality of every tree.
+* The difficulty for an instance to be classified.
 
 ## Installation
 `fforest` is available on <a href="https://pypi.python.org/pypi/fforest">PyPI</a>, just run
