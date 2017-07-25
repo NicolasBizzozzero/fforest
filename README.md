@@ -5,7 +5,7 @@
 </p>
 
 With the help of the <a href="http://webia.lip6.fr/~marsala/Salammbo/">Salammbô</a> software, **fforest** construct Decision Trees and Fuzzy Decision Trees from the sub-sub-train databases, using a handful of Triangular Norms.
-These trees then produces multiple
+
 
 ## Installation
 `fforest` is available on <a href="https://pypi.python.org/pypi/fforest">PyPI</a>, just run
@@ -54,6 +54,8 @@ This project is licensed under the !!! License - see the [LICENSE.txt](LICENSE.t
 
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc" height="110" width="250" align="middle"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_lip6.png?raw=true" alt="logo_lip6" align="middle"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_lfi.png?raw=true" alt="logo_lfi" align="middle"/>
 </p>
