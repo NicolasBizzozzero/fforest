@@ -4,5 +4,10 @@
     "append_class": "The Class column is not last, we append it to the database.",
     "extract_header": "The database contains a header, we extract it.",
     "add_id": "The database doesn't contains an identifier column, we add it.",
-    "environment_file_not_found": "The environment file has not been found. Canceling the phase resuming process."
+    "environment_file_not_found": "The environment file has not been found. Canceling the phase resuming process.",
+    "guess_header": "Trying to guess the header.",
+    "guess_delimiter": "Trying to guess the delimiter.",
+    "guess_quoting": "Trying to guess the quoting frequency.",
+    "guess_quote_character": "Trying to guess the character used during quoting.",
+    "guess_encoding": "Trying to guess the file encoding."
 }

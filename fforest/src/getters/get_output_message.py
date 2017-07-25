@@ -38,6 +38,11 @@ class Message(enum.Enum):
     APPEND_CLASS = "append_class"
     EXTRACT_HEADER = "extract_header"
     ENVIRONMENT_FILE_NOT_FOUND = "environment_file_not_found"
+    GUESS_HEADER = "guess_header"
+    GUESS_DELIMITER = "guess_delimiter"
+    GUESS_QUOTING = "guess_quoting"
+    GUESS_QUOTE_CHARACTER = "guess_quote_character"
+    GUESS_ENCODING = "guess_encoding"
 
 
 @enum.unique
