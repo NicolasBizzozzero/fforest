@@ -22,7 +22,7 @@ $ fforest
 ```
 
 ## Usage
-For a regular usage, you only have to identify the way your data is stored in your CSV file, the software'll handle the rest for you.
+For a regular usage, you only have to identify the way your data is stored in your CSV file and the software'll handle the rest for you.
 The most used options are :
 ```shell
 --encoding-input=ENCODING
