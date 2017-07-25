@@ -22,6 +22,27 @@ $ fforest
 ```
 
 ## Usage
+For a regular usage, you only have to identify the way your data is stored in your CSV file, the software'll handle the rest for you.
+The most used options are :
+```shell
+--encoding-input=ENCODING
+--delimiter-input=CHAR
+--quoting-input=QUOTING
+--quote-character-input=CHAR
+--have-header
+--class=NAME
+--identifier=ID
+```
+The software can't predict if theses options are badly configured, and this can lead to unknown results. Be careful !
+
+For example, here are the following parameters used to test the software with two databases from the `fforest/test/data` directory.
+```shell
+$ fforest fforest/test/data/bank.csv --delimiter-input=';' --have-header --class y
+$ fforest fforest/test/data/australian.dat --delimiter-input=' ' --quoting-input nonnumeric --class -1
+```
+
+The goal of this software is to be very modular. To achieve this, a lot of options are available. So do not hesitate to consult the **help** page.
+
 
 ## Requirements
 * This software **doesn't work with Windows OSes**, this is due to the fact that Salammbô, the binary used to create Fuzzy-Trees only works with GNU/Linux distributions.
