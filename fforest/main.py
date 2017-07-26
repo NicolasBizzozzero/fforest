@@ -10,7 +10,7 @@ from fforest.src.core.phase.preprocessing.args_parser import parse_args_main_ent
 from fforest.src.core.phase.preprocessing.preparsing import compute_first_phase
 
 
-@failure_safe
+
 def main_entry_point() -> None:
     # Parse only a part of arguments needed to know if the user asked to start the software from the beginning or from a
     # specific phase.
