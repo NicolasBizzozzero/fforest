@@ -1,10 +1,10 @@
 # fforest
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/diagram_fforest.png?raw=true" alt="diagram_fforest"/>
-    <br> Your database is split into multiple sub-databases. This configuration is the one mainly used by Data-Scientists and Researchers in Machine-Learning.
+    <br> Your database is split into multiple sub-databases. This configuration is the one mainly used by data-scientists and researchers in machine-learning.
 </p>
 
-With the help of the <a href="http://webia.lip6.fr/~marsala/Salammbo/">Salammbô</a> software, **fforest** construct Decision Trees and Fuzzy Decision Trees from the sub-sub-train databases, using a handful of Triangular Norms.
+With the help of the <a href="http://webia.lip6.fr/~marsala/Salammbo/">Salammbo</a> software, **fforest** construct decision trees and fuzzy decision trees from the sub-sub-train databases, using a handful of triangular norms.
 Then **fforest** compute different information about the databases, such as :
 * If a tree has correctly classified your instance.
 * The quality of every tree.
@@ -45,7 +45,7 @@ The goal of this software is to be very modular. To achieve this, a lot of optio
 
 
 ## Requirements
-* This software **doesn't work with Windows OSes**, this is due to the fact that Salammbô, the binary used to create Fuzzy-Trees only works with GNU/Linux distributions.
+* This software **doesn't work with Windows OSes**, this is due to the fact that Salammbo, the binary used to create Fuzzy-Trees only works with GNU/Linux distributions.
 * This software can be run with **Python 3.5** and above. It hasn't been tested with other Python 3 versions, but due to type hints, it should works with Python 3.4.
 
 ## Dependencies
