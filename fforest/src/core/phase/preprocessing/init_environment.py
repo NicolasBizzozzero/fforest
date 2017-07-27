@@ -32,6 +32,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.classes_matrices_directory = args.get(gpn.classes_matrices_directory().split()[-1])
     env.clustering_trees_directory = args.get(gpn.clustering_trees_directory().split()[-1])
     env.clustering_trees_method = args.get(gpn.clustering_trees_method().split()[-1])
+    env.clustering_trees_prefix = args.get(gpn.clustering_trees_prefix().split()[-1])
     env.delimiter_input = args.get(gpn.delimiter_input().split()[-1])
     env.delimiter_output = args.get(gpn.delimiter_output().split()[-1])
     env.difficulty_vector_prefix = args.get(gpn.difficulty_vector_prefix().split()[-1])
