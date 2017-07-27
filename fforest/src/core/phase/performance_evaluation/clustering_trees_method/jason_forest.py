@@ -28,7 +28,7 @@ def _data_normalization(file_path: str, output_path: str, dialect: Dialect) -> N
     _dump_matrix(matrix=matrix, output_path=output_path, dialect=dialect)
 
 
-def _load_matrix(file_path: str, dialect: Dialect) -> Dict[str, OrderedDict[str, float]]:
+def _load_matrix(file_path: str, dialect: Dialect) -> Dict[str, Dict[str, float]]:
     """ Load the matrix located at `file_path` then return a dictionary mapping a tree name with all the attributes, and
     these attributes to the value given by the tree.
     """
@@ -47,12 +47,12 @@ def _get_attributes(file_path: str, dialect: Dialect) -> List[str]:
     return get_header(path=file_path, dialect=dialect)[1:]
 
 
-def _compute_mean(matrix: Dict[str, OrderedDict[str, float]], attribute: str) -> float:
+def _compute_mean(matrix: Dict[str, Dict[str, float]], attribute: str) -> float:
     """ Compute the mean of all values given by the trees for one attribute """
     return np.mean(matrix[tree_name][attribute] for tree_name in matrix.keys())
 
 
-def _compute_standard_deviation(matrix: Dict[str, OrderedDict[str, float]], attribute: str) -> float:
+def _compute_standard_deviation(matrix: Dict[str, Dict[str, float]], attribute: str) -> float:
     return np.std(matrix[tree_name][attribute] for tree_name in matrix.keys())
 
 
