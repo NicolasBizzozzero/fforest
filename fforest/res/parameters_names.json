@@ -25,6 +25,7 @@
     "cclassified_vector_prefix": "--cclassified-vector-prefix",
     "salammbo_vector_prefix": "--salammbo-vector-prefix",
     "difficulty_vector_prefix": "--difficulty-vector-prefix",
+    "clustering_trees_prefix": "--clustering-trees-prefix",
     "quality_file_prefix": "--quality-file-prefix",
     "class_matrix_prefix": "--class-matrix-prefix",
     "tree_file_extension": "--tree-file-extension",

@@ -25,6 +25,7 @@
     "difficulty_vector_prefix": "difficulty_",
     "quality_file_prefix": "quality_",
     "class_matrix_prefix": "class_matrix_",
+    "clustering_trees_prefix": "clustering_trees_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory": "subsubtrain",
