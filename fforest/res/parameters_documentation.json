@@ -26,6 +26,7 @@
     "difficulty_vector_prefix": "The prefix of every 'difficulty' vector created in the su\n                         btrain directory. [default: {default_difficulty_vector_prefix}]\n",
     "quality_file_prefix":  "The prefix of every 'quality' file created in the subtrai\n                         n directory. [default: {default_quality_file_prefix}]\n",
     "class_matrix_prefix": "The prefix of every 'class matrix' file created in the 'c\n                         lasses matrices' directory. [default: {default_class_matrix_prefix}]\n",
+    "clustering_trees_prefix": "The prefix of every 'clustering trees' file created in th\n                         e 'clustering trees' directory.\n                         [default: {default_clustering_trees_prefix}]\n",
     "tree_file_extension": "The name of the extension for a tree file.\n                         [default: {default_tree_file_extension}]\n",
     "vector_file_extension": "The name of the extension for a vector file.\n                         [default: {default_vector_file_extension}]\n",
     "header_extension": "The extension of the header file, extracted from the orig\n                         inal database if it contains one. [default: {default_header_extension}]\n",

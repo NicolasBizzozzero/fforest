@@ -8,7 +8,7 @@
     "reference_split_method": "keep_distribution",
     "subsubtrain_split_method": "keep_distribution",
     "quality_computing_method": "kapparifqimarsala",
-    "clustering_trees_method": "hypersphere",
+    "clustering_trees_method": "jason_forest",
 
     "train_name": "train",
     "test_name": "test",
@@ -25,6 +25,7 @@
     "difficulty_vector_prefix": "difficulty_",
     "quality_file_prefix": "quality_",
     "class_matrix_prefix": "class_matrix_",
+    "clustering_trees_prefix": "clustering_trees_",
 
     "subtrain_directory": "subtrain",
     "subsubtrain_directory": "subsubtrain",

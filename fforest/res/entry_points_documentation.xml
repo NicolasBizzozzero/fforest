@@ -36,6 +36,7 @@ Options:
   {param_difficulty_vector_prefix}=PREFIX{LONG_SPACE}{doc_difficulty_vector_prefix}
   {param_quality_file_prefix}=PREFIX{LONG_SPACE}{doc_quality_file_prefix}
   {param_class_matrix_prefix}=PREFIX{LONG_SPACE}{doc_class_matrix_prefix}
+  {param_clustering_trees_prefix}=PREFIX{LONG_SPACE}{doc_clustering_trees_prefix}
   {param_tree_file_extension}=NAME{LONG_SPACE}{doc_tree_file_extension}
   {param_vector_file_extension}=NAME{LONG_SPACE}{doc_vector_file_extension}
   {param_header_extension}=NAME{LONG_SPACE}{doc_header_extension}

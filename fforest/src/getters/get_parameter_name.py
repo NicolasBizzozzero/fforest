@@ -134,6 +134,10 @@ def class_matrix_prefix() -> str:
     return _get_name_from_file("class_matrix_prefix")
 
 
+def clustering_trees_prefix() -> str:
+    return _get_name_from_file("clustering_trees_prefix")
+
+
 def main_directory() -> str:
     return _get_name_from_file("main_directory")
 

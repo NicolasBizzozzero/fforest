@@ -32,6 +32,7 @@ def _init_command_line_parameters(args: dict) -> None:
     env.classes_matrices_directory = args.get(gpn.classes_matrices_directory().split()[-1])
     env.clustering_trees_directory = args.get(gpn.clustering_trees_directory().split()[-1])
     env.clustering_trees_method = args.get(gpn.clustering_trees_method().split()[-1])
+    env.clustering_trees_prefix = args.get(gpn.clustering_trees_prefix().split()[-1])
     env.delimiter_input = args.get(gpn.delimiter_input().split()[-1])
     env.delimiter_output = args.get(gpn.delimiter_output().split()[-1])
     env.difficulty_vector_prefix = args.get(gpn.difficulty_vector_prefix().split()[-1])
@@ -128,6 +129,7 @@ def _init_dir_paths(args: dict) -> None:
         env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
                                                                             class_name) for
                                                  class_name in env.possible_classes}
+
     if env.clustering_trees_directory:
         env.clustering_trees_directory_path = "{}/{}".format(env.subtrain_directory_path,
                                                              env.clustering_trees_directory)
@@ -179,6 +181,14 @@ def _init_paths(args: dict) -> None:
         env.classes_matrices_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
             env.classes_matrices_directories_path[class_name],
             env.class_matrix_prefix,
+            class_name,
+            tnorm,
+            format_to_str(args.get(gpn.format_output()))) for
+            tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+            for class_name in env.possible_classes}
+        env.clustering_trees_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
+            env.clustering_trees_directories_path[class_name],
+            env.clustering_trees_prefix,
             class_name,
             tnorm,
             format_to_str(args.get(gpn.format_output()))) for
