@@ -12,22 +12,24 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
     clustering_trees = dict()
     for class_name in env.possible_classes:
         for tnorm_name in env.t_norms_names:
-            database = _data_normalization(file_path=env.classes_matrices_files_paths[class_name][tnorm_name],
+            # TODO: This segment of code can be parallelled
+            database = _data_normalization(input_path=env.classes_matrices_files_paths[class_name][tnorm_name],
                                            dialect=env.dialect_output)
     return clustering_trees
 
 
-def _data_normalization(file_path: str, dialect: Dialect) -> Dict[str, Dict[str, float]]:
+def _data_normalization(input_path: str, dialect: Dialect) -> Dict[str, Dict[str, float]]:
     """ Retrieve a database from a file and normalize its data between the interval [-1, 1]. """
-    database = _load_database(file_path=file_path, dialect=dialect)
-    for attribute in _get_attributes(file_path=file_path, dialect=dialect):
+    database = _load_database(file_path=input_path, dialect=dialect)
+    for attribute in _get_attributes(file_path=input_path, dialect=dialect):
         mean = _compute_mean(database=database, attribute=attribute)
         print("mean:", mean)
         standard_deviation = _compute_standard_deviation(database=database, attribute=attribute)
         print("sd:", standard_deviation)
         for tree_name in database.keys():
+            print("old_value:", database[tree_name][attribute])
             database[tree_name][attribute] = (database[tree_name][attribute] - mean) / standard_deviation
-            print("res:", database[tree_name][attribute])
+            print("new_value:", database[tree_name][attribute])
     return database
 
 
