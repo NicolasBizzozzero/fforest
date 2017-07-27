@@ -8,7 +8,7 @@
     "reference_split_method": "keep_distribution",
     "subsubtrain_split_method": "keep_distribution",
     "quality_computing_method": "kapparifqimarsala",
-    "clustering_trees_method": "hypersphere",
+    "clustering_trees_method": "jason_forest",
 
     "train_name": "train",
     "test_name": "test",

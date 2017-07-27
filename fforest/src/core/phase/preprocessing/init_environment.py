@@ -128,6 +128,7 @@ def _init_dir_paths(args: dict) -> None:
         env.classes_matrices_directories_path = {class_name: "{}/{}".format(env.classes_matrices_directory_path,
                                                                             class_name) for
                                                  class_name in env.possible_classes}
+
     if env.clustering_trees_directory:
         env.clustering_trees_directory_path = "{}/{}".format(env.subtrain_directory_path,
                                                              env.clustering_trees_directory)
