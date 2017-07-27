@@ -12,7 +12,7 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
     clustering_trees = dict()
     for class_name in env.possible_classes:
         for tnorm_name in env.t_norms_names:
-            _data_normalization(file_path=env.clustering_trees_files_paths[class_name][tnorm_name],
+            _data_normalization(file_path=env.classes_matrices_files_paths[class_name][tnorm_name],
                                 output_path=env.clustering_trees_files_paths[class_name][tnorm_name],
                                 dialect=env.dialect_output)
     return clustering_trees
@@ -22,7 +22,9 @@ def _data_normalization(file_path: str, output_path: str, dialect: Dialect) -> N
     matrix = _load_matrix(file_path=file_path, dialect=dialect)
     for attribute in _get_attributes(file_path=file_path, dialect=dialect):
         mean = _compute_mean(matrix=matrix, attribute=attribute)
+        print("mean:", mean)
         standard_deviation = _compute_standard_deviation(matrix=matrix, attribute=attribute)
+        print("sd:", standard_deviation)
         for tree_name in matrix.keys():
             matrix[tree_name][attribute] = (matrix[tree_name][attribute] - mean) / standard_deviation
     _dump_matrix(matrix=matrix, output_path=output_path, dialect=dialect)
@@ -49,21 +51,21 @@ def _get_attributes(file_path: str, dialect: Dialect) -> List[str]:
 
 def _compute_mean(matrix: Dict[str, Dict[str, float]], attribute: str) -> float:
     """ Compute the mean of all values given by the trees for one attribute """
-    return np.mean(matrix[tree_name][attribute] for tree_name in matrix.keys())
+    return np.mean([matrix[tree_name][attribute] for tree_name in matrix.keys()])
 
 
 def _compute_standard_deviation(matrix: Dict[str, Dict[str, float]], attribute: str) -> float:
-    return np.std(matrix[tree_name][attribute] for tree_name in matrix.keys())
+    return np.std([matrix[tree_name][attribute] for tree_name in matrix.keys()])
 
 
 def _dump_matrix(matrix: Dict[str, Dict[str, float]], output_path: str, dialect: Dialect) -> None:
     """ Dump the normalized matrix. """
     # Construct header
-    content = [KEY_IDENTIFIER, *[instance_identifier for instance_identifier in next(matrix.keys())]]
+    content = [[KEY_IDENTIFIER] + list(list(matrix.values())[0].keys())]
 
     # Construct content
     for tree_name in matrix.keys():
-        content.append([tree_name, matrix[tree_name].values()])
+        content.append([tree_name] + list(matrix[tree_name].values()))
 
     # Dump content
     dump_csv_content(path=output_path,
