@@ -56,7 +56,7 @@ def _compute_standard_deviation(matrix: Dict[str, Dict[str, float]], attribute: 
     return np.std(matrix[tree_name][attribute] for tree_name in matrix.keys())
 
 
-def _dump_matrix(matrix: Dict[str, OrderedDict[str, float]], output_path: str, dialect: Dialect) -> None:
+def _dump_matrix(matrix: Dict[str, Dict[str, float]], output_path: str, dialect: Dialect) -> None:
     """ Dump the normalized matrix. """
     # Construct header
     content = [KEY_IDENTIFIER, *[instance_identifier for instance_identifier in next(matrix.keys())]]
