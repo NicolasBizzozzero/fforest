@@ -12,8 +12,8 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
     clustering_trees = dict()
     for class_name in env.possible_classes:
         for tnorm_name in env.t_norms_names:
-            _data_normalization(file_path=env.clustering_trees_directories_path[class_name][tnorm_name],
-                                output_path=env.clustering_trees_directories_path[class_name][tnorm_name],
+            _data_normalization(file_path=env.clustering_trees_files_paths[class_name][tnorm_name],
+                                output_path=env.clustering_trees_files_paths[class_name][tnorm_name],
                                 dialect=env.dialect_output)
     return clustering_trees
 
