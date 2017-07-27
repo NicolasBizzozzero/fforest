@@ -9,6 +9,7 @@ from collections import OrderedDict
 
 
 def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
+    raise NotImplementedError("The values created by this algorithms are FALSE")
     clustering_trees = dict()
     for class_name in env.possible_classes:
         for tnorm_name in env.t_norms_names:
@@ -27,6 +28,7 @@ def _data_normalization(file_path: str, output_path: str, dialect: Dialect) -> N
         print("sd:", standard_deviation)
         for tree_name in matrix.keys():
             matrix[tree_name][attribute] = (matrix[tree_name][attribute] - mean) / standard_deviation
+            print("res:", matrix[tree_name][attribute])
     _dump_matrix(matrix=matrix, output_path=output_path, dialect=dialect)
 
 
