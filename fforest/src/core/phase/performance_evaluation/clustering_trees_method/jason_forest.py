@@ -12,9 +12,11 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
     clustering_trees = dict()
     for class_name in env.possible_classes:
         for tnorm_name in env.t_norms_names:
-            # TODO: This segment of code can be parallelled
+            # TODO: This segment of code can be parallellised
             database = _data_normalization(input_path=env.classes_matrices_files_paths[class_name][tnorm_name],
                                            dialect=env.dialect_output)
+            distances_matrix = _compute_distances_matrix(database=database,
+                                                         distance_measure=env.distance_measure)
     return clustering_trees
 
 

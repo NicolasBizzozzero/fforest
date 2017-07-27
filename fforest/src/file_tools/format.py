@@ -23,9 +23,9 @@ class UnknownFormat(Exception):
 def str_to_format(string: str) -> Format:
     """ Return the enum value associated with the name `string`, case insensitive. """
     string = string.lower()
-    for phase_name, phase_value in zip(Format.__members__.keys(), Format.__members__.values()):
-        if string == phase_name.lower():
-            return phase_value
+    for format_name, format_value in zip(Format.__members__.keys(), Format.__members__.values()):
+        if string == format_name.lower():
+            return format_value
     raise UnknownFormat(string)
 
 
