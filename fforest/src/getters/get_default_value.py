@@ -122,6 +122,10 @@ def class_matrix_prefix() -> str:
     return _get_value_from_file("class_matrix_prefix")
 
 
+def clustering_trees_prefix() -> str:
+    return _get_value_from_file("clustering_trees_prefix")
+
+
 def subtrain_directory() -> str:
     return _get_value_from_file("subtrain_directory")
 
