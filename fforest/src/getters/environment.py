@@ -9,6 +9,7 @@ class_name = None
 classes_matrices_directory = None
 clustering_trees_directory = None
 clustering_trees_method = None
+clustering_trees_prefix = None
 delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
@@ -74,6 +75,7 @@ clustering_trees_directories_path = None
 # Paths
 cclassified_vectors_paths = None
 classes_matrices_files_paths = None
+clustering_trees_files_paths = None
 difficulty_vectors_paths = None
 statistics_file_path = None
 original_database_path = None

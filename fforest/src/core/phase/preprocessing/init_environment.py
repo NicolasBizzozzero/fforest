@@ -185,6 +185,14 @@ def _init_paths(args: dict) -> None:
             format_to_str(args.get(gpn.format_output()))) for
             tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
             for class_name in env.possible_classes}
+        env.clustering_trees_files_paths = {class_name: {tnorm: "{}/{}{}_{}.{}".format(
+            env.clustering_trees_directories_path[class_name],
+            env.clustering_trees_prefix,
+            class_name,
+            tnorm,
+            format_to_str(args.get(gpn.format_output()))) for
+            tnorm in [tnorm_to_str(tnorm_index) for tnorm_index in range(env.t_norms + 1)]}
+            for class_name in env.possible_classes}
 
 
 def _init_names(args: dict) -> None:
