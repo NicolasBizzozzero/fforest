@@ -18,6 +18,7 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
 
 
 def _data_normalization(file_path: str, dialect: Dialect) -> Dict[str, Dict[str, float]]:
+    """ Retrieve a database from a file and normalize its data between the interval [-1, 1]. """
     database = _load_database(file_path=file_path, dialect=dialect)
     for attribute in _get_attributes(file_path=file_path, dialect=dialect):
         mean = _compute_mean(database=database, attribute=attribute)
