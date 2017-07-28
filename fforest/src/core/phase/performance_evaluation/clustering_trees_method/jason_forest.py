@@ -75,9 +75,14 @@ def _compute_distances_matrix(database: Dict[str, Dict[str, float]], distance_me
         for i_attribute1, attribute1 in enumerate(database[tree_name].keys()):
             for i_attribute2 in range(i_attribute1, len(database[tree_name].keys())):
                 attribute2 = list(database[tree_name].keys())[i_attribute2]
-                distances_matrix[tree_name][frozenset([attribute1, attribute2])] = distance_measure(attribute1,
-                                                                                                    attribute2)
+                distances_matrix[tree_name][frozenset([attribute1, attribute2])] = \
+                    distance_measure(database[tree_name][attribute1], database[tree_name][attribute2])
     return distances_matrix
+
+
+#TODO: Delete this when the algorithm is working
+def jason_forest():
+    pass
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 from typing import Iterable, Callable
 
 import scipy as sp
+import scipy.spatial
 import enum
 
 from fforest.src.vrac.maths.maths import Number
