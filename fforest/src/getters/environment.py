@@ -14,6 +14,7 @@ delimiter_input = None
 delimiter_output = None
 difficulty_vector_prefix = None
 discretization_threshold = None
+distance_measure = None
 encoding_input = None
 encoding_output = None
 entropy_measure = None

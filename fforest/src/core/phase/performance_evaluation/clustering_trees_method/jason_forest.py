@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Callable, Set
 
 from fforest.src.file_tools.csv_tools import get_header, iter_rows_dict
 from fforest.src.file_tools.dialect import Dialect
@@ -60,3 +60,7 @@ def _compute_mean(database: Dict[str, Dict[str, float]], attribute: str) -> floa
 def _compute_standard_deviation(database: Dict[str, Dict[str, float]], attribute: str) -> float:
     """ Compute the standard deviatio of all values given by the trees for one attribute """
     return np.std([database[tree_name][attribute] for tree_name in database.keys()])
+
+
+def _compute_distances_matrix(database: Dict[str, Dict[str, float]], distance_measure: Callable) -> Dict[Set, float]:
+    pass
