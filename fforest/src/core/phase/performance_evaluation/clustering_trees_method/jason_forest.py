@@ -20,7 +20,6 @@ def jason_forest() -> Dict[str, Dict[str, List[Dict[str, Union[str, int]]]]]:
                                                          #TODO: Implement this parameter
                                                          #distance_measure=env.distance_measure)
                                                          distance_measure=euclidean)
-            print(distances_matrix)
     return clustering_trees
 
 
