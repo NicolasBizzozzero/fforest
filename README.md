@@ -51,6 +51,7 @@ The goal of this software is to be very modular. To achieve this, a lot of optio
 ## Dependencies
 * docopt >= 0.6.2
 * numpy >= 1.12.1
+* scipy >= 0.19.0
 
 ## Contributing
 1. Fork the project.

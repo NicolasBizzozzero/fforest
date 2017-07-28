@@ -1,6 +1,6 @@
 from typing import Iterable, Callable
 
-import numpy as np
+import scipy as sp
 import enum
 
 from fforest.src.vrac.maths.maths import Number
@@ -37,9 +37,9 @@ def distancemeasure_to_function(form: DistanceMeasure) -> Callable:
     pass
 
 
-def euclidean(vector: Iterable[Number]) -> float:
-    pass
+def euclidean(vector1: Iterable[Number], vector2: Iterable[Number]) -> float:
+    return sp.spatial.distance.euclidean(vector1, vector2)
 
 
-def manhattan(vector: Iterable[Number]) -> int:
+def manhattan(vector1: Iterable[Number], vector2: Iterable[Number]) -> int:
     pass

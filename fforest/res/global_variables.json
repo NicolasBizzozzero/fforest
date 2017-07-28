@@ -25,7 +25,8 @@
   ],
   "dependencies": [
     "docopt >= 0.6.2",
-    "numpy >= 1.12.1"
+    "numpy >= 1.12.1",
+    "scipy >= 0.19.0"
   ],
 
   "main_entry_point": "fforest",
