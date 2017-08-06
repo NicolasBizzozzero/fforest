@@ -83,6 +83,8 @@ This project is licensed under the !!! License - see the [LICENSE.txt](LICENSE.t
 * P. W. Cooper, "The hypersphere in pattern recognition", Information and Control, vol. 5, pp. 324-346, December 1962.
 * P. W. Cooper, "A Note on an Adaptive Hypersphere Decision Boundary", IEEE Transactions on Electronic Computers Volume EC-15, Issue 6, DECEMBER, 1966, Pages 948-949
 * Jigang Wang, Predrag Neskovic, Leon N. Cooper, "Pattern Classification via Single Spheres", Lecture Notes in Computer Science Volume 3735
+* J. Forest, "Caractérisation de classes par la découverte automatique de sous-classes", thesis from Université Pierre et Marie Curie, Laboratoire d’informatique de Paris 6, September 2009
+* C. Marsala, "Apprentissage artificiel et raisonnement flou", thesis from Université Pierre et Marie Curie – Paris VI, November 2010
 
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc" height="110" width="250" align="middle"/>
