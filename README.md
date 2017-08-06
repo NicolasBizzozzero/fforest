@@ -77,6 +77,13 @@ I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from t
 ## License
 This project is licensed under the !!! License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+## References
+* C. Marsala and B. Bouchon-Meunier, “An adaptable system to construct fuzzy decision trees,” in Proc. of the NAFIPS’99 (North American Fuzzy Information Processing Society), New York, USA, 1999, pp. 223–227 (http://webia.lip6.fr/~marsala/articles/1999-nafips.pdf)
+* C. Marsala, and M. Rifqi. Summarizing Fuzzy Decision Forest by subclass discovery. IEEE International Conference on Fuzzy Systems, FUZZIEEE’2013, Jul 2013, Hyderabad, India. IEEE, pp.1-6, 2013, (http://hal.upmc.fr/hal-01198855)
+* P. W. Cooper, "The hypersphere in pattern recognition", Information and Control, vol. 5, pp. 324-346, December 1962.
+* P. W. Cooper, "A Note on an Adaptive Hypersphere Decision Boundary", IEEE Transactions on Electronic Computers Volume EC-15, Issue 6, DECEMBER, 1966, Pages 948-949
+* Jigang Wang, Predrag Neskovic, Leon N. Cooper, "Pattern Classification via Single Spheres", Lecture Notes in Computer Science Volume 3735
+
 <p align="center">
     <img src="https://github.com/NicolasBi/fforest/blob/master/fforest/res/pictures/logo_upmc.png?raw=true" alt="logo_upmc" height="110" width="250" align="middle"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
