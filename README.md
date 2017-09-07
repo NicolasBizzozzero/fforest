@@ -70,6 +70,7 @@ The goal of this software is to be very modular. To achieve this, a lot of optio
 * Add the --max-instances-at-once parameter, which force some functions which loads entire databases in memory to only loads a precise amount of instances at once.
 * Clean all the non-main entry points documentation inside the entry_points_documentation.xml file.
 * The code inside the args_cleaner.py and init_environment.py modules is working but is very ugly and thus, difficult to maintain. A better idea is welcome.
+* Implement the `random` option as a splitting method.
 
 ## Acknowledgments
 I would like to thanks the <a href="http://lfi.lip6.fr/web/">LFI team</a> from the <a href="https://www.lip6.fr/">LIP6 laboratory</a>, and specifically <a href="http://webia.lip6.fr/~marsala/christophe/Accueil.html">Mr. Marsala Christophe</a>, for helping me during the entire duration of my internship, and for offering me the knowledge and resources needed to build this software.
